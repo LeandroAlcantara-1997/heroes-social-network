@@ -9,7 +9,30 @@ services:
     volumes:
       - ..:/workspace
     env_file:
-      - ../.env
+      - .env
     ports:
       - "8080:8080"
     command: /bin/sh -c "while sleep 1000; do :; done"
+    depends_on:
+      - postgres-database
+    networks:
+      - heroes-network
+
+  
+  postgres-database:
+    image: postgres
+    container_name: postgres-heroes-social-network
+    env_file:
+      - .env
+    environment:
+      - POSTGRES_DB=${DB_NAME}
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+    ports:
+      - "5432:5432"
+    networks:
+     - heroes-network
+    
+networks:
+  heroes-network:
+    driver: bridge
