@@ -6,5 +6,3 @@ FROM mcr.microsoft.com/vscode/devcontainers/go:0-${VARIANT}
 
 COPY Makefile .
 RUN make setup
-
-RUN ls -a
