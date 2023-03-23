@@ -1,5 +1,7 @@
 DB_URL = postgres://${DB_USER}:${DB_PASSWORD}@postgres-database:5432/${DB_NAME}?sslmode=disable
-
+MODULE_NAME=$(shell grep ^module go.mod | cut -d " " -f2)
+GIT_COMMIT_HASH=$(shell git rev-parse HEAD)
+LD_FLAGS=-ldflags="-X $(MODULE_NAME)/internal/config.gitCommitHash=$(GIT_COMMIT_HASH)"
 
 # docker
 .PHONY: docker-up
@@ -16,9 +18,21 @@ docker-build:
 lint:
 	@staticcheck ./...
 
+.PHONY: run
+run:
+	@go run main.go
+
+.PHONY: hot
+hot:
+	@air
+
 .PHONY: build
 build:
 	@go build main.go
+
+.PHONY: test
+test:
+	@go test ./...
 
 
 # setup
@@ -31,6 +45,11 @@ setup:
 	@echo __Installing staticcheck__
 	@go install honnef.co/go/tools/cmd/staticcheck@latest
 	@staticcheck --version
+	@echo __Installing hot reload__
+	@curl -sSfL https://raw.githubusercontent.com/cosmtrek/air/master/install.sh | sh -s -- -b $(go env GOPATH)/bin
+	@air -v
+	@chmod -R a+w /go/pkg
+	@git config --global --add safe.directory '*'
 
 
 # migrate
