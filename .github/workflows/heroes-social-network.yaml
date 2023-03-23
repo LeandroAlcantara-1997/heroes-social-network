@@ -22,6 +22,5 @@ jobs:
         make test
     - name: Lint
       run: |
-        sudo apt-get install curl
         go install honnef.co/go/tools/cmd/staticcheck@latest
         make lint

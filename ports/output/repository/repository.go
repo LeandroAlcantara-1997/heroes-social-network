@@ -7,5 +7,5 @@ import (
 )
 
 type Repository interface {
-	CreateHero(ctx context.Context, hero model.Hero) (err error)
+	CreateHero(ctx context.Context, hero *model.Hero) (err error)
 }

@@ -2,10 +2,12 @@ package heroes
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/LeandroAlcantara-1997/heroes-social-network/model"
 	"github.com/LeandroAlcantara-1997/heroes-social-network/ports/input"
 	"github.com/LeandroAlcantara-1997/heroes-social-network/ports/output/repository"
+	"github.com/google/uuid"
 )
 
 type service struct {
@@ -19,8 +21,12 @@ func New(repository repository.Repository) *service {
 }
 
 func (s *service) RegisterHero(ctx context.Context, heroDto input.HeroRequest) (*input.HeroResponse, error) {
-	heroModel := model.New(heroDto)
-	if err := s.repository.CreateHero(ctx, *heroModel); err != nil {
+	heroModel := model.New(uuid.New().String(), heroDto)
+	if !model.CheckUniverse(model.Universe(heroModel.Universe)) {
+		return nil, fmt.Errorf("%s", "")
+	}
+
+	if err := s.repository.CreateHero(ctx, heroModel); err != nil {
 		return nil, err
 	}
 
