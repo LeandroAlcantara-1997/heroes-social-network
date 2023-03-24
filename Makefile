@@ -50,6 +50,7 @@ setup:
 	@air -v
 	@chmod -R a+w /go/pkg
 	@git config --global --add safe.directory '*'
+	@go install github.com/golang/mock/mockgen@v1.6.0
 
 
 # migrate
