@@ -3,14 +3,15 @@ CREATE TYPE UNIVERSE AS ENUM ('DC', 'MARVEL', 'DC|MARVEL');
 
 CREATE TABLE team(
     id UUID PRIMARY KEY,
-    name VARCHAR(100) NOT NULL UNIQUE
+    name VARCHAR(100) NOT NULL UNIQUE,
+    universe UNIVERSE NOT NULL
 );
 
 CREATE TABLE character(
     id UUID UNIQUE NOT NULL PRIMARY KEY,
     character_name VARCHAR(100) NOT NULL,
     civil_name VARCHAR(100),
-    heroe BOOLEAN,
+    hero BOOLEAN,
     universe UNIVERSE NOT NULL,
     fk_team UUID,
     FOREIGN KEY (fk_team) REFERENCES team(id)
@@ -47,6 +48,13 @@ CREATE TABLE serie(
     universe UNIVERSE NOT NULL
 );
 
+CREATE TABLE movie(
+    id UUID PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    release_year DATE NOT NULL,
+    universe UNIVERSE NOT NULL
+);
+
 CREATE TABLE character_serie(
     fk_character UUID,
     fk_serie UUID,
@@ -78,3 +86,12 @@ CREATE TABLE character_game(
     FOREIGN KEY (fk_character) REFERENCES character(id),
     FOREIGN KEY (fk_game) REFERENCES game(id)
 );
+
+CREATE TABLE character_movie(
+    fk_character UUID,
+    fk_movie UUID,
+    CONSTRAINT pk_character_movie PRIMARY KEY (fk_character,fk_movie),
+    FOREIGN KEY (fk_character) REFERENCES character(id),
+    FOREIGN KEY (fk_movie) REFERENCES movie(id)
+);
+

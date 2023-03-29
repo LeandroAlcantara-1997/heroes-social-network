@@ -19,3 +19,7 @@ DROP TABLE IF EXISTS character_hq;
 DROP TABLE IF EXISTS character_super_power;
 
 DROP TABLE IF EXISTS  character_game;
+
+DROP TABLE IF EXISTS  movie;
+
+DROP TABLE IF EXISTS  character_movie;

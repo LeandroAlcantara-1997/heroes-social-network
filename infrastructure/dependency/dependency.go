@@ -7,6 +7,7 @@ import (
 	"github.com/LeandroAlcantara-1997/heroes-social-network/domain/heroes"
 	"github.com/LeandroAlcantara-1997/heroes-social-network/infrastructure/config"
 	"github.com/LeandroAlcantara-1997/heroes-social-network/infrastructure/repository"
+	"github.com/LeandroAlcantara-1997/heroes-social-network/infrastructure/splunk"
 	"github.com/LeandroAlcantara-1997/heroes-social-network/ports/input"
 	"github.com/jackc/pgx/v5"
 )
@@ -16,7 +17,8 @@ type dependency struct {
 }
 
 type components struct {
-	clientPgx *pgx.Conn
+	clientPgx    *pgx.Conn
+	clientSplunk *splunk.Splunk
 }
 
 func LoadDependency(ctx context.Context) (*dependency, error) {
@@ -26,6 +28,7 @@ func LoadDependency(ctx context.Context) (*dependency, error) {
 	}
 	heroService := heroes.New(
 		repository.New(cmp.clientPgx),
+		cmp.clientSplunk,
 	)
 
 	return &dependency{
@@ -48,7 +51,10 @@ func loadExternalTools(ctx context.Context) (*components, error) {
 		return nil, err
 	}
 
+	clientSplunk := splunk.New(config.Env.SplunkHost, false)
+
 	return &components{
-		clientPgx: clientPgx,
+		clientPgx:    clientPgx,
+		clientSplunk: clientSplunk,
 	}, nil
 }
