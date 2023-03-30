@@ -4,6 +4,7 @@ import (
 	"context"
 )
 
+//go:generate mockgen -destination ../../../mock/log_mock.go -package=mock -source=log.go
 type Log interface {
 	SendErrorLog(ctx context.Context, message string)
 	SendEvent(ctx context.Context, eventCode int, message string)

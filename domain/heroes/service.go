@@ -69,6 +69,9 @@ func (s *service) GetHeroByID(ctx context.Context, id string) (*input.HeroRespon
 	hero, err := s.repository.GetHeroByID(ctx, id)
 	if err != nil {
 		s.log.SendErrorLog(ctx, err.Error())
+		if err.Error() == exception.HeroNotFoundError {
+			return nil, err
+		}
 		return nil, exception.New(exception.InternalServerError)
 	}
 	return &input.HeroResponse{
@@ -83,7 +86,7 @@ func (s *service) GetHeroByID(ctx context.Context, id string) (*input.HeroRespon
 func (s *service) DeleteHeroByID(ctx context.Context, id string) (err error) {
 	if err = s.repository.DeleteHeroByID(ctx, id); err != nil {
 		s.log.SendErrorLog(ctx, err.Error())
-		return exception.New(exception.InternalServerError)
+		return exception.New(exception.HeroNotFoundError)
 	}
 	return
 }

@@ -2,8 +2,10 @@ package repository
 
 import (
 	"context"
+	"errors"
 	"fmt"
 
+	"github.com/LeandroAlcantara-1997/heroes-social-network/infrastructure/exception"
 	"github.com/LeandroAlcantara-1997/heroes-social-network/model"
 	"github.com/jackc/pgx/v5"
 )
@@ -129,6 +131,9 @@ func (r *reposiotry) GetHeroByID(ctx context.Context, id string) (*model.Hero, e
 	row := r.client.QueryRow(ctx, query, id)
 	if err := row.Scan(&hero.Id, &hero.HeroName, &hero.CivilName,
 		&hero.Hero, &hero.Universe); err != nil {
+		if errors.Is(err, pgx.ErrNoRows) {
+			return nil, exception.New(exception.HeroNotFoundError)
+		}
 		return nil, err
 	}
 

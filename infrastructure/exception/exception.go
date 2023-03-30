@@ -22,11 +22,13 @@ func (e *Exception) Error() string {
 const (
 	InternalServerError = "error.0001"
 	InvalidFieldsError  = "error.0002"
+	HeroNotFoundError   = "error.0003"
 )
 
 var restErrorMap = map[string]int{
 	InternalServerError: http.StatusInternalServerError,
 	InvalidFieldsError:  http.StatusBadRequest,
+	HeroNotFoundError:   http.StatusNotFound,
 }
 
 func RestError(key string) (int, error) {

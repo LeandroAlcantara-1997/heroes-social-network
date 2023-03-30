@@ -19,4 +19,5 @@ func ConfigureRoutes(r *gin.Engine, heroUseCase input.Hero) {
 	heroesRoute.POST("", hero.PostHero)
 	heroesRoute.PUT("", hero.PutHero)
 	heroesRoute.GET("", hero.GetHeroByID)
+	heroesRoute.DELETE("", hero.DeleteHeroByID)
 }

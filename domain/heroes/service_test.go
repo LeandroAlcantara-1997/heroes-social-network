@@ -59,6 +59,7 @@ func TestServiceRegisterHeroFailInternalServerError(t *testing.T) {
 		ctx       = context.Background()
 		ctrl      = gomock.NewController(t)
 		rep       = mock.NewMockRepository(ctrl)
+		l         = mock.NewMockLog(ctrl)
 		expected  *input.HeroResponse
 		wantError = exception.New(exception.InternalServerError)
 	)
@@ -66,8 +67,10 @@ func TestServiceRegisterHeroFailInternalServerError(t *testing.T) {
 	rep.EXPECT().CreateHero(ctx, gomock.Any()).
 		Return(wantError)
 
+	l.EXPECT().SendErrorLog(ctx, gomock.Any())
 	s := &service{
 		repository: rep,
+		log:        l,
 	}
 
 	out, err := s.RegisterHero(ctx, superMan)
@@ -78,12 +81,16 @@ func TestServiceRegisterHeroFailInternalServerError(t *testing.T) {
 func TestServiceRegisterHeroFailInvalidField(t *testing.T) {
 	var (
 		ctx       = context.Background()
+		ctrl      = gomock.NewController(t)
+		l         = mock.NewMockLog(ctrl)
 		expected  *input.HeroResponse
 		wantError = exception.New(exception.InvalidFieldsError)
 	)
 
+	l.EXPECT().SendErrorLog(ctx, gomock.Any())
 	s := &service{
 		repository: nil,
+		log:        l,
 	}
 
 	out, err := s.RegisterHero(ctx, batman)

@@ -34,6 +34,9 @@ build:
 test:
 	@go test ./...
 
+.PHONY: mock
+mock: 
+	@go generate ./...
 
 # setup
 .PHONY: setup
