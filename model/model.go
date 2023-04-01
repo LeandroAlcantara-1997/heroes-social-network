@@ -2,6 +2,7 @@ package model
 
 import (
 	"strings"
+	"time"
 
 	"github.com/LeandroAlcantara-1997/heroes-social-network/ports/input"
 )
@@ -12,6 +13,8 @@ type Hero struct {
 	CivilName string
 	Hero      bool
 	Universe  string
+	CreatedAt time.Time
+	UpdatedAt *time.Time
 	Team      *string
 }
 
@@ -36,6 +39,7 @@ func New(id string, dto *input.HeroRequest) *Hero {
 		CivilName: dto.CivilName,
 		Hero:      dto.Hero,
 		Universe:  dto.Universe,
+		CreatedAt: time.Now().UTC(),
 		Team:      dto.Team,
 	}
 }

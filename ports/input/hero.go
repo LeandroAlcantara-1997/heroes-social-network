@@ -2,6 +2,7 @@ package input
 
 import (
 	"context"
+	"time"
 )
 
 type HeroRequest struct {
@@ -18,7 +19,24 @@ type HeroResponse struct {
 	CivilName string        `json:"civilName"`
 	Hero      bool          `json:"hero"`
 	Universe  string        `json:"universe"`
+	CreatedAt time.Time     `json:"created_at"`
+	UpdatedAt *time.Time    `json:"updated_at"`
 	Team      *TeamResponse `json:"team,omitempty"`
+}
+
+func NewHeroResponse(id, heroName, civilName, universe string,
+	hero bool, created_at time.Time, updated_at *time.Time,
+	team *TeamResponse) *HeroResponse {
+	return &HeroResponse{
+		Id:        id,
+		HeroName:  heroName,
+		CivilName: civilName,
+		Hero:      hero,
+		Universe:  universe,
+		CreatedAt: created_at,
+		UpdatedAt: updated_at,
+		Team:      team,
+	}
 }
 
 type Hero interface {

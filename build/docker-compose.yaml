@@ -33,6 +33,15 @@ services:
       - "5432:5432"
     networks:
      - heroes-network
+    
+  redis-cache:
+    image: redis
+    container_name: redis-heroes-social-network
+    command: redis-server --requirepass ${CACHE_PASSWORD}
+    ports:
+      - "6379:6379"
+    networks:
+     - heroes-network
 
   splunk:
     image: splunk/splunk:latest

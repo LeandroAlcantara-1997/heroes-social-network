@@ -5,7 +5,7 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/LeandroAlcantara-1997/heroes-social-network/infrastructure/exception"
+	"github.com/LeandroAlcantara-1997/heroes-social-network/exception"
 	"github.com/LeandroAlcantara-1997/heroes-social-network/model"
 	"github.com/jackc/pgx/v5"
 )
@@ -40,8 +40,9 @@ func (r *reposiotry) CreateHero(ctx context.Context, hero *model.Hero) (err erro
 		return
 	}
 
-	var query = `INSERT INTO character (id, character_name, civil_name, hero, universe, fk_team)
-		VALUES ($1, $2, $3, $4, $5, $6);`
+	var query = `INSERT INTO character (id, character_name, civil_name, 
+		hero, universe, created_at, fk_team)
+		VALUES ($1, $2, $3, $4, $5, $6, $7);`
 
 	tag, err := tx.Exec(ctx, query,
 		hero.Id,
@@ -49,6 +50,7 @@ func (r *reposiotry) CreateHero(ctx context.Context, hero *model.Hero) (err erro
 		hero.CivilName,
 		hero.Hero,
 		hero.Universe,
+		hero.CreatedAt,
 		hero.Team,
 	)
 	if err != nil {
@@ -90,8 +92,8 @@ func (r *reposiotry) checkIfExistsTeam(ctx context.Context, id string) (bool, er
 
 func (r *reposiotry) UpdateHero(ctx context.Context, hero *model.Hero) (err error) {
 	var query = `UPDATE heroes
-		SET character_name = $1, civil_name = $2, hero = $3, universe = $4
-		WHERE id = $5;`
+		SET character_name = $1, civil_name = $2, hero = $3, universe = $4, updated_at = $5
+		WHERE id = $6;`
 
 	tx, err := r.client.Begin(ctx)
 	if err != nil {
@@ -132,7 +134,7 @@ func (r *reposiotry) GetHeroByID(ctx context.Context, id string) (*model.Hero, e
 	if err := row.Scan(&hero.Id, &hero.HeroName, &hero.CivilName,
 		&hero.Hero, &hero.Universe); err != nil {
 		if errors.Is(err, pgx.ErrNoRows) {
-			return nil, exception.New(exception.HeroNotFoundError)
+			return nil, exception.ErrHeroNotFound
 		}
 		return nil, err
 	}
@@ -150,7 +152,7 @@ func (r *reposiotry) DeleteHeroByID(ctx context.Context, id string) (err error) 
 	}
 
 	if tag.RowsAffected() == 0 {
-		return fmt.Errorf("unable to delete hero")
+		return exception.ErrHeroNotFound
 	}
 	return
 }

@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/LeandroAlcantara-1997/heroes-social-network/infrastructure/exception"
+	"github.com/LeandroAlcantara-1997/heroes-social-network/exception"
 	"github.com/LeandroAlcantara-1997/heroes-social-network/ports/input"
 	"github.com/gin-gonic/gin"
 )
@@ -22,7 +22,7 @@ func (h *Handler) PostHero(ctx *gin.Context) {
 
 	response, err := h.UseCase.RegisterHero(ctx, request)
 	if err != nil {
-		code, err := exception.RestError(err.Error())
+		code, err := exception.RestError(err)
 		ctx.JSON(code, err)
 		return
 	}
@@ -43,7 +43,7 @@ func (h *Handler) PutHero(ctx *gin.Context) {
 
 	response, err := h.UseCase.UpdateHero(ctx, id, request)
 	if err != nil {
-		code, err := exception.RestError(err.Error())
+		code, err := exception.RestError(err)
 		ctx.JSON(code, err)
 		return
 	}
@@ -56,7 +56,7 @@ func (h *Handler) GetHeroByID(ctx *gin.Context) {
 
 	response, err := h.UseCase.GetHeroByID(ctx, id)
 	if err != nil {
-		code, err := exception.RestError(err.Error())
+		code, err := exception.RestError(err)
 		ctx.JSON(code, err)
 		return
 	}
@@ -68,7 +68,7 @@ func (h *Handler) DeleteHeroByID(ctx *gin.Context) {
 	var id, _ = ctx.GetQuery("id")
 
 	if err := h.UseCase.DeleteHeroByID(ctx, id); err != nil {
-		code, err := exception.RestError(err.Error())
+		code, err := exception.RestError(err)
 		ctx.JSON(code, err)
 		return
 	}

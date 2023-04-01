@@ -4,7 +4,9 @@ CREATE TYPE UNIVERSE AS ENUM ('DC', 'MARVEL', 'DC|MARVEL');
 CREATE TABLE team(
     id UUID PRIMARY KEY,
     name VARCHAR(100) NOT NULL UNIQUE,
-    universe UNIVERSE NOT NULL
+    universe UNIVERSE NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE NOT NULL,
+    updated_at TIMESTAMP WITH TIME ZONE
 );
 
 CREATE TABLE character(
@@ -13,6 +15,8 @@ CREATE TABLE character(
     civil_name VARCHAR(100),
     hero BOOLEAN,
     universe UNIVERSE NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE NOT NULL,
+    updated_at TIMESTAMP WITH TIME ZONE,
     fk_team UUID,
     FOREIGN KEY (fk_team) REFERENCES team(id)
 );
@@ -20,7 +24,9 @@ CREATE TABLE character(
 
 CREATE TABLE super_power(
     id UUID UNIQUE NOT NULL PRIMARY KEY,
-    description VARCHAR(300) NOT NULL
+    description VARCHAR(300) NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE NOT NULL,
+    updated_at TIMESTAMP WITH TIME ZONE
 );
 
 
@@ -29,14 +35,18 @@ CREATE TABLE game(
     id UUID UNIQUE NOT NULL PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
     release_year DATE NOT NULL,
-    universe UNIVERSE NOT NULL
+    universe UNIVERSE NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE NOT NULL,
+    updated_at TIMESTAMP WITH TIME ZONE
 );
 
 CREATE TABLE hq(
     id UUID PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
     release_year DATE NOT NULL,
-    universe UNIVERSE NOT NULL
+    universe UNIVERSE NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE NOT NULL,
+    updated_at TIMESTAMP WITH TIME ZONE
 );
 
 CREATE TABLE serie(
@@ -45,14 +55,18 @@ CREATE TABLE serie(
     release_year DATE NOT NULL,
     season SMALLINT NOT NULL,
     chapters SMALLINT NOT NULL,
-    universe UNIVERSE NOT NULL
+    universe UNIVERSE NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE NOT NULL,
+    updated_at TIMESTAMP WITH TIME ZONE
 );
 
-CREATE TABLE movie(
+CREATE TABLE movie (
     id UUID PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
     release_year DATE NOT NULL,
-    universe UNIVERSE NOT NULL
+    universe UNIVERSE NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE NOT NULL,
+    updated_at TIMESTAMP WITH TIME ZONE
 );
 
 CREATE TABLE character_serie(
