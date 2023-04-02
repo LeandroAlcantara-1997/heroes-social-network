@@ -1,0 +1,63 @@
+version: '3.9'
+
+services:
+  heroes-social-network:
+    container_name: heroes-social-network-container
+    build:
+      context: ./../
+      dockerfile: build/Dockerfile
+    volumes:
+      - ..:/workspace
+    env_file:
+      - .env
+    ports:
+      - "8080:8080"
+    command: /bin/sh -c "while sleep 1000; do :; done"
+    depends_on:
+      - postgres-database
+      - splunk
+    networks:
+      - heroes-network
+
+  
+  postgres-database:
+    image: postgres
+    container_name: postgres-heroes-social-network
+    env_file:
+      - .env
+    environment:
+      - POSTGRES_DB=${DB_NAME}
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+    ports:
+      - "5432:5432"
+    networks:
+     - heroes-network
+    
+  redis-cache:
+    image: redis
+    container_name: redis-heroes-social-network
+    command: redis-server --requirepass ${CACHE_PASSWORD}
+    ports:
+      - "6379:6379"
+    networks:
+     - heroes-network
+
+  splunk:
+    image: splunk/splunk:latest
+    container_name: splunk
+    volumes:
+      - ..:/splunk
+    environment:
+      - SPLUNK_PASSWORD=${SPLUNK_PASSWORD}
+      - SPLUNK_START_ARGS=--accept-license"
+      # - SPLUNK_PASS
+    ports:
+      - "8000:8000"
+      - "8088:8088"
+    networks:
+      - heroes-network
+    
+networks:
+  heroes-network:
+    driver: bridge
