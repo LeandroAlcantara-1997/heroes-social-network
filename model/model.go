@@ -1,6 +1,11 @@
 package model
 
-import "github.com/LeandroAlcantara-1997/heroes-social-network/ports/input"
+import (
+	"strings"
+	"time"
+
+	"github.com/LeandroAlcantara-1997/heroes-social-network/ports/input"
+)
 
 type Hero struct {
 	Id        string
@@ -8,16 +13,33 @@ type Hero struct {
 	CivilName string
 	Hero      bool
 	Universe  string
+	CreatedAt time.Time
+	UpdatedAt *time.Time
 	Team      *string
 }
 
-func New(id string, dto input.HeroRequest) *Hero {
+type Team struct {
+	Id       string `json:"id"`
+	Name     string `json:"name"`
+	Universe string `json:"universe"`
+}
+
+func NewTeam(id string, dto input.TeamRequest) *Team {
+	return &Team{
+		Id:       id,
+		Name:     dto.Name,
+		Universe: dto.Universe,
+	}
+}
+
+func New(id string, dto *input.HeroRequest) *Hero {
 	return &Hero{
 		Id:        id,
 		HeroName:  dto.HeroName,
 		CivilName: dto.CivilName,
 		Hero:      dto.Hero,
 		Universe:  dto.Universe,
+		CreatedAt: time.Now().UTC(),
 		Team:      dto.Team,
 	}
 }
@@ -31,6 +53,7 @@ const (
 )
 
 func CheckUniverse(universe Universe) bool {
+	universe = Universe(strings.ToUpper(string(universe)))
 	switch universe {
 	case Marvel, DC, DCMarvel:
 		return true

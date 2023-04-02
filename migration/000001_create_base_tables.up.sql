@@ -3,15 +3,20 @@ CREATE TYPE UNIVERSE AS ENUM ('DC', 'MARVEL', 'DC|MARVEL');
 
 CREATE TABLE team(
     id UUID PRIMARY KEY,
-    name VARCHAR(100) NOT NULL UNIQUE
+    name VARCHAR(100) NOT NULL UNIQUE,
+    universe UNIVERSE NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE NOT NULL,
+    updated_at TIMESTAMP WITH TIME ZONE
 );
 
 CREATE TABLE character(
     id UUID UNIQUE NOT NULL PRIMARY KEY,
     character_name VARCHAR(100) NOT NULL,
     civil_name VARCHAR(100),
-    heroe BOOLEAN,
+    hero BOOLEAN,
     universe UNIVERSE NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE NOT NULL,
+    updated_at TIMESTAMP WITH TIME ZONE,
     fk_team UUID,
     FOREIGN KEY (fk_team) REFERENCES team(id)
 );
@@ -19,7 +24,9 @@ CREATE TABLE character(
 
 CREATE TABLE super_power(
     id UUID UNIQUE NOT NULL PRIMARY KEY,
-    description VARCHAR(300) NOT NULL
+    description VARCHAR(300) NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE NOT NULL,
+    updated_at TIMESTAMP WITH TIME ZONE
 );
 
 
@@ -28,14 +35,18 @@ CREATE TABLE game(
     id UUID UNIQUE NOT NULL PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
     release_year DATE NOT NULL,
-    universe UNIVERSE NOT NULL
+    universe UNIVERSE NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE NOT NULL,
+    updated_at TIMESTAMP WITH TIME ZONE
 );
 
 CREATE TABLE hq(
     id UUID PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
     release_year DATE NOT NULL,
-    universe UNIVERSE NOT NULL
+    universe UNIVERSE NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE NOT NULL,
+    updated_at TIMESTAMP WITH TIME ZONE
 );
 
 CREATE TABLE serie(
@@ -44,7 +55,18 @@ CREATE TABLE serie(
     release_year DATE NOT NULL,
     season SMALLINT NOT NULL,
     chapters SMALLINT NOT NULL,
-    universe UNIVERSE NOT NULL
+    universe UNIVERSE NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE NOT NULL,
+    updated_at TIMESTAMP WITH TIME ZONE
+);
+
+CREATE TABLE movie (
+    id UUID PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    release_year DATE NOT NULL,
+    universe UNIVERSE NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE NOT NULL,
+    updated_at TIMESTAMP WITH TIME ZONE
 );
 
 CREATE TABLE character_serie(
@@ -78,3 +100,12 @@ CREATE TABLE character_game(
     FOREIGN KEY (fk_character) REFERENCES character(id),
     FOREIGN KEY (fk_game) REFERENCES game(id)
 );
+
+CREATE TABLE character_movie(
+    fk_character UUID,
+    fk_movie UUID,
+    CONSTRAINT pk_character_movie PRIMARY KEY (fk_character,fk_movie),
+    FOREIGN KEY (fk_character) REFERENCES character(id),
+    FOREIGN KEY (fk_movie) REFERENCES movie(id)
+);
+

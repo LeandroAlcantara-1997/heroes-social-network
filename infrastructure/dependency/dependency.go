@@ -5,10 +5,13 @@ import (
 	"fmt"
 
 	"github.com/LeandroAlcantara-1997/heroes-social-network/domain/heroes"
+	"github.com/LeandroAlcantara-1997/heroes-social-network/infrastructure/cache"
 	"github.com/LeandroAlcantara-1997/heroes-social-network/infrastructure/config"
 	"github.com/LeandroAlcantara-1997/heroes-social-network/infrastructure/repository"
+	"github.com/LeandroAlcantara-1997/heroes-social-network/infrastructure/splunk"
 	"github.com/LeandroAlcantara-1997/heroes-social-network/ports/input"
 	"github.com/jackc/pgx/v5"
+	"github.com/redis/go-redis/v9"
 )
 
 type dependency struct {
@@ -16,7 +19,9 @@ type dependency struct {
 }
 
 type components struct {
-	clientPgx *pgx.Conn
+	pgxClient    *pgx.Conn
+	splunkClient *splunk.Splunk
+	redisClient  *redis.Client
 }
 
 func LoadDependency(ctx context.Context) (*dependency, error) {
@@ -25,7 +30,9 @@ func LoadDependency(ctx context.Context) (*dependency, error) {
 		return nil, err
 	}
 	heroService := heroes.New(
-		repository.New(cmp.clientPgx),
+		repository.New(cmp.pgxClient),
+		cache.New(cmp.redisClient),
+		cmp.splunkClient,
 	)
 
 	return &dependency{
@@ -34,7 +41,7 @@ func LoadDependency(ctx context.Context) (*dependency, error) {
 }
 
 func loadExternalTools(ctx context.Context) (*components, error) {
-	clientPgx, err := pgx.Connect(
+	pgxClient, err := pgx.Connect(
 		ctx,
 		fmt.Sprintf("postgres://%s:%s@%s:%s/%s?sslmode=disable",
 			config.Env.DbUser,
@@ -48,7 +55,19 @@ func loadExternalTools(ctx context.Context) (*components, error) {
 		return nil, err
 	}
 
+	splunkClient := splunk.New(config.Env.SplunkHost, false)
+
+	redisClient := redis.NewClient(
+		&redis.Options{
+			Addr:     fmt.Sprintf("%s:%s", config.Env.CacheHost, config.Env.CachePort),
+			Password: config.Env.CachePassword,
+			DB:       0,
+		},
+	)
+
 	return &components{
-		clientPgx: clientPgx,
+		pgxClient:    pgxClient,
+		splunkClient: splunkClient,
+		redisClient:  redisClient,
 	}, nil
 }
