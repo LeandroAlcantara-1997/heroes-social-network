@@ -32,7 +32,7 @@ build:
 
 .PHONY: test
 test:
-	@go test ./...
+	@go test -coverpkg ./... -race -coverprofile coverage.out ./...
 
 .PHONY: mock
 mock: 

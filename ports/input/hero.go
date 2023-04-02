@@ -39,6 +39,7 @@ func NewHeroResponse(id, heroName, civilName, universe string,
 	}
 }
 
+//go:generate mockgen -destination ../../mock/hero_mock.go -package=mock -source=hero.go
 type Hero interface {
 	RegisterHero(ctx context.Context, dto *HeroRequest) (*HeroResponse, error)
 	UpdateHero(ctx context.Context, id string, dto *HeroRequest) (*HeroResponse, error)
