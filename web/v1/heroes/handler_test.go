@@ -12,7 +12,7 @@ import (
 
 	"github.com/LeandroAlcantara-1997/heroes-social-network/exception"
 	"github.com/LeandroAlcantara-1997/heroes-social-network/mock"
-	"github.com/LeandroAlcantara-1997/heroes-social-network/ports/input"
+	input "github.com/LeandroAlcantara-1997/heroes-social-network/ports/input/hero"
 	"github.com/gin-gonic/gin"
 	"github.com/golang/mock/gomock"
 )

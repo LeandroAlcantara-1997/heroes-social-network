@@ -7,7 +7,7 @@ import (
 	"github.com/LeandroAlcantara-1997/heroes-social-network/exception"
 	"github.com/LeandroAlcantara-1997/heroes-social-network/mock"
 	"github.com/LeandroAlcantara-1997/heroes-social-network/model"
-	"github.com/LeandroAlcantara-1997/heroes-social-network/ports/input"
+	input "github.com/LeandroAlcantara-1997/heroes-social-network/ports/input/hero"
 	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/assert"
 )
@@ -50,7 +50,7 @@ func TestServiceRegisterHeroSuccess(t *testing.T) {
 	defer ctrl.Finish()
 	rep.EXPECT().CreateHero(ctx, gomock.Any()).
 		Return(nil)
-	c.EXPECT().Set(ctx, gomock.Any()).Return(nil)
+	c.EXPECT().SetHero(ctx, gomock.Any()).Return(nil)
 	defer ctrl.Finish()
 	s := &service{
 		repository: rep,
@@ -82,7 +82,7 @@ func TestServiceRegisterHeroFailInternalServerError(t *testing.T) {
 	defer ctrl.Finish()
 	rep.EXPECT().CreateHero(ctx, gomock.Any()).
 		Return(exception.ErrInternalServer)
-	c.EXPECT().Delete(ctx, gomock.Any()).Return(nil)
+	c.EXPECT().DeleteHero(ctx, gomock.Any()).Return(nil)
 
 	l.EXPECT().SendErrorLog(ctx, gomock.Any())
 	s := &service{
@@ -123,7 +123,7 @@ func TestServiceGetHeroByIDSuccess(t *testing.T) {
 		c    = mock.NewMockCache(ctrl)
 	)
 	defer ctrl.Finish()
-	c.EXPECT().Get(ctx, ironman.Id).Return(ironman, nil)
+	c.EXPECT().GetHero(ctx, ironman.Id).Return(ironman, nil)
 
 	s := &service{
 		repository: nil,
@@ -155,7 +155,7 @@ func TestServiceGetHeroByIDFailHeroNotFoundError(t *testing.T) {
 	rep.EXPECT().GetHeroByID(ctx, ironman.Id).
 		Return(nil, exception.ErrHeroNotFound)
 	l.EXPECT().SendErrorLog(ctx, gomock.Any()).AnyTimes()
-	c.EXPECT().Get(ctx, ironman.Id).Return(nil, exception.ErrHeroNotFound)
+	c.EXPECT().GetHero(ctx, ironman.Id).Return(nil, exception.ErrHeroNotFound)
 
 	s := &service{
 		repository: rep,
@@ -181,7 +181,7 @@ func TestServiceGetHeroByIDFailInternalServerError(t *testing.T) {
 	rep.EXPECT().GetHeroByID(ctx, ironman.Id).
 		Return(nil, exception.ErrInternalServer)
 	l.EXPECT().SendErrorLog(ctx, gomock.Any()).AnyTimes()
-	c.EXPECT().Get(ctx, ironman.Id).Return(nil, exception.ErrInternalServer)
+	c.EXPECT().GetHero(ctx, ironman.Id).Return(nil, exception.ErrInternalServer)
 
 	s := &service{
 		repository: rep,
@@ -206,7 +206,7 @@ func TestServiceUpdateHeroSuccess(t *testing.T) {
 	defer ctrl.Finish()
 	rep.EXPECT().UpdateHero(ctx, gomock.Any()).
 		Return(nil)
-	c.EXPECT().Set(ctx, gomock.Any()).Return(nil)
+	c.EXPECT().SetHero(ctx, gomock.Any()).Return(nil)
 
 	s := &service{
 		repository: rep,
@@ -269,7 +269,7 @@ func TestServiceUpdateHeroFailInternalServerError(t *testing.T) {
 	defer ctrl.Finish()
 	l.EXPECT().SendErrorLog(ctx, gomock.Any())
 	r.EXPECT().UpdateHero(ctx, gomock.Any()).Return(exception.ErrInternalServer)
-	c.EXPECT().Delete(ctx, gomock.Any()).Return(nil)
+	c.EXPECT().DeleteHero(ctx, gomock.Any()).Return(nil)
 	s := &service{
 		repository: r,
 		log:        l,
@@ -293,10 +293,10 @@ func TestServiceDeleteHeroByIDSuccess(t *testing.T) {
 		ctx  = context.Background()
 		ctrl = gomock.NewController(t)
 		c    = mock.NewMockCache(ctrl)
-		r    = mock.NewMockHeroRepository(ctrl)
+		r    = mock.NewMockRepository(ctrl)
 	)
 	defer ctrl.Finish()
-	c.EXPECT().Delete(ctx, ironman.Id).Return(nil)
+	c.EXPECT().DeleteHero(ctx, ironman.Id).Return(nil)
 	r.EXPECT().DeleteHeroByID(ctx, ironman.Id).Return(nil)
 	s := New(r, c, nil)
 	err := s.DeleteHeroByID(ctx, ironman.Id)
@@ -310,7 +310,7 @@ func TestServiceDeleteHeroByIDFailInternalServerError(t *testing.T) {
 		c    = mock.NewMockCache(ctrl)
 		l    = mock.NewMockLog(ctrl)
 	)
-	c.EXPECT().Delete(ctx, ironman.Id).Return(exception.ErrInternalServer)
+	c.EXPECT().DeleteHero(ctx, ironman.Id).Return(exception.ErrInternalServer)
 	l.EXPECT().SendErrorLog(ctx, gomock.Any())
 	s := New(nil, c, l)
 	err := s.DeleteHeroByID(ctx, ironman.Id)

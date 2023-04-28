@@ -8,7 +8,7 @@ import (
 	context "context"
 	reflect "reflect"
 
-	input "github.com/LeandroAlcantara-1997/heroes-social-network/ports/input"
+	hero "github.com/LeandroAlcantara-1997/heroes-social-network/ports/input/hero"
 	gomock "github.com/golang/mock/gomock"
 )
 
@@ -50,10 +50,10 @@ func (mr *MockHeroMockRecorder) DeleteHeroByID(ctx, id interface{}) *gomock.Call
 }
 
 // GetHeroByID mocks base method.
-func (m *MockHero) GetHeroByID(ctx context.Context, id string) (*input.HeroResponse, error) {
+func (m *MockHero) GetHeroByID(ctx context.Context, id string) (*hero.HeroResponse, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetHeroByID", ctx, id)
-	ret0, _ := ret[0].(*input.HeroResponse)
+	ret0, _ := ret[0].(*hero.HeroResponse)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -65,10 +65,10 @@ func (mr *MockHeroMockRecorder) GetHeroByID(ctx, id interface{}) *gomock.Call {
 }
 
 // RegisterHero mocks base method.
-func (m *MockHero) RegisterHero(ctx context.Context, dto *input.HeroRequest) (*input.HeroResponse, error) {
+func (m *MockHero) RegisterHero(ctx context.Context, dto *hero.HeroRequest) (*hero.HeroResponse, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "RegisterHero", ctx, dto)
-	ret0, _ := ret[0].(*input.HeroResponse)
+	ret0, _ := ret[0].(*hero.HeroResponse)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -80,10 +80,10 @@ func (mr *MockHeroMockRecorder) RegisterHero(ctx, dto interface{}) *gomock.Call 
 }
 
 // UpdateHero mocks base method.
-func (m *MockHero) UpdateHero(ctx context.Context, id string, dto *input.HeroRequest) (*input.HeroResponse, error) {
+func (m *MockHero) UpdateHero(ctx context.Context, id string, dto *hero.HeroRequest) (*hero.HeroResponse, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "UpdateHero", ctx, id, dto)
-	ret0, _ := ret[0].(*input.HeroResponse)
+	ret0, _ := ret[0].(*hero.HeroResponse)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
