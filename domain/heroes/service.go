@@ -7,7 +7,7 @@ import (
 
 	"github.com/LeandroAlcantara-1997/heroes-social-network/exception"
 	"github.com/LeandroAlcantara-1997/heroes-social-network/model"
-	"github.com/LeandroAlcantara-1997/heroes-social-network/ports/input"
+	input "github.com/LeandroAlcantara-1997/heroes-social-network/ports/input/hero"
 	"github.com/LeandroAlcantara-1997/heroes-social-network/ports/output/cache"
 	"github.com/LeandroAlcantara-1997/heroes-social-network/ports/output/log"
 	"github.com/LeandroAlcantara-1997/heroes-social-network/ports/output/repository"
@@ -38,14 +38,14 @@ func (s *service) RegisterHero(ctx context.Context, dto *input.HeroRequest) (*in
 
 	if err := s.repository.CreateHero(ctx, hero); err != nil {
 		s.log.SendErrorLog(ctx, err.Error())
-		if err := s.cache.Delete(ctx, hero.Id); err != nil {
+		if err := s.cache.DeleteHero(ctx, hero.Id); err != nil {
 			s.log.SendErrorLog(ctx, err.Error())
 			return nil, exception.ErrInternalServer
 		}
 		return nil, exception.ErrInternalServer
 	}
 
-	if err := s.cache.Set(ctx, hero); err != nil {
+	if err := s.cache.SetHero(ctx, hero); err != nil {
 		s.log.SendErrorLog(ctx, err.Error())
 		return nil, exception.ErrInternalServer
 	}
@@ -63,14 +63,14 @@ func (s *service) UpdateHero(ctx context.Context, id string, dto *input.HeroRequ
 	hero.UpdatedAt = gerPointer(time.Now().UTC())
 	if err := s.repository.UpdateHero(ctx, hero); err != nil {
 		s.log.SendErrorLog(ctx, err.Error())
-		if err := s.cache.Delete(ctx, hero.Id); err != nil {
+		if err := s.cache.DeleteHero(ctx, hero.Id); err != nil {
 			s.log.SendErrorLog(ctx, err.Error())
 			return nil, exception.ErrInternalServer
 		}
 		return nil, err
 	}
 
-	if err := s.cache.Set(ctx, hero); err != nil {
+	if err := s.cache.SetHero(ctx, hero); err != nil {
 		s.log.SendErrorLog(ctx, err.Error())
 		return nil, exception.ErrInternalServer
 	}
@@ -80,7 +80,7 @@ func (s *service) UpdateHero(ctx context.Context, id string, dto *input.HeroRequ
 }
 
 func (s *service) GetHeroByID(ctx context.Context, id string) (*input.HeroResponse, error) {
-	hero, err := s.cache.Get(ctx, id)
+	hero, err := s.cache.GetHero(ctx, id)
 	if err != nil {
 		s.log.SendErrorLog(ctx, err.Error())
 		hero, err = s.repository.GetHeroByID(ctx, id)
@@ -100,7 +100,7 @@ func (s *service) GetHeroByID(ctx context.Context, id string) (*input.HeroRespon
 }
 
 func (s *service) DeleteHeroByID(ctx context.Context, id string) (err error) {
-	if err = s.cache.Delete(ctx, id); err != nil {
+	if err = s.cache.DeleteHero(ctx, id); err != nil {
 		s.log.SendErrorLog(ctx, err.Error())
 		return exception.ErrInternalServer
 	}
