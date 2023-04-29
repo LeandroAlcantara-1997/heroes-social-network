@@ -49,6 +49,20 @@ func (mr *MockRepositoryMockRecorder) CreateHero(ctx, hero interface{}) *gomock.
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateHero", reflect.TypeOf((*MockRepository)(nil).CreateHero), ctx, hero)
 }
 
+// CreateTeam mocks base method.
+func (m *MockRepository) CreateTeam(ctx context.Context, team *model.Team) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "CreateTeam", ctx, team)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// CreateTeam indicates an expected call of CreateTeam.
+func (mr *MockRepositoryMockRecorder) CreateTeam(ctx, team interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateTeam", reflect.TypeOf((*MockRepository)(nil).CreateTeam), ctx, team)
+}
+
 // DeleteHeroByID mocks base method.
 func (m *MockRepository) DeleteHeroByID(ctx context.Context, id string) error {
 	m.ctrl.T.Helper()
@@ -170,4 +184,41 @@ func (m *MockHeroRepository) UpdateHero(ctx context.Context, hero *model.Hero) e
 func (mr *MockHeroRepositoryMockRecorder) UpdateHero(ctx, hero interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateHero", reflect.TypeOf((*MockHeroRepository)(nil).UpdateHero), ctx, hero)
+}
+
+// MockTeamRepository is a mock of TeamRepository interface.
+type MockTeamRepository struct {
+	ctrl     *gomock.Controller
+	recorder *MockTeamRepositoryMockRecorder
+}
+
+// MockTeamRepositoryMockRecorder is the mock recorder for MockTeamRepository.
+type MockTeamRepositoryMockRecorder struct {
+	mock *MockTeamRepository
+}
+
+// NewMockTeamRepository creates a new mock instance.
+func NewMockTeamRepository(ctrl *gomock.Controller) *MockTeamRepository {
+	mock := &MockTeamRepository{ctrl: ctrl}
+	mock.recorder = &MockTeamRepositoryMockRecorder{mock}
+	return mock
+}
+
+// EXPECT returns an object that allows the caller to indicate expected use.
+func (m *MockTeamRepository) EXPECT() *MockTeamRepositoryMockRecorder {
+	return m.recorder
+}
+
+// CreateTeam mocks base method.
+func (m *MockTeamRepository) CreateTeam(ctx context.Context, team *model.Team) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "CreateTeam", ctx, team)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// CreateTeam indicates an expected call of CreateTeam.
+func (mr *MockTeamRepositoryMockRecorder) CreateTeam(ctx, team interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateTeam", reflect.TypeOf((*MockTeamRepository)(nil).CreateTeam), ctx, team)
 }

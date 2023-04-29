@@ -5,7 +5,7 @@ import (
 	"net/http"
 
 	"github.com/LeandroAlcantara-1997/heroes-social-network/exception"
-	"github.com/LeandroAlcantara-1997/heroes-social-network/ports/input"
+	input "github.com/LeandroAlcantara-1997/heroes-social-network/ports/input/hero"
 	"github.com/gin-gonic/gin"
 )
 
@@ -15,6 +15,7 @@ type Handler struct {
 
 func (h *Handler) PostHero(ctx *gin.Context) {
 	var request *input.HeroRequest
+
 	if err := json.NewDecoder(ctx.Request.Body).Decode(&request); err != nil {
 		ctx.JSON(http.StatusBadRequest, err)
 		return
@@ -27,7 +28,7 @@ func (h *Handler) PostHero(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusOK, response)
+	ctx.JSON(http.StatusCreated, response)
 }
 
 func (h *Handler) PutHero(ctx *gin.Context) {
