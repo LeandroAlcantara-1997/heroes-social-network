@@ -34,7 +34,7 @@ type EventMetadata struct {
 
 type LogMetadata struct {
 	RequestID string `json:"requestId,omitempty"`
-	EntityId  string `json:"entityId,omitempty"`
+	EntityID  string `json:"entityId,omitempty"`
 	LogLevel  string `json:"logLevel,omitempty"`
 	Type      string `json:"type,omitempty"`
 	EventCode string `json:"eventCode,omitempty"`

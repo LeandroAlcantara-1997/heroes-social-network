@@ -74,5 +74,5 @@ func (h *Handler) DeleteHeroByID(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusAccepted, nil)
+	ctx.Status(http.StatusAccepted)
 }

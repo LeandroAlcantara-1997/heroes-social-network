@@ -16,7 +16,7 @@ type HeroRequest struct {
 }
 
 type HeroResponse struct {
-	Id        string             `json:"id"`
+	ID        string             `json:"id"`
 	HeroName  string             `json:"heroName"`
 	CivilName string             `json:"civilName"`
 	Hero      bool               `json:"hero"`
@@ -27,16 +27,16 @@ type HeroResponse struct {
 }
 
 func NewHeroResponse(id, heroName, civilName, universe string,
-	hero bool, created_at time.Time, updated_at *time.Time,
+	hero bool, createdAt time.Time, updatedAt *time.Time,
 	team *team.TeamResponse) *HeroResponse {
 	return &HeroResponse{
-		Id:        id,
+		ID:        id,
 		HeroName:  heroName,
 		CivilName: civilName,
 		Hero:      hero,
 		Universe:  universe,
-		CreatedAt: created_at,
-		UpdatedAt: updated_at,
+		CreatedAt: createdAt,
+		UpdatedAt: updatedAt,
 		Team:      team,
 	}
 }
