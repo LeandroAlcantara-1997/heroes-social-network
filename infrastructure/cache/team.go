@@ -16,7 +16,7 @@ func (c *cache) SetTeam(ctx context.Context, team *model.Team) (err error) {
 	}
 
 	if cmd := c.redisClient.Set(ctx,
-		getTeamKey(team.Id), payload,
+		getTeamKey(team.ID), payload,
 		time.Duration(time.Hour*24)); cmd.Err() != nil {
 		return cmd.Err()
 	}

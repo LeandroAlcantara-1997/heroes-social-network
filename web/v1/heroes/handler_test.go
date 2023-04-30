@@ -26,7 +26,7 @@ var (
 		Team:      nil,
 	}
 	batmanResponse = &input.HeroResponse{
-		Id:        "4d67708f-f5fc-49c5-8ed3-90e5e078917c",
+		ID:        "4d67708f-f5fc-49c5-8ed3-90e5e078917c",
 		HeroName:  "Batman",
 		CivilName: "Bruce Wayne",
 		Hero:      true,
@@ -140,11 +140,11 @@ func TestHandlerPutHeroSuccess(t *testing.T) {
 		useCase = mock.NewMockHero(ctrl)
 	)
 	defer ctrl.Finish()
-	useCase.EXPECT().UpdateHero(ctx, batmanResponse.Id, batmanRequest).
+	useCase.EXPECT().UpdateHero(ctx, batmanResponse.ID, batmanRequest).
 		Return(batmanResponse, nil)
 	ctx.Request = httptest.NewRequest(
 		http.MethodPut,
-		fmt.Sprintf("/v1/heroes?id=%s", batmanResponse.Id),
+		fmt.Sprintf("/v1/heroes?id=%s", batmanResponse.ID),
 		strings.NewReader(`{
 					"heroName": "Batman",
 					"civilName": "Bruce Wayne",
@@ -169,11 +169,11 @@ func TestHandlerPutHeroFailInvalidField(t *testing.T) {
 		useCase = mock.NewMockHero(ctrl)
 	)
 	defer ctrl.Finish()
-	useCase.EXPECT().UpdateHero(ctx, batmanResponse.Id, batmanRequestWithInvalidField).
+	useCase.EXPECT().UpdateHero(ctx, batmanResponse.ID, batmanRequestWithInvalidField).
 		Return(nil, exception.ErrInvalidFields)
 	ctx.Request = httptest.NewRequest(
 		http.MethodPut,
-		fmt.Sprintf("/v1/heroes?id=%s", batmanResponse.Id),
+		fmt.Sprintf("/v1/heroes?id=%s", batmanResponse.ID),
 		strings.NewReader(`{
 					"heroName": "Batman",
 					"civilName": "Bruce Wayne",
@@ -198,11 +198,11 @@ func TestHandlerPutHeroFailInternalServerError(t *testing.T) {
 		useCase = mock.NewMockHero(ctrl)
 	)
 	defer ctrl.Finish()
-	useCase.EXPECT().UpdateHero(ctx, batmanResponse.Id, batmanRequest).
+	useCase.EXPECT().UpdateHero(ctx, batmanResponse.ID, batmanRequest).
 		Return(nil, exception.ErrInternalServer)
 	ctx.Request = httptest.NewRequest(
 		http.MethodPut,
-		fmt.Sprintf("/v1/heroes?id=%s", batmanResponse.Id),
+		fmt.Sprintf("/v1/heroes?id=%s", batmanResponse.ID),
 		strings.NewReader(`{
 					"heroName": "Batman",
 					"civilName": "Bruce Wayne",
@@ -228,11 +228,11 @@ func TestHandlerGetHeroByIDSucess(t *testing.T) {
 		useCase = mock.NewMockHero(ctrl)
 	)
 	defer ctrl.Finish()
-	useCase.EXPECT().GetHeroByID(ctx, batmanResponse.Id).
+	useCase.EXPECT().GetHeroByID(ctx, batmanResponse.ID).
 		Return(nil, exception.ErrInternalServer)
 	ctx.Request = httptest.NewRequest(
 		http.MethodPut,
-		fmt.Sprintf("/v1/heroes?id=%s", batmanResponse.Id),
+		fmt.Sprintf("/v1/heroes?id=%s", batmanResponse.ID),
 		strings.NewReader(`{}`),
 	)
 	h := &Handler{
@@ -252,11 +252,11 @@ func TestHandlerGetHeroByIDFailHeroNotFound(t *testing.T) {
 		useCase = mock.NewMockHero(ctrl)
 	)
 	defer ctrl.Finish()
-	useCase.EXPECT().GetHeroByID(ctx, batmanResponse.Id).
+	useCase.EXPECT().GetHeroByID(ctx, batmanResponse.ID).
 		Return(nil, exception.ErrHeroNotFound)
 	ctx.Request = httptest.NewRequest(
 		http.MethodPut,
-		fmt.Sprintf("/v1/heroes?id=%s", batmanResponse.Id),
+		fmt.Sprintf("/v1/heroes?id=%s", batmanResponse.ID),
 		strings.NewReader(`{}`),
 	)
 	h := &Handler{
@@ -276,11 +276,11 @@ func TestHandlerGetHeroByIDFailHInternalServerError(t *testing.T) {
 		useCase = mock.NewMockHero(ctrl)
 	)
 	defer ctrl.Finish()
-	useCase.EXPECT().GetHeroByID(ctx, batmanResponse.Id).
+	useCase.EXPECT().GetHeroByID(ctx, batmanResponse.ID).
 		Return(nil, exception.ErrInternalServer)
 	ctx.Request = httptest.NewRequest(
 		http.MethodPut,
-		fmt.Sprintf("/v1/heroes?id=%s", batmanResponse.Id),
+		fmt.Sprintf("/v1/heroes?id=%s", batmanResponse.ID),
 		strings.NewReader(`{}`),
 	)
 	h := &Handler{
@@ -301,11 +301,11 @@ func TestHandlerDeleteHeroByIDSuccess(t *testing.T) {
 		useCase = mock.NewMockHero(ctrl)
 	)
 	defer ctrl.Finish()
-	useCase.EXPECT().DeleteHeroByID(ctx, batmanResponse.Id).
+	useCase.EXPECT().DeleteHeroByID(ctx, batmanResponse.ID).
 		Return(nil)
 	ctx.Request = httptest.NewRequest(
 		http.MethodDelete,
-		fmt.Sprintf("/v1/heroes?id=%s", batmanResponse.Id),
+		fmt.Sprintf("/v1/heroes?id=%s", batmanResponse.ID),
 		strings.NewReader(`{}`),
 	)
 	h := &Handler{
@@ -325,11 +325,11 @@ func TestHandlerDeleteHeroByIDFailHeroNotFound(t *testing.T) {
 		useCase = mock.NewMockHero(ctrl)
 	)
 	defer ctrl.Finish()
-	useCase.EXPECT().DeleteHeroByID(ctx, batmanResponse.Id).
+	useCase.EXPECT().DeleteHeroByID(ctx, batmanResponse.ID).
 		Return(exception.ErrHeroNotFound)
 	ctx.Request = httptest.NewRequest(
 		http.MethodDelete,
-		fmt.Sprintf("/v1/heroes?id=%s", batmanResponse.Id),
+		fmt.Sprintf("/v1/heroes?id=%s", batmanResponse.ID),
 		strings.NewReader(`{}`),
 	)
 	h := &Handler{
@@ -349,11 +349,11 @@ func TestHandlerDeleteHeroByIDFailInternalServerError(t *testing.T) {
 		useCase = mock.NewMockHero(ctrl)
 	)
 	defer ctrl.Finish()
-	useCase.EXPECT().DeleteHeroByID(ctx, batmanResponse.Id).
+	useCase.EXPECT().DeleteHeroByID(ctx, batmanResponse.ID).
 		Return(exception.ErrInternalServer)
 	ctx.Request = httptest.NewRequest(
 		http.MethodDelete,
-		fmt.Sprintf("/v1/heroes?id=%s", batmanResponse.Id),
+		fmt.Sprintf("/v1/heroes?id=%s", batmanResponse.ID),
 		strings.NewReader(`{}`),
 	)
 	h := &Handler{

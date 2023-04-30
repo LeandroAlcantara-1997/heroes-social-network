@@ -11,7 +11,7 @@ type TeamRequest struct {
 }
 
 type TeamResponse struct {
-	Id        string     `json:"id"`
+	ID        string     `json:"id"`
 	Name      string     `json:"name"`
 	Universe  string     `json:"universe"`
 	CreatedAt time.Time  `json:"createdAt"`
@@ -21,7 +21,7 @@ type TeamResponse struct {
 func NewTeamResponse(id, name, universe string,
 	createdAt time.Time, updatedAt *time.Time) *TeamResponse {
 	return &TeamResponse{
-		Id:        id,
+		ID:        id,
 		Name:      name,
 		Universe:  universe,
 		CreatedAt: createdAt,
@@ -31,5 +31,5 @@ func NewTeamResponse(id, name, universe string,
 
 //go:generate mockgen -destination ../../../mock/team_mock.go -package=mock -source=team.go
 type Team interface {
-	RegisterTeam(ctx context.Context, team *TeamRequest) (*TeamResponse, error)
+	RegisterTeam(ctx context.Context, dto *TeamRequest) (*TeamResponse, error)
 }

@@ -37,6 +37,11 @@ func (s *service) RegisterTeam(ctx context.Context, request *input.TeamRequest) 
 		s.log.SendErrorLog(ctx, err.Error())
 		return nil, exception.ErrInternalServer
 	}
-	return input.NewTeamResponse(team.Id, team.Name, team.Universe,
+
+	if err := s.cache.SetTeam(ctx, team); err != nil {
+		s.log.SendErrorLog(ctx, err.Error())
+	}
+
+	return input.NewTeamResponse(team.ID, team.Name, team.Universe,
 		team.CreatedAt, team.UpdatedAt), nil
 }

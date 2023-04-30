@@ -3,12 +3,12 @@ package config
 import "github.com/Netflix/go-env"
 
 type environment struct {
-	ApiPort       string `env:"API_PORT"`
-	DbName        string `env:"DB_NAME"`
-	DbUser        string `env:"DB_USER"`
-	DbPassword    string `env:"DB_PASSWORD"`
-	DbHost        string `env:"DB_HOST"`
-	DbPort        string `env:"DB_PORT"`
+	APIPort       string `env:"API_PORT"`
+	DBName        string `env:"DB_NAME"`
+	DBUser        string `env:"DB_USER"`
+	DBPassword    string `env:"DB_PASSWORD"`
+	DBHost        string `env:"DB_HOST"`
+	DBPort        string `env:"DB_PORT"`
 	SplunkHost    string `env:"SPLUNK_HOST"`
 	SplunkToken   string `env:"SPLUNK_TOKEN"`
 	CacheHost     string `env:"CACHE_HOST"`
