@@ -54,11 +54,11 @@ func loadExternalTools(ctx context.Context) (*components, error) {
 	pgxClient, err := pgx.Connect(
 		ctx,
 		fmt.Sprintf("postgres://%s:%s@%s:%s/%s?sslmode=disable",
-			config.Env.DbUser,
-			config.Env.DbPassword,
-			config.Env.DbHost,
-			config.Env.DbPort,
-			config.Env.DbName,
+			config.Env.DBUser,
+			config.Env.DBPassword,
+			config.Env.DBHost,
+			config.Env.DBPort,
+			config.Env.DBName,
 		),
 	)
 	if err != nil {

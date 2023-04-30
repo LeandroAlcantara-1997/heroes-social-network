@@ -7,7 +7,7 @@ import (
 )
 
 type Hero struct {
-	Id        string
+	ID        string
 	HeroName  string
 	CivilName string
 	Hero      bool
@@ -19,7 +19,7 @@ type Hero struct {
 
 func New(id string, dto *hero.HeroRequest) *Hero {
 	return &Hero{
-		Id:        id,
+		ID:        id,
 		HeroName:  dto.HeroName,
 		CivilName: dto.CivilName,
 		Hero:      dto.Hero,

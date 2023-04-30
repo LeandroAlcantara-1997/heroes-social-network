@@ -16,13 +16,13 @@ func (r *repository) CreateTeam(ctx context.Context, team *model.Team) (err erro
 		return
 	}
 
-	tag, err := tx.Exec(ctx, query, team.Id,
+	tag, err := tx.Exec(ctx, query, team.ID,
 		team.Name, team.Universe, team.CreatedAt)
 	if err != nil {
 		if err = tx.Rollback(ctx); err != nil {
 			return
 		}
-		return
+		return errors.New("cannot be insert team")
 	}
 
 	if tag.RowsAffected() == 0 {

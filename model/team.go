@@ -7,7 +7,7 @@ import (
 )
 
 type Team struct {
-	Id        string `json:"id"`
+	ID        string `json:"id"`
 	Name      string `json:"name"`
 	Universe  string `json:"universe"`
 	CreatedAt time.Time
@@ -16,7 +16,7 @@ type Team struct {
 
 func NewTeam(id string, createdAt time.Time, dto *team.TeamRequest) *Team {
 	return &Team{
-		Id:        id,
+		ID:        id,
 		Name:      dto.Name,
 		Universe:  dto.Universe,
 		CreatedAt: createdAt,

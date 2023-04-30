@@ -16,7 +16,7 @@ func (c *cache) SetHero(ctx context.Context, hero *model.Hero) (err error) {
 	}
 
 	if cmd := c.redisClient.Set(ctx,
-		getHeroKey(hero.Id), payload,
+		getHeroKey(hero.ID), payload,
 		time.Duration(time.Hour*24)); cmd.Err() != nil {
 		return cmd.Err()
 	}

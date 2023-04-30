@@ -21,8 +21,8 @@ func main() {
 
 	configureGlobalMiddleware(ctx, r)
 
-	log.Default().Printf("Server listening in :%s", config.Env.ApiPort)
-	r.Run(fmt.Sprintf(":%s", config.Env.ApiPort))
+	log.Default().Printf("Server listening in :%s", config.Env.APIPort)
+	r.Run(fmt.Sprintf(":%s", config.Env.APIPort))
 }
 
 func configureGlobalMiddleware(ctx context.Context, r *gin.Engine) {

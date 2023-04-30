@@ -38,7 +38,7 @@ func (s *service) RegisterHero(ctx context.Context, dto *input.HeroRequest) (*in
 
 	if err := s.repository.CreateHero(ctx, hero); err != nil {
 		s.log.SendErrorLog(ctx, err.Error())
-		if err := s.cache.DeleteHero(ctx, hero.Id); err != nil {
+		if err := s.cache.DeleteHero(ctx, hero.ID); err != nil {
 			s.log.SendErrorLog(ctx, err.Error())
 			return nil, exception.ErrInternalServer
 		}
@@ -50,7 +50,7 @@ func (s *service) RegisterHero(ctx context.Context, dto *input.HeroRequest) (*in
 		return nil, exception.ErrInternalServer
 	}
 
-	return input.NewHeroResponse(hero.Id, hero.HeroName, hero.CivilName, hero.Universe,
+	return input.NewHeroResponse(hero.ID, hero.HeroName, hero.CivilName, hero.Universe,
 		hero.Hero, hero.CreatedAt, hero.UpdatedAt, nil), nil
 }
 
@@ -63,7 +63,7 @@ func (s *service) UpdateHero(ctx context.Context, id string, dto *input.HeroRequ
 	hero.UpdatedAt = gerPointer(time.Now().UTC())
 	if err := s.repository.UpdateHero(ctx, hero); err != nil {
 		s.log.SendErrorLog(ctx, err.Error())
-		if err := s.cache.DeleteHero(ctx, hero.Id); err != nil {
+		if err := s.cache.DeleteHero(ctx, hero.ID); err != nil {
 			s.log.SendErrorLog(ctx, err.Error())
 			return nil, exception.ErrInternalServer
 		}
@@ -72,7 +72,9 @@ func (s *service) UpdateHero(ctx context.Context, id string, dto *input.HeroRequ
 
 	if err := s.cache.SetHero(ctx, hero); err != nil {
 		s.log.SendErrorLog(ctx, err.Error())
-		return nil, exception.ErrInternalServer
+		if err := s.cache.DeleteHero(ctx, hero.ID); err != nil {
+			s.log.SendErrorLog(ctx, err.Error())
+		}
 	}
 
 	return input.NewHeroResponse(id, hero.HeroName, hero.CivilName, hero.Universe,
@@ -91,11 +93,11 @@ func (s *service) GetHeroByID(ctx context.Context, id string) (*input.HeroRespon
 			}
 			return nil, exception.ErrInternalServer
 		}
-		return input.NewHeroResponse(hero.Id, hero.HeroName, hero.CivilName,
+		return input.NewHeroResponse(hero.ID, hero.HeroName, hero.CivilName,
 			hero.Universe, hero.Hero, hero.CreatedAt, hero.UpdatedAt, nil), nil
 	}
 
-	return input.NewHeroResponse(hero.Id, hero.HeroName, hero.CivilName,
+	return input.NewHeroResponse(hero.ID, hero.HeroName, hero.CivilName,
 		hero.Universe, hero.Hero, hero.CreatedAt, hero.UpdatedAt, nil), nil
 }
 

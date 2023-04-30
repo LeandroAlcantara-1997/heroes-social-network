@@ -35,7 +35,7 @@ func (r *repository) CreateHero(ctx context.Context, hero *model.Hero) (err erro
 		VALUES ($1, $2, $3, $4, $5, $6, $7);`
 
 	tag, err := tx.Exec(ctx, query,
-		hero.Id,
+		hero.ID,
 		hero.HeroName,
 		hero.CivilName,
 		hero.Hero,
@@ -73,7 +73,7 @@ func (r *repository) UpdateHero(ctx context.Context, hero *model.Hero) (err erro
 
 	tag, err := tx.Exec(ctx,
 		query,
-		hero.HeroName, hero.CivilName, hero.Hero, hero.Universe, hero.Id)
+		hero.HeroName, hero.CivilName, hero.Hero, hero.Universe, hero.ID)
 	if err != nil {
 		if err = tx.Rollback(ctx); err != nil {
 			return
@@ -102,7 +102,7 @@ func (r *repository) GetHeroByID(ctx context.Context, id string) (*model.Hero, e
 	)
 
 	row := r.client.QueryRow(ctx, query, id)
-	if err := row.Scan(&hero.Id, &hero.HeroName, &hero.CivilName,
+	if err := row.Scan(&hero.ID, &hero.HeroName, &hero.CivilName,
 		&hero.Hero, &hero.Universe); err != nil {
 		if errors.Is(err, pgx.ErrNoRows) {
 			return nil, exception.ErrHeroNotFound
