@@ -27,5 +27,6 @@ func ConfigureTeamRoutes(r *gin.Engine, teamUseCase team.Team) {
 
 	teamsRoute := r.Group("/v1/teams")
 	teamsRoute.POST("", team.PostTeam)
+	teamsRoute.GET("", team.GetTeamByID)
 
 }

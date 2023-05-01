@@ -23,12 +23,14 @@ var (
 	ErrInternalServer = errors.New("error.0001")
 	ErrInvalidFields  = errors.New("error.0002")
 	ErrHeroNotFound   = errors.New("error.0003")
+	ErrTeamNotFound   = errors.New("error.0004")
 )
 
 var restErrorMap = map[error]int{
 	ErrInternalServer: http.StatusInternalServerError,
 	ErrInvalidFields:  http.StatusBadRequest,
 	ErrHeroNotFound:   http.StatusNotFound,
+	ErrTeamNotFound:   http.StatusNotFound,
 }
 
 func RestError(key error) (int, error) {

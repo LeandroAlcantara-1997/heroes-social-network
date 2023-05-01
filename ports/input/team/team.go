@@ -32,4 +32,5 @@ func NewTeamResponse(id, name, universe string,
 //go:generate mockgen -destination ../../../mock/team_mock.go -package=mock -source=team.go
 type Team interface {
 	RegisterTeam(ctx context.Context, dto *TeamRequest) (*TeamResponse, error)
+	GetTeamByID(ctx context.Context, id string) (*TeamResponse, error)
 }

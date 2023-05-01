@@ -85,3 +85,49 @@ func TestHandlerPostTeamFailInvaliidUniverse(t *testing.T) {
 	}
 	h.PostTeam(ctx)
 }
+
+func TestHandlerGetTeamByIDSuccess(t *testing.T) {
+	var (
+		response, _ = json.Marshal(&xMenResponse)
+		ctx, _      = gin.CreateTestContext(&httptest.ResponseRecorder{
+			Code: http.StatusFound,
+			Body: bytes.NewBuffer(response),
+		})
+		ctrl    = gomock.NewController(t)
+		useCase = mock.NewMockTeam(ctrl)
+	)
+	defer ctrl.Finish()
+	ctx.Request = httptest.NewRequest(
+		http.MethodGet,
+		"/v1/teamss?id=e36b3582-f936-47b7-8832-47da045ea4e9",
+		nil,
+	)
+	useCase.EXPECT().GetTeamByID(ctx, "e36b3582-f936-47b7-8832-47da045ea4e9").Return(xMenResponse, nil)
+	h := Handler{
+		useCase,
+	}
+	h.GetTeamByID(ctx)
+}
+
+func TestHandlerGetTeamByIDFailTeamNotFound(t *testing.T) {
+	var (
+		response, _ = json.Marshal(exception.ErrTeamNotFound)
+		ctx, _      = gin.CreateTestContext(&httptest.ResponseRecorder{
+			Code: http.StatusFound,
+			Body: bytes.NewBuffer(response),
+		})
+		ctrl    = gomock.NewController(t)
+		useCase = mock.NewMockTeam(ctrl)
+	)
+	defer ctrl.Finish()
+	ctx.Request = httptest.NewRequest(
+		http.MethodGet,
+		"/v1/teamss?id=e36b3582-f936-47b7-8832-47da045ea4e9",
+		nil,
+	)
+	useCase.EXPECT().GetTeamByID(ctx, "e36b3582-f936-47b7-8832-47da045ea4e9").Return(nil, exception.ErrTeamNotFound)
+	h := Handler{
+		useCase,
+	}
+	h.GetTeamByID(ctx)
+}
