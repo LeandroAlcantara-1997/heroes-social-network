@@ -45,3 +45,21 @@ func (s *service) RegisterTeam(ctx context.Context, request *input.TeamRequest) 
 	return input.NewTeamResponse(team.ID, team.Name, team.Universe,
 		team.CreatedAt, team.UpdatedAt), nil
 }
+
+func (s *service) GetTeamByID(ctx context.Context, id string) (*input.TeamResponse, error) {
+	team, err := s.cache.GetTeam(ctx, id)
+	if err != nil {
+		s.log.SendErrorLog(ctx, err.Error())
+		if team, err = s.repository.GetTeamByID(ctx, id); err != nil {
+			s.log.SendErrorLog(ctx, err.Error())
+			return nil, exception.ErrTeamNotFound
+		}
+
+	}
+	return input.NewTeamResponse(
+		team.ID,
+		team.Name,
+		team.Universe,
+		team.CreatedAt,
+		team.UpdatedAt), nil
+}

@@ -38,6 +38,22 @@ func (r *repository) CreateTeam(ctx context.Context, team *model.Team) (err erro
 	return
 }
 
+func (r *repository) GetTeamByID(ctx context.Context, id string) (*model.Team, error) {
+	var (
+		query = `SELECT id, name, universe, created_at, updated_at FROM team
+		WHERE id = $1;`
+		team = &model.Team{}
+	)
+
+	row := r.client.QueryRow(ctx, query, id)
+	if err := row.Scan(&team.ID, &team.Name, &team.Universe,
+		&team.CreatedAt, &team.UpdatedAt); err != nil {
+		return nil, err
+	}
+
+	return team, nil
+
+}
 func (r *repository) checkIfExistsTeam(ctx context.Context, id string) (bool, error) {
 	var (
 		query = `SELECT COUNT(id) FROM team
