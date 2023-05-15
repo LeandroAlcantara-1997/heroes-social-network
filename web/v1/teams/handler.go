@@ -38,5 +38,5 @@ func (h *Handler) GetTeamByID(ctx *gin.Context) {
 		ctx.JSON(code, err)
 		return
 	}
-	ctx.JSON(http.StatusFound, response)
+	ctx.JSON(http.StatusOK, response)
 }

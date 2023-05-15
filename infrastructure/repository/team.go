@@ -41,7 +41,7 @@ func (r *repository) CreateTeam(ctx context.Context, team *model.Team) (err erro
 func (r *repository) GetTeamByID(ctx context.Context, id string) (*model.Team, error) {
 	var (
 		query = `SELECT id, name, universe, created_at, updated_at FROM team
-		WHERE id = '$1';`
+		WHERE id = $1;`
 		team = &model.Team{}
 	)
 
