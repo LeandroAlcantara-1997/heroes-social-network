@@ -31,7 +31,6 @@ func configureGlobalMiddleware(ctx context.Context, r *gin.Engine) {
 		AllowMethods:  []string{"*"},
 		AllowHeaders:  []string{"*"},
 		ExposeHeaders: []string{"Content-Length", "content-type"},
-		// AllowAllOrigins: true,
 	}))
 
 	r.GET("/health-check", func(ctx *gin.Context) {

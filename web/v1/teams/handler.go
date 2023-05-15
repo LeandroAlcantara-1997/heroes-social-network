@@ -29,3 +29,14 @@ func (h *Handler) PostTeam(ctx *gin.Context) {
 
 	ctx.JSON(http.StatusCreated, response)
 }
+
+func (h *Handler) GetTeamByID(ctx *gin.Context) {
+	id, _ := ctx.GetQuery("id")
+	response, err := h.UseCase.GetTeamByID(ctx, id)
+	if err != nil {
+		code, err := exception.RestError(err)
+		ctx.JSON(code, err)
+		return
+	}
+	ctx.JSON(http.StatusOK, response)
+}
