@@ -22,4 +22,5 @@ type HeroRepository interface {
 type TeamRepository interface {
 	CreateTeam(ctx context.Context, team *model.Team) (err error)
 	GetTeamByID(ctx context.Context, id string) (*model.Team, error)
+	DeleteTeamByID(ctx context.Context, id string) (err error)
 }

@@ -98,3 +98,63 @@ func TestServiceGetTeamByIDSuccessByRepository(t *testing.T) {
 	assert.Equal(t, teenTitansResponse, out)
 	assert.ErrorIs(t, err, nil)
 }
+
+func TestServiceDeleteTeamByIDSuccessTeamDeleted(t *testing.T) {
+	var (
+		ctx            = context.Background()
+		ctrl           = gomock.NewController(t)
+		repositoryMock = mock.NewMockRepository(ctrl)
+		cacheMock      = mock.NewMockCache(ctrl)
+	)
+
+	cacheMock.EXPECT().DeleteTeam(ctx, teenTitans.ID).Return(nil)
+	repositoryMock.EXPECT().DeleteTeamByID(ctx, teenTitans.ID).Return(nil)
+	s := &service{
+		repository: repositoryMock,
+		cache:      cacheMock,
+		log:        nil,
+	}
+	err := s.DeleteTeamByID(ctx, teenTitans.ID)
+	assert.ErrorIs(t, err, nil)
+
+}
+
+func TestServiceDeleteTeamByIDFailTeamNotDeletedCache(t *testing.T) {
+	var (
+		ctx       = context.Background()
+		ctrl      = gomock.NewController(t)
+		cacheMock = mock.NewMockCache(ctrl)
+		logMock   = mock.NewMockLog(ctrl)
+	)
+
+	cacheMock.EXPECT().DeleteTeam(ctx, teenTitans.ID).Return(exception.ErrInternalServer)
+	logMock.EXPECT().SendErrorLog(ctx, exception.ErrInternalServer.Error())
+	s := &service{
+		repository: nil,
+		cache:      cacheMock,
+		log:        logMock,
+	}
+	err := s.DeleteTeamByID(ctx, teenTitans.ID)
+	assert.ErrorIs(t, err, exception.ErrInternalServer)
+}
+
+func TestServiceDeleteTeamByIDFailTeamNotDeletedByDatabase(t *testing.T) {
+	var (
+		ctx            = context.Background()
+		ctrl           = gomock.NewController(t)
+		cacheMock      = mock.NewMockCache(ctrl)
+		repositoryMock = mock.NewMockRepository(ctrl)
+		logMock        = mock.NewMockLog(ctrl)
+	)
+
+	cacheMock.EXPECT().DeleteTeam(ctx, teenTitans.ID).Return(nil)
+	repositoryMock.EXPECT().DeleteTeamByID(ctx, teenTitans.ID).Return(exception.ErrInternalServer)
+	logMock.EXPECT().SendErrorLog(ctx, exception.ErrInternalServer.Error())
+	s := &service{
+		repository: repositoryMock,
+		cache:      cacheMock,
+		log:        logMock,
+	}
+	err := s.DeleteTeamByID(ctx, teenTitans.ID)
+	assert.ErrorIs(t, err, exception.ErrInternalServer)
+}

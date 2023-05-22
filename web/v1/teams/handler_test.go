@@ -131,3 +131,49 @@ func TestHandlerGetTeamByIDFailTeamNotFound(t *testing.T) {
 	}
 	h.GetTeamByID(ctx)
 }
+
+func TestHandlerDeleteTeamByIDSuccess(t *testing.T) {
+	var (
+		ctx, _ = gin.CreateTestContext(&httptest.ResponseRecorder{
+			Code: http.StatusFound,
+		})
+		ctrl    = gomock.NewController(t)
+		useCase = mock.NewMockTeam(ctrl)
+	)
+	defer ctrl.Finish()
+	ctx.Request = httptest.NewRequest(
+		http.MethodDelete,
+		"/v1/teamss?id=e36b3582-f936-47b7-8832-47da045ea4e9",
+		nil,
+	)
+	useCase.EXPECT().DeleteTeamByID(ctx, "e36b3582-f936-47b7-8832-47da045ea4e9").Return(nil)
+	h := Handler{
+		useCase,
+	}
+
+	h.DeleteTeamByID(ctx)
+}
+
+func TestHandlerDeleteTeamByIDFail(t *testing.T) {
+	var (
+		response, _ = json.Marshal(exception.ErrTeamNotFound)
+		ctx, _      = gin.CreateTestContext(&httptest.ResponseRecorder{
+			Code: http.StatusFound,
+			Body: bytes.NewBuffer(response),
+		})
+		ctrl    = gomock.NewController(t)
+		useCase = mock.NewMockTeam(ctrl)
+	)
+	defer ctrl.Finish()
+	ctx.Request = httptest.NewRequest(
+		http.MethodDelete,
+		"/v1/teamss?id=e36b3582-f936-47b7-8832-47da045ea4e9",
+		nil,
+	)
+	useCase.EXPECT().DeleteTeamByID(ctx, "e36b3582-f936-47b7-8832-47da045ea4e9").Return(nil)
+	h := Handler{
+		useCase,
+	}
+
+	h.DeleteTeamByID(ctx)
+}

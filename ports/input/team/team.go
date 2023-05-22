@@ -33,4 +33,5 @@ func NewTeamResponse(id, name, universe string,
 type Team interface {
 	RegisterTeam(ctx context.Context, dto *TeamRequest) (*TeamResponse, error)
 	GetTeamByID(ctx context.Context, id string) (*TeamResponse, error)
+	DeleteTeamByID(ctx context.Context, id string) error
 }
