@@ -2,6 +2,7 @@ package teams
 
 import (
 	"context"
+	"errors"
 	"time"
 
 	"github.com/LeandroAlcantara-1997/heroes-social-network/exception"
@@ -62,4 +63,20 @@ func (s *service) GetTeamByID(ctx context.Context, id string) (*input.TeamRespon
 		team.Universe,
 		team.CreatedAt,
 		team.UpdatedAt), nil
+}
+
+func (s *service) DeleteTeamByID(ctx context.Context, id string) (err error) {
+	if err = s.cache.DeleteTeam(ctx, id); err != nil {
+		s.log.SendErrorLog(ctx, err.Error())
+		return exception.ErrInternalServer
+	}
+	if err = s.repository.DeleteTeamByID(ctx, id); err != nil {
+		s.log.SendErrorLog(ctx, err.Error())
+		if errors.Is(err, exception.ErrTeamNotFound) {
+			return
+		}
+		return exception.ErrInternalServer
+	}
+
+	return nil
 }

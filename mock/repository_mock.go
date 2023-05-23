@@ -77,6 +77,20 @@ func (mr *MockRepositoryMockRecorder) DeleteHeroByID(ctx, id interface{}) *gomoc
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteHeroByID", reflect.TypeOf((*MockRepository)(nil).DeleteHeroByID), ctx, id)
 }
 
+// DeleteTeamByID mocks base method.
+func (m *MockRepository) DeleteTeamByID(ctx context.Context, id string) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "DeleteTeamByID", ctx, id)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// DeleteTeamByID indicates an expected call of DeleteTeamByID.
+func (mr *MockRepositoryMockRecorder) DeleteTeamByID(ctx, id interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteTeamByID", reflect.TypeOf((*MockRepository)(nil).DeleteTeamByID), ctx, id)
+}
+
 // GetHeroByID mocks base method.
 func (m *MockRepository) GetHeroByID(ctx context.Context, id string) (*model.Hero, error) {
 	m.ctrl.T.Helper()
@@ -236,6 +250,20 @@ func (m *MockTeamRepository) CreateTeam(ctx context.Context, team *model.Team) e
 func (mr *MockTeamRepositoryMockRecorder) CreateTeam(ctx, team interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateTeam", reflect.TypeOf((*MockTeamRepository)(nil).CreateTeam), ctx, team)
+}
+
+// DeleteTeamByID mocks base method.
+func (m *MockTeamRepository) DeleteTeamByID(ctx context.Context, id string) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "DeleteTeamByID", ctx, id)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// DeleteTeamByID indicates an expected call of DeleteTeamByID.
+func (mr *MockTeamRepositoryMockRecorder) DeleteTeamByID(ctx, id interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteTeamByID", reflect.TypeOf((*MockTeamRepository)(nil).DeleteTeamByID), ctx, id)
 }
 
 // GetTeamByID mocks base method.

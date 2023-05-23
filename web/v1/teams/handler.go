@@ -40,3 +40,14 @@ func (h *Handler) GetTeamByID(ctx *gin.Context) {
 	}
 	ctx.JSON(http.StatusOK, response)
 }
+
+func (h *Handler) DeleteTeamByID(ctx *gin.Context) {
+	id, _ := ctx.GetQuery("id")
+	err := h.UseCase.DeleteTeamByID(ctx, id)
+	if err != nil {
+		code, err := exception.RestError(err)
+		ctx.JSON(code, err)
+		return
+	}
+	ctx.AbortWithStatus(http.StatusOK)
+}

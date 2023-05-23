@@ -35,6 +35,20 @@ func (m *MockTeam) EXPECT() *MockTeamMockRecorder {
 	return m.recorder
 }
 
+// DeleteTeamByID mocks base method.
+func (m *MockTeam) DeleteTeamByID(ctx context.Context, id string) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "DeleteTeamByID", ctx, id)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// DeleteTeamByID indicates an expected call of DeleteTeamByID.
+func (mr *MockTeamMockRecorder) DeleteTeamByID(ctx, id interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteTeamByID", reflect.TypeOf((*MockTeam)(nil).DeleteTeamByID), ctx, id)
+}
+
 // GetTeamByID mocks base method.
 func (m *MockTeam) GetTeamByID(ctx context.Context, id string) (*team.TeamResponse, error) {
 	m.ctrl.T.Helper()
