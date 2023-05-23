@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 
+	"github.com/LeandroAlcantara-1997/heroes-social-network/exception"
 	"github.com/LeandroAlcantara-1997/heroes-social-network/model"
 )
 
@@ -71,4 +72,19 @@ func (r *repository) checkIfExistsTeam(ctx context.Context, id string) (bool, er
 		}
 	}
 	return count != 0, nil
+}
+
+func (r *repository) DeleteTeamByID(ctx context.Context, id string) (err error) {
+	var query = `DELETE FROM team 
+	WHERE id = $1;`
+
+	tag, err := r.client.Exec(ctx, query, id)
+	if err != nil {
+		return
+	}
+
+	if tag.RowsAffected() == 0 {
+		return exception.ErrTeamNotFound
+	}
+	return
 }
