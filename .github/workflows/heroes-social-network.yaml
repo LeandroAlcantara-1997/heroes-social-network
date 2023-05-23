@@ -1,4 +1,4 @@
-name: appointments
+name: heroes-social-network
 
 on: [push, pull_request]
 
