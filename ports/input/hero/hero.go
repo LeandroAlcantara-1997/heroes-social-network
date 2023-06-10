@@ -8,10 +8,10 @@ import (
 )
 
 type HeroRequest struct {
-	HeroName  string  `json:"heroName"`
-	CivilName string  `json:"civilName"`
-	Hero      bool    `json:"hero"`
-	Universe  string  `json:"universe"`
+	HeroName  string  `json:"heroName" validate:"required"`
+	CivilName string  `json:"civilName" validate:"required"`
+	Hero      bool    `json:"hero" validate:"required"`
+	Universe  string  `json:"universe" validate:"universe,required"`
 	Team      *string `json:"team,omitempty"`
 }
 

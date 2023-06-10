@@ -6,8 +6,8 @@ import (
 )
 
 type TeamRequest struct {
-	Name     string `json:"name"`
-	Universe string `json:"universe"`
+	Name     string `json:"name" validate:"required"`
+	Universe string `json:"universe" validate:"universe,required"`
 }
 
 type TeamResponse struct {
