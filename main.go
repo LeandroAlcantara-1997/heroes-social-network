@@ -28,7 +28,7 @@ func main() {
 func configureGlobalMiddleware(ctx context.Context, r *gin.Engine) {
 	r.Use(cors.New(cors.Config{
 		AllowOrigins:  util.ChunkTextByComma(config.Env.AllowOrigins),
-		AllowMethods:  []string{"*"},
+		AllowMethods:  []string{http.MethodGet},
 		AllowHeaders:  []string{"*"},
 		ExposeHeaders: []string{"Content-Length", "content-type"},
 	}))

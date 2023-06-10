@@ -12,6 +12,8 @@ import (
 
 	"github.com/LeandroAlcantara-1997/heroes-social-network/exception"
 	"github.com/LeandroAlcantara-1997/heroes-social-network/mock"
+	customcontext "github.com/LeandroAlcantara-1997/heroes-social-network/pkg/custom_context"
+	"github.com/LeandroAlcantara-1997/heroes-social-network/pkg/validator"
 	input "github.com/LeandroAlcantara-1997/heroes-social-network/ports/input/hero"
 	"github.com/gin-gonic/gin"
 	"github.com/golang/mock/gomock"
@@ -34,13 +36,6 @@ var (
 		Team:      nil,
 		CreatedAt: time.Now().UTC(),
 	}
-	batmanRequestWithInvalidField = &input.HeroRequest{
-		HeroName:  "Batman",
-		CivilName: "Bruce Wayne",
-		Hero:      true,
-		Universe:  "DCI",
-		Team:      nil,
-	}
 )
 
 // Post Hero
@@ -55,6 +50,12 @@ func TestHandlerPostHeroSuccess(t *testing.T) {
 		useCase = mock.NewMockHero(ctrl)
 	)
 	defer ctrl.Finish()
+	customcontext.AddValidator(ctx, validator.RegisterValidateFunc([]validator.CustomValidator{
+		{
+			TagName:    "universe",
+			CustomFunc: validator.CheckUniverse,
+		},
+	}))
 	ctx.Request = httptest.NewRequest(
 		http.MethodPost,
 		"/v1/heroes",
@@ -83,6 +84,12 @@ func TestHandlerPostHeroFailInvalidField(t *testing.T) {
 		useCase = mock.NewMockHero(ctrl)
 	)
 	defer ctrl.Finish()
+	customcontext.AddValidator(ctx, validator.RegisterValidateFunc([]validator.CustomValidator{
+		{
+			TagName:    "universe",
+			CustomFunc: validator.CheckUniverse,
+		},
+	}))
 	ctx.Request = httptest.NewRequest(
 		http.MethodPost,
 		"/v1/heroes",
@@ -93,7 +100,6 @@ func TestHandlerPostHeroFailInvalidField(t *testing.T) {
 					"universe": "DCI"
 				}`),
 	)
-	useCase.EXPECT().RegisterHero(ctx, batmanRequestWithInvalidField).Return(nil, exception.ErrInvalidFields)
 	h := Handler{
 		useCase,
 	}
@@ -121,6 +127,12 @@ func TestHandlerPostHeroFailInternalServerError(t *testing.T) {
 					"universe": "DC"
 				}`),
 	)
+	customcontext.AddValidator(ctx, validator.RegisterValidateFunc([]validator.CustomValidator{
+		{
+			TagName:    "universe",
+			CustomFunc: validator.CheckUniverse,
+		},
+	}))
 	useCase.EXPECT().RegisterHero(ctx, batmanRequest).Return(nil, exception.ErrInternalServer)
 	h := Handler{
 		useCase,
@@ -152,6 +164,12 @@ func TestHandlerPutHeroSuccess(t *testing.T) {
 					"universe": "DC"
 				}`),
 	)
+	customcontext.AddValidator(ctx, validator.RegisterValidateFunc([]validator.CustomValidator{
+		{
+			TagName:    "universe",
+			CustomFunc: validator.CheckUniverse,
+		},
+	}))
 	h := &Handler{
 		UseCase: useCase,
 	}
@@ -169,8 +187,6 @@ func TestHandlerPutHeroFailInvalidField(t *testing.T) {
 		useCase = mock.NewMockHero(ctrl)
 	)
 	defer ctrl.Finish()
-	useCase.EXPECT().UpdateHero(ctx, batmanResponse.ID, batmanRequestWithInvalidField).
-		Return(nil, exception.ErrInvalidFields)
 	ctx.Request = httptest.NewRequest(
 		http.MethodPut,
 		fmt.Sprintf("/v1/heroes?id=%s", batmanResponse.ID),
@@ -181,6 +197,12 @@ func TestHandlerPutHeroFailInvalidField(t *testing.T) {
 					"universe": "DCI"
 				}`),
 	)
+	customcontext.AddValidator(ctx, validator.RegisterValidateFunc([]validator.CustomValidator{
+		{
+			TagName:    "universe",
+			CustomFunc: validator.CheckUniverse,
+		},
+	}))
 	h := &Handler{
 		UseCase: useCase,
 	}
@@ -213,6 +235,12 @@ func TestHandlerPutHeroFailInternalServerError(t *testing.T) {
 	h := &Handler{
 		UseCase: useCase,
 	}
+	customcontext.AddValidator(ctx, validator.RegisterValidateFunc([]validator.CustomValidator{
+		{
+			TagName:    "universe",
+			CustomFunc: validator.CheckUniverse,
+		},
+	}))
 	h.PutHero(ctx)
 }
 

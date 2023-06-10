@@ -24,6 +24,7 @@ var (
 	ErrInvalidFields  = errors.New("error.0002")
 	ErrHeroNotFound   = errors.New("error.0003")
 	ErrTeamNotFound   = errors.New("error.0004")
+	ErrInvalidRequest = errors.New("error.0005")
 )
 
 var restErrorMap = map[error]int{
@@ -31,6 +32,7 @@ var restErrorMap = map[error]int{
 	ErrInvalidFields:  http.StatusBadRequest,
 	ErrHeroNotFound:   http.StatusNotFound,
 	ErrTeamNotFound:   http.StatusNotFound,
+	ErrInvalidRequest: http.StatusForbidden,
 }
 
 func RestError(key error) (int, error) {

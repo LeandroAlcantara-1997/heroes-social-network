@@ -48,9 +48,9 @@ setup:
 	@echo __Installing staticcheck__
 	@go install honnef.co/go/tools/cmd/staticcheck@latest
 	@staticcheck --version
-	@echo __Installing hot reload__
-	@curl -sSfL https://raw.githubusercontent.com/cosmtrek/air/master/install.sh | sh -s -- -b $(go env GOPATH)/bin
-	@air -v
+	# @echo __Installing hot reload__
+	# @curl -sSfL https://raw.githubusercontent.com/cosmtrek/air/master/install.sh | sh -s -- -b $(go env GOPATH)/bin
+	# @air -v
 	@chmod -R a+w /go/pkg
 	@git config --global --add safe.directory '*'
 	@go install github.com/golang/mock/mockgen@v1.6.0
