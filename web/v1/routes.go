@@ -21,8 +21,7 @@ func ConfigureHeroRoutes(r *gin.Engine, heroUseCase hero.Hero) {
 	}
 
 	m := &middleware.Middleware{
-		RequiredToken: false,
-		Admin:         false,
+		Admin: false,
 		Validator: validator.RegisterValidateFunc([]validator.CustomValidator{
 			{
 				TagName:    "universe",
@@ -51,8 +50,7 @@ func ConfigureTeamRoutes(r *gin.Engine, teamUseCase team.Team) {
 		UseCase: teamUseCase,
 	}
 	m := &middleware.Middleware{
-		RequiredToken: false,
-		Admin:         false,
+		Admin: false,
 		Validator: validator.RegisterValidateFunc([]validator.CustomValidator{
 			{
 				TagName:    "universe",
