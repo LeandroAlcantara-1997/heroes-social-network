@@ -30,18 +30,14 @@ func New(repository repository.Repository, cache cache.Cache,
 }
 
 func (s *service) RegisterHero(ctx context.Context, dto *input.HeroRequest) (*input.HeroResponse, error) {
-	hero := model.New(uuid.NewString(), dto)
-	if !model.CheckUniverse(model.Universe(hero.Universe)) {
+	if !model.CheckUniverse(model.Universe(dto.Universe)) {
 		s.log.SendErrorLog(ctx, "invalid field")
 		return nil, exception.ErrInvalidFields
 	}
 
-	if err := s.repository.CreateHero(ctx, hero); err != nil {
+	hero, err := s.repository.CreateHero(ctx, model.New(uuid.NewString(), dto))
+	if err != nil {
 		s.log.SendErrorLog(ctx, err.Error())
-		if err := s.cache.DeleteHero(ctx, hero.ID); err != nil {
-			s.log.SendErrorLog(ctx, err.Error())
-			return nil, exception.ErrInternalServer
-		}
 		return nil, exception.ErrInternalServer
 	}
 
