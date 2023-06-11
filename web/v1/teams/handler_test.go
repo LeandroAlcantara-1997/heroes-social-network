@@ -11,6 +11,8 @@ import (
 
 	"github.com/LeandroAlcantara-1997/heroes-social-network/exception"
 	"github.com/LeandroAlcantara-1997/heroes-social-network/mock"
+	customcontext "github.com/LeandroAlcantara-1997/heroes-social-network/pkg/custom_context"
+	"github.com/LeandroAlcantara-1997/heroes-social-network/pkg/validator"
 	"github.com/LeandroAlcantara-1997/heroes-social-network/ports/input/team"
 	"github.com/gin-gonic/gin"
 	"github.com/golang/mock/gomock"
@@ -27,10 +29,6 @@ var (
 	xMenRequest = &team.TeamRequest{
 		Name:     "X-Men",
 		Universe: "MARVEL",
-	}
-	xMenInvalidFieldRequest = &team.TeamRequest{
-		Name:     "X-Men",
-		Universe: "MARVE",
 	}
 )
 
@@ -53,6 +51,12 @@ func TestHandler_PostTeam(t *testing.T) {
 					"universe": "MARVEL"
 				}`),
 	)
+	customcontext.AddValidator(ctx, validator.RegisterValidateFunc([]validator.CustomValidator{
+		{
+			TagName:    "universe",
+			CustomFunc: validator.CheckUniverse,
+		},
+	}))
 	useCase.EXPECT().RegisterTeam(ctx, xMenRequest).Return(xMenResponse, nil)
 	h := Handler{
 		useCase,
@@ -79,7 +83,12 @@ func TestHandlerPostTeamFailInvaliidUniverse(t *testing.T) {
 					"universe": "MARVE"
 				}`),
 	)
-	useCase.EXPECT().RegisterTeam(ctx, xMenInvalidFieldRequest).Return(nil, exception.ErrInvalidFields)
+	customcontext.AddValidator(ctx, validator.RegisterValidateFunc([]validator.CustomValidator{
+		{
+			TagName:    "universe",
+			CustomFunc: validator.CheckUniverse,
+		},
+	}))
 	h := Handler{
 		useCase,
 	}
