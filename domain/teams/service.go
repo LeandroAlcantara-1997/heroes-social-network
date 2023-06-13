@@ -35,12 +35,12 @@ func (s *service) RegisterTeam(ctx context.Context, request *input.TeamRequest) 
 	}
 	team := model.NewTeam(uuid.NewString(), time.Now().UTC(), request)
 	if err := s.repository.CreateTeam(ctx, team); err != nil {
-		s.log.SendErrorLog(ctx, err.Error())
+		s.log.SendErrorLog(ctx, err)
 		return nil, exception.ErrInternalServer
 	}
 
 	if err := s.cache.SetTeam(ctx, team); err != nil {
-		s.log.SendErrorLog(ctx, err.Error())
+		s.log.SendErrorLog(ctx, err)
 	}
 
 	return input.NewTeamResponse(team.ID, team.Name, team.Universe,
@@ -50,9 +50,9 @@ func (s *service) RegisterTeam(ctx context.Context, request *input.TeamRequest) 
 func (s *service) GetTeamByID(ctx context.Context, id string) (*input.TeamResponse, error) {
 	team, err := s.cache.GetTeam(ctx, id)
 	if err != nil {
-		s.log.SendErrorLog(ctx, err.Error())
+		s.log.SendErrorLog(ctx, err)
 		if team, err = s.repository.GetTeamByID(ctx, id); err != nil {
-			s.log.SendErrorLog(ctx, err.Error())
+			s.log.SendErrorLog(ctx, err)
 			return nil, exception.ErrTeamNotFound
 		}
 
@@ -67,11 +67,11 @@ func (s *service) GetTeamByID(ctx context.Context, id string) (*input.TeamRespon
 
 func (s *service) DeleteTeamByID(ctx context.Context, id string) (err error) {
 	if err = s.cache.DeleteTeam(ctx, id); err != nil {
-		s.log.SendErrorLog(ctx, err.Error())
+		s.log.SendErrorLog(ctx, err)
 		return exception.ErrInternalServer
 	}
 	if err = s.repository.DeleteTeamByID(ctx, id); err != nil {
-		s.log.SendErrorLog(ctx, err.Error())
+		s.log.SendErrorLog(ctx, err)
 		if errors.Is(err, exception.ErrTeamNotFound) {
 			return
 		}

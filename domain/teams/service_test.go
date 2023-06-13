@@ -59,7 +59,7 @@ func TestServiceRegisterTeamFail(t *testing.T) {
 	)
 
 	repositoryMock.EXPECT().CreateTeam(ctx, gomock.Any()).Return(errors.New("unexpected error"))
-	logMock.EXPECT().SendErrorLog(ctx, "unexpected error")
+	logMock.EXPECT().SendErrorLog(ctx, errors.New("unexpected error"))
 	s := New(repositoryMock, nil, logMock)
 	out, err := s.RegisterTeam(ctx, &team.TeamRequest{
 		Name:     "The Avengers",
@@ -91,7 +91,7 @@ func TestServiceGetTeamByIDSuccessByRepository(t *testing.T) {
 		logMock        = mock.NewMockLog(ctrl)
 	)
 	cacheCall := cacheMock.EXPECT().GetTeam(ctx, "0c2ab516-d1b9-4ba4-bbf2-a7b77b21e8a0").Return(nil, errors.New("unexpected error"))
-	logMock.EXPECT().SendErrorLog(ctx, "unexpected error").After(cacheCall)
+	logMock.EXPECT().SendErrorLog(ctx, errors.New("unexpected error")).After(cacheCall)
 	repositoryMock.EXPECT().GetTeamByID(ctx, "0c2ab516-d1b9-4ba4-bbf2-a7b77b21e8a0").Return(teenTitans, nil)
 	s := New(repositoryMock, cacheMock, logMock)
 	out, err := s.GetTeamByID(ctx, "0c2ab516-d1b9-4ba4-bbf2-a7b77b21e8a0")
@@ -128,7 +128,7 @@ func TestServiceDeleteTeamByIDFailTeamNotDeletedCache(t *testing.T) {
 	)
 
 	cacheMock.EXPECT().DeleteTeam(ctx, teenTitans.ID).Return(exception.ErrInternalServer)
-	logMock.EXPECT().SendErrorLog(ctx, exception.ErrInternalServer.Error())
+	logMock.EXPECT().SendErrorLog(ctx, exception.ErrInternalServer)
 	s := &service{
 		repository: nil,
 		cache:      cacheMock,
@@ -149,7 +149,7 @@ func TestServiceDeleteTeamByIDFailTeamNotDeletedByDatabase(t *testing.T) {
 
 	cacheMock.EXPECT().DeleteTeam(ctx, teenTitans.ID).Return(nil)
 	repositoryMock.EXPECT().DeleteTeamByID(ctx, teenTitans.ID).Return(exception.ErrInternalServer)
-	logMock.EXPECT().SendErrorLog(ctx, exception.ErrInternalServer.Error())
+	logMock.EXPECT().SendErrorLog(ctx, exception.ErrInternalServer)
 	s := &service{
 		repository: repositoryMock,
 		cache:      cacheMock,
