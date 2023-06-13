@@ -33,8 +33,9 @@ func (s *service) RegisterTeam(ctx context.Context, request *input.TeamRequest) 
 	if !model.CheckUniverse(model.Universe(request.Universe)) {
 		return nil, exception.ErrInvalidFields
 	}
-	team := model.NewTeam(uuid.NewString(), time.Now().UTC(), request)
-	if err := s.repository.CreateTeam(ctx, team); err != nil {
+	team, err := s.repository.CreateTeam(ctx, model.NewTeam(uuid.NewString(),
+		time.Now().UTC(), request))
+	if err != nil {
 		s.log.SendErrorLog(ctx, err)
 		return nil, exception.ErrInternalServer
 	}

@@ -3,6 +3,7 @@ package heroes
 import (
 	"context"
 	"testing"
+	"time"
 
 	"github.com/LeandroAlcantara-1997/heroes-social-network/exception"
 	"github.com/LeandroAlcantara-1997/heroes-social-network/mock"
@@ -11,6 +12,8 @@ import (
 	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/assert"
 )
+
+const id = "96f15886-6570-4469-8d9e-e694733000d1"
 
 var (
 	superMan = &input.HeroRequest{
@@ -49,7 +52,15 @@ func TestServiceRegisterHeroSuccess(t *testing.T) {
 	)
 	defer ctrl.Finish()
 	rep.EXPECT().CreateHero(ctx, gomock.Any()).
-		Return(nil)
+		Return(&model.Hero{
+			ID:        id,
+			HeroName:  "Super-man",
+			CivilName: "Clark Kent",
+			Hero:      true,
+			Universe:  "DC",
+			CreatedAt: time.Time{},
+			Team:      nil,
+		}, nil)
 	c.EXPECT().SetHero(ctx, gomock.Any()).Return(nil)
 	defer ctrl.Finish()
 	s := &service{
@@ -81,8 +92,7 @@ func TestServiceRegisterHeroFailInternalServerError(t *testing.T) {
 	)
 	defer ctrl.Finish()
 	rep.EXPECT().CreateHero(ctx, gomock.Any()).
-		Return(exception.ErrInternalServer)
-	c.EXPECT().DeleteHero(ctx, gomock.Any()).Return(nil)
+		Return(nil, exception.ErrInternalServer)
 
 	l.EXPECT().SendErrorLog(ctx, gomock.Any())
 	s := &service{
