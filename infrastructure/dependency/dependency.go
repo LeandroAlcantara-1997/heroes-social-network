@@ -9,7 +9,7 @@ import (
 	"github.com/LeandroAlcantara-1997/heroes-social-network/infrastructure/cache"
 	"github.com/LeandroAlcantara-1997/heroes-social-network/infrastructure/config"
 	"github.com/LeandroAlcantara-1997/heroes-social-network/infrastructure/repository"
-	"github.com/LeandroAlcantara-1997/heroes-social-network/infrastructure/splunk"
+	log "github.com/LeandroAlcantara-1997/heroes-social-network/infrastructure/splunk"
 	"github.com/LeandroAlcantara-1997/heroes-social-network/ports/input/hero"
 	"github.com/LeandroAlcantara-1997/heroes-social-network/ports/input/team"
 	"github.com/jackc/pgx/v5"
@@ -23,7 +23,7 @@ type dependency struct {
 
 type components struct {
 	pgxClient    *pgx.Conn
-	splunkClient *splunk.Splunk
+	splunkClient *log.Splunk
 	redisClient  *redis.Client
 }
 
@@ -65,7 +65,7 @@ func loadExternalTools(ctx context.Context) (*components, error) {
 		return nil, err
 	}
 
-	splunkClient := splunk.New(config.Env.SplunkHost, false)
+	splunkClient := log.New(config.Env.SplunkHost, false)
 
 	redisClient := redis.NewClient(
 		&redis.Options{

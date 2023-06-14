@@ -35,15 +35,15 @@ func (m *MockLog) EXPECT() *MockLogMockRecorder {
 }
 
 // SendErrorLog mocks base method.
-func (m *MockLog) SendErrorLog(ctx context.Context, message string) {
+func (m *MockLog) SendErrorLog(ctx context.Context, err error) {
 	m.ctrl.T.Helper()
-	m.ctrl.Call(m, "SendErrorLog", ctx, message)
+	m.ctrl.Call(m, "SendErrorLog", ctx, err)
 }
 
 // SendErrorLog indicates an expected call of SendErrorLog.
-func (mr *MockLogMockRecorder) SendErrorLog(ctx, message interface{}) *gomock.Call {
+func (mr *MockLogMockRecorder) SendErrorLog(ctx, err interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SendErrorLog", reflect.TypeOf((*MockLog)(nil).SendErrorLog), ctx, message)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SendErrorLog", reflect.TypeOf((*MockLog)(nil).SendErrorLog), ctx, err)
 }
 
 // SendEvent mocks base method.

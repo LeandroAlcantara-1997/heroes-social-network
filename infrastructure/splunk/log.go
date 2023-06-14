@@ -1,4 +1,4 @@
-package splunk
+package log
 
 import (
 	"bytes"
@@ -25,14 +25,12 @@ func New(host string, assync bool) *Splunk {
 	}
 }
 
-func (s *Splunk) SendErrorLog(ctx context.Context, message string) {
-	var outputLog = &outputLog.GlobalLog{
-		Data: outputLog.LogMetadata{
-			LogLevel: "error",
-			Message:  message,
-		},
-	}
-	payload, err := json.Marshal(&outputLog)
+func (s *Splunk) SendErrorLog(ctx context.Context, err error) {
+	logger := outputLog.GetLogger(ctx)
+	logger.Data.LogLevel = "error"
+	logger.Data.Message = err.Error()
+
+	payload, err := json.Marshal(&logger)
 	if err != nil {
 		log.Fatalf("Error to do marshal log: %v", err)
 	}
@@ -45,7 +43,7 @@ func (s *Splunk) SendErrorLog(ctx context.Context, message string) {
 
 func (s *Splunk) SendEvent(ctx context.Context, eventCode int, message string) {
 	var outputEvent = &outputLog.GlobalEvent{
-		Data: outputLog.EventMetadata{
+		Data: &outputLog.EventMetadata{
 			EventCode: eventCode,
 			Message:   message,
 		},
