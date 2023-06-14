@@ -3,6 +3,7 @@ package middleware
 import (
 	"github.com/LeandroAlcantara-1997/heroes-social-network/exception"
 	customContext "github.com/LeandroAlcantara-1997/heroes-social-network/pkg/custom_context"
+	"github.com/LeandroAlcantara-1997/heroes-social-network/ports/output/log"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
@@ -25,6 +26,7 @@ func (m *Middleware) Init(ctx *gin.Context) {
 		ctx.AbortWithError(code, err)
 		return
 	}
+	log.AddLoggerInContext(ctx)
 
 }
 

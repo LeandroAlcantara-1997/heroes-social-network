@@ -36,11 +36,12 @@ func (m *MockRepository) EXPECT() *MockRepositoryMockRecorder {
 }
 
 // CreateHero mocks base method.
-func (m *MockRepository) CreateHero(ctx context.Context, hero *model.Hero) error {
+func (m *MockRepository) CreateHero(ctx context.Context, hero *model.Hero) (*model.Hero, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "CreateHero", ctx, hero)
-	ret0, _ := ret[0].(error)
-	return ret0
+	ret0, _ := ret[0].(*model.Hero)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
 }
 
 // CreateHero indicates an expected call of CreateHero.
@@ -50,11 +51,12 @@ func (mr *MockRepositoryMockRecorder) CreateHero(ctx, hero interface{}) *gomock.
 }
 
 // CreateTeam mocks base method.
-func (m *MockRepository) CreateTeam(ctx context.Context, team *model.Team) error {
+func (m *MockRepository) CreateTeam(ctx context.Context, team *model.Team) (*model.Team, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "CreateTeam", ctx, team)
-	ret0, _ := ret[0].(error)
-	return ret0
+	ret0, _ := ret[0].(*model.Team)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
 }
 
 // CreateTeam indicates an expected call of CreateTeam.
@@ -159,11 +161,12 @@ func (m *MockHeroRepository) EXPECT() *MockHeroRepositoryMockRecorder {
 }
 
 // CreateHero mocks base method.
-func (m *MockHeroRepository) CreateHero(ctx context.Context, hero *model.Hero) error {
+func (m *MockHeroRepository) CreateHero(ctx context.Context, hero *model.Hero) (*model.Hero, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "CreateHero", ctx, hero)
-	ret0, _ := ret[0].(error)
-	return ret0
+	ret0, _ := ret[0].(*model.Hero)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
 }
 
 // CreateHero indicates an expected call of CreateHero.
@@ -239,11 +242,12 @@ func (m *MockTeamRepository) EXPECT() *MockTeamRepositoryMockRecorder {
 }
 
 // CreateTeam mocks base method.
-func (m *MockTeamRepository) CreateTeam(ctx context.Context, team *model.Team) error {
+func (m *MockTeamRepository) CreateTeam(ctx context.Context, team *model.Team) (*model.Team, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "CreateTeam", ctx, team)
-	ret0, _ := ret[0].(error)
-	return ret0
+	ret0, _ := ret[0].(*model.Team)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
 }
 
 // CreateTeam indicates an expected call of CreateTeam.
