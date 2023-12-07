@@ -40,7 +40,6 @@ func New(repository repository.Repository, cache cache.Cache,
 }
 
 func (s *service) RegisterHero(ctx context.Context, request *dto.HeroRequest) (*dto.HeroResponse, error) {
-
 	hero := model.NewHero(uuid.NewString(), request)
 	if err := s.repository.CreateHero(ctx, hero); err != nil {
 		s.log.SendErrorLog(ctx, err)

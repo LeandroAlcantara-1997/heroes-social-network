@@ -1,6 +1,9 @@
 package util
 
-import "strings"
+import (
+	"strings"
+	"time"
+)
 
 func ChunkTextByComma(text string) []string {
 	if strings.Contains(text, ",") {
@@ -10,4 +13,8 @@ func ChunkTextByComma(text string) []string {
 	return []string{
 		text,
 	}
+}
+
+func GerPointer[T time.Time](value T) *T {
+	return &value
 }

@@ -25,7 +25,6 @@ func New(host string, token string, assync bool) *Splunk {
 }
 
 func (s *Splunk) SendErrorLog(ctx context.Context, err error) {
-
 	logger := GetLogger(ctx)
 	logger.Data.LogLevel = "error"
 	logger.Data.Message = err.Error()

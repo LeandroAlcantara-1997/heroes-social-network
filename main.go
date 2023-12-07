@@ -1,47 +1,15 @@
 package main
 
 import (
-	"context"
-	"fmt"
-	"log"
-	"net/http"
-
-	"github.com/LeandroAlcantara-1997/heroes-social-network/infrastructure/config"
-	"github.com/LeandroAlcantara-1997/heroes-social-network/infrastructure/dependency"
-	"github.com/LeandroAlcantara-1997/heroes-social-network/pkg/util"
-	v1 "github.com/LeandroAlcantara-1997/heroes-social-network/web/v1"
-	"github.com/gin-contrib/cors"
-	"github.com/gin-gonic/gin"
+	"github.com/LeandroAlcantara-1997/heroes-social-network/config/env"
+	"github.com/LeandroAlcantara-1997/heroes-social-network/internal/app/container"
+	"github.com/LeandroAlcantara-1997/heroes-social-network/internal/app/transport/rest"
 )
 
 func main() {
-	config.LoadEnv()
-	ctx := context.Background()
-	r := gin.Default()
-
-	configureGlobalMiddleware(ctx, r)
-
-	log.Default().Printf("Server listening in :%s", config.Env.APIPort)
-	r.Run(fmt.Sprintf(":%s", config.Env.APIPort))
-}
-
-func configureGlobalMiddleware(ctx context.Context, r *gin.Engine) {
-	r.Use(cors.New(cors.Config{
-		AllowOrigins:  util.ChunkTextByComma(config.Env.AllowOrigins),
-		AllowMethods:  []string{http.MethodGet},
-		AllowHeaders:  []string{"*"},
-		ExposeHeaders: []string{"Content-Length", "content-type"},
-	}))
-
-	r.GET("/health-check", func(ctx *gin.Context) {
-		ctx.JSON(http.StatusOK, "ok")
-	})
-
-	dep, err := dependency.LoadDependency(ctx)
+	ctx, cont, err := container.New()
 	if err != nil {
 		panic(err)
 	}
-
-	v1.ConfigureHeroRoutes(r, dep.HeroUseCase)
-	v1.ConfigureTeamRoutes(r, dep.TeamUseCase)
+	rest.New(env.Env.APIPort, env.Env.AllowOrigins, cont).NewServer(ctx)
 }
