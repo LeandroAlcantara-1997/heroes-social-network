@@ -133,7 +133,7 @@ func TestHandlerPutHeroSuccess(t *testing.T) {
 	)
 	defer ctrl.Finish()
 	useCase.EXPECT().UpdateHero(ctx, batmanResponse.ID, batmanRequest).
-		Return(batmanResponse, nil)
+		Return(nil)
 	ctx.Request = httptest.NewRequest(
 		http.MethodPut,
 		fmt.Sprintf("/v1/heroes?id=%s", batmanResponse.ID),
@@ -189,7 +189,7 @@ func TestHandlerPutHeroFailInternalServerError(t *testing.T) {
 	)
 	defer ctrl.Finish()
 	useCase.EXPECT().UpdateHero(ctx, batmanResponse.ID, batmanRequest).
-		Return(nil, exception.ErrInternalServer)
+		Return(exception.ErrInternalServer)
 	ctx.Request = httptest.NewRequest(
 		http.MethodPut,
 		fmt.Sprintf("/v1/heroes?id=%s", batmanResponse.ID),

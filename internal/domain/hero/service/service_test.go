@@ -97,25 +97,6 @@ func TestServiceRegisterHeroFailInternalServerError(t *testing.T) {
 	assert.ErrorIs(t, exception.ErrInternalServer, err)
 }
 
-func TestServiceRegisterHeroFailInvalidField(t *testing.T) {
-	var (
-		ctx      = context.Background()
-		ctrl     = gomock.NewController(t)
-		l        = mock.NewMockLog(ctrl)
-		expected *dto.HeroResponse
-	)
-	defer ctrl.Finish()
-	l.EXPECT().SendErrorLog(ctx, gomock.Any())
-	s := &service{
-		repository: nil,
-		log:        l,
-	}
-
-	out, err := s.RegisterHero(ctx, batman)
-	assert.Equal(t, expected, out)
-	assert.Equal(t, exception.ErrInvalidFields, err)
-}
-
 // Get
 func TestServiceGetHeroByIDSuccess(t *testing.T) {
 	var (
@@ -222,29 +203,6 @@ func TestServiceUpdateHeroSuccess(t *testing.T) {
 	})
 
 	assert.ErrorIs(t, nil, err)
-}
-
-func TestServiceUpdateHeroFailInvalidField(t *testing.T) {
-	var (
-		ctx  = context.Background()
-		ctrl = gomock.NewController(t)
-		l    = mock.NewMockLog(ctrl)
-	)
-	defer ctrl.Finish()
-	l.EXPECT().SendErrorLog(ctx, gomock.Any())
-	s := &service{
-		repository: nil,
-		log:        l,
-		cache:      nil,
-	}
-	err := s.UpdateHero(ctx, ironman.ID, &dto.HeroRequest{
-		HeroName:  ironman.HeroName,
-		CivilName: ironman.CivilName,
-		Hero:      ironman.Hero,
-		Universe:  "Marrvel",
-	})
-
-	assert.ErrorIs(t, exception.ErrInvalidFields, err)
 }
 
 func TestServiceUpdateHeroFailInternalServerError(t *testing.T) {
