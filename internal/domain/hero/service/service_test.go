@@ -12,22 +12,12 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-// const id = "96f15886-6570-4469-8d9e-e694733000d1"
-
 var (
 	superMan = &dto.HeroRequest{
 		HeroName:  "Super-man",
 		CivilName: "Clark Kent",
 		Hero:      true,
 		Universe:  "DC",
-		Team:      nil,
-	}
-
-	batman = &dto.HeroRequest{
-		HeroName:  "Batman",
-		CivilName: "Bruce Wayne",
-		Hero:      true,
-		Universe:  "DCI",
 		Team:      nil,
 	}
 

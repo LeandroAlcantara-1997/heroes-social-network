@@ -72,12 +72,12 @@ func (h *Handler) DeleteTeamByID(ctx *gin.Context) {
 func (h *Handler) GetTeamByName(ctx *gin.Context) {
 	var request *dto.GetTeamByName
 	if err := ctx.BindUri(&request); err != nil {
-		ctx.AbortWithError(http.StatusBadRequest, err)
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, err)
 		return
 	}
 	resp, err := h.UseCase.GetTeamByName(ctx, request)
 	if err != nil {
-		ctx.JSON(response.RestError(err))
+		ctx.AbortWithStatusJSON(response.RestError(err))
 		return
 	}
 	ctx.JSON(http.StatusOK, resp)
@@ -93,12 +93,12 @@ func (h *Handler) UpdateTeam(ctx *gin.Context) {
 		}
 
 		if err := json.NewDecoder(ctx.Request.Body).Decode(&request); err != nil {
-			ctx.AbortWithError(http.StatusBadRequest, err)
+			ctx.AbortWithStatusJSON(http.StatusBadRequest, err)
 			return
 		}
 
 		if err := h.UseCase.UpdateTeam(ctx, id, request); err != nil {
-			ctx.AbortWithError(response.RestError(err))
+			ctx.AbortWithStatusJSON(response.RestError(err))
 			return
 		}
 		ctx.Status(http.StatusOK)
