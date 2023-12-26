@@ -3,6 +3,7 @@ package cache
 import (
 	"context"
 
+	game "github.com/LeandroAlcantara-1997/heroes-social-network/internal/domain/game/model"
 	hero "github.com/LeandroAlcantara-1997/heroes-social-network/internal/domain/hero/model"
 	team "github.com/LeandroAlcantara-1997/heroes-social-network/internal/domain/team/model"
 )
@@ -23,4 +24,10 @@ type TeamCache interface {
 	SetTeam(ctx context.Context, team *team.Team, key string) (err error)
 	GetTeam(ctx context.Context, key string) (team *team.Team, err error)
 	DeleteTeam(ctx context.Context, key string) (err error)
+}
+
+type GameCache interface {
+	SetGame(ctx context.Context, game *game.Game, key string) (err error)
+	GetGame(ctx context.Context, key string) (game *game.Game, err error)
+	DeleteGame(ctx context.Context, key string) (err error)
 }

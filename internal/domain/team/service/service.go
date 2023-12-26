@@ -25,7 +25,7 @@ type Team interface {
 }
 
 type service struct {
-	repository repository.Repository
+	repository repository.TeamRepository
 	cache      cache.Cache
 	log        log.Log
 }

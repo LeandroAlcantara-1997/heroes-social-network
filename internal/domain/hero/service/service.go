@@ -25,7 +25,7 @@ type Hero interface {
 }
 
 type service struct {
-	repository repository.Repository
+	repository repository.HeroRepository
 	cache      cache.Cache
 	log        log.Log
 }
@@ -52,7 +52,7 @@ func (s *service) RegisterHero(ctx context.Context, request *dto.HeroRequest) (*
 	}
 
 	return dto.NewHeroResponse(hero.ID, hero.HeroName, hero.CivilName, hero.Universe,
-		hero.Hero, hero.CreatedAt, hero.UpdatedAt, nil), nil
+		hero.Hero, hero.CreatedAt, hero.UpdatedAt, hero.Team), nil
 }
 
 func (s *service) UpdateHero(ctx context.Context, id string, request *dto.HeroRequest) error {
@@ -94,7 +94,7 @@ func (s *service) GetHeroByID(ctx context.Context, id string) (*dto.HeroResponse
 	}
 
 	return dto.NewHeroResponse(hero.ID, hero.HeroName, hero.CivilName,
-		hero.Universe, hero.Hero, hero.CreatedAt, hero.UpdatedAt, nil), nil
+		hero.Universe, hero.Hero, hero.CreatedAt, hero.UpdatedAt, hero.Team), nil
 }
 
 func (s *service) DeleteHeroByID(ctx context.Context, id string) (err error) {

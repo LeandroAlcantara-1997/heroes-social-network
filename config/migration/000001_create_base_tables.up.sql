@@ -101,6 +101,14 @@ CREATE TABLE character_game(
     FOREIGN KEY (fk_game) REFERENCES game(id)
 );
 
+CREATE TABLE team_game(
+    fk_team UUID,
+    fk_game UUID,
+    CONSTRAINT pk_team_game PRIMARY KEY (fk_team,fk_game),
+    FOREIGN KEY (fk_team) REFERENCES team(id),
+    FOREIGN KEY (fk_game) REFERENCES game(id)
+);
+
 CREATE TABLE character_movie(
     fk_character UUID,
     fk_movie UUID,

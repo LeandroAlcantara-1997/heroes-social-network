@@ -35,7 +35,7 @@ func TestServiceRegisterTeamSuccess(t *testing.T) {
 	var (
 		ctx            = context.Background()
 		ctrl           = gomock.NewController(t)
-		repositoryMock = mock.NewMockRepository(ctrl)
+		repositoryMock = mock.NewRepositoryMock(ctrl)
 		cacheMock      = mock.NewMockCache(ctrl)
 		logMock        = mock.NewMockLog(ctrl)
 	)
@@ -55,7 +55,7 @@ func TestServiceRegisterTeamFail(t *testing.T) {
 	var (
 		ctx            = context.Background()
 		ctrl           = gomock.NewController(t)
-		repositoryMock = mock.NewMockRepository(ctrl)
+		repositoryMock = mock.NewRepositoryMock(ctrl)
 		logMock        = mock.NewMockLog(ctrl)
 		expected       *dto.TeamResponse
 	)
@@ -88,7 +88,7 @@ func TestServiceGetTeamByIDSuccessByRepository(t *testing.T) {
 	var (
 		ctx            = context.Background()
 		ctrl           = gomock.NewController(t)
-		repositoryMock = mock.NewMockRepository(ctrl)
+		repositoryMock = mock.NewRepositoryMock(ctrl)
 		cacheMock      = mock.NewMockCache(ctrl)
 		logMock        = mock.NewMockLog(ctrl)
 	)
@@ -105,7 +105,7 @@ func TestServiceDeleteTeamByIDSuccessTeamDeleted(t *testing.T) {
 	var (
 		ctx            = context.Background()
 		ctrl           = gomock.NewController(t)
-		repositoryMock = mock.NewMockRepository(ctrl)
+		repositoryMock = mock.NewRepositoryMock(ctrl)
 		cacheMock      = mock.NewMockCache(ctrl)
 	)
 
@@ -145,7 +145,7 @@ func TestServiceDeleteTeamByIDFailTeamNotDeletedByDatabase(t *testing.T) {
 		ctx            = context.Background()
 		ctrl           = gomock.NewController(t)
 		cacheMock      = mock.NewMockCache(ctrl)
-		repositoryMock = mock.NewMockRepository(ctrl)
+		repositoryMock = mock.NewRepositoryMock(ctrl)
 		logMock        = mock.NewMockLog(ctrl)
 	)
 

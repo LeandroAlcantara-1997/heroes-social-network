@@ -36,7 +36,7 @@ func TestServiceRegisterHeroSuccess(t *testing.T) {
 	var (
 		ctx  = context.Background()
 		ctrl = gomock.NewController(t)
-		rep  = mock.NewMockRepository(ctrl)
+		rep  = mock.NewRepositoryMock(ctrl)
 		c    = mock.NewMockCache(ctrl)
 	)
 	defer ctrl.Finish()
@@ -66,7 +66,7 @@ func TestServiceRegisterHeroFailInternalServerError(t *testing.T) {
 	var (
 		ctx      = context.Background()
 		ctrl     = gomock.NewController(t)
-		rep      = mock.NewMockRepository(ctrl)
+		rep      = mock.NewRepositoryMock(ctrl)
 		l        = mock.NewMockLog(ctrl)
 		c        = mock.NewMockCache(ctrl)
 		expected *dto.HeroResponse
@@ -118,7 +118,7 @@ func TestServiceGetHeroByIDFailHeroNotFoundError(t *testing.T) {
 	var (
 		ctx      = context.Background()
 		ctrl     = gomock.NewController(t)
-		rep      = mock.NewMockRepository(ctrl)
+		rep      = mock.NewRepositoryMock(ctrl)
 		l        = mock.NewMockLog(ctrl)
 		c        = mock.NewMockCache(ctrl)
 		expected *dto.HeroResponse
@@ -144,7 +144,7 @@ func TestServiceGetHeroByIDFailInternalServerError(t *testing.T) {
 	var (
 		ctx      = context.Background()
 		ctrl     = gomock.NewController(t)
-		rep      = mock.NewMockRepository(ctrl)
+		rep      = mock.NewRepositoryMock(ctrl)
 		l        = mock.NewMockLog(ctrl)
 		c        = mock.NewMockCache(ctrl)
 		expected *dto.HeroResponse
@@ -172,7 +172,7 @@ func TestServiceUpdateHeroSuccess(t *testing.T) {
 	var (
 		ctx  = context.Background()
 		ctrl = gomock.NewController(t)
-		rep  = mock.NewMockRepository(ctrl)
+		rep  = mock.NewRepositoryMock(ctrl)
 		c    = mock.NewMockCache(ctrl)
 	)
 	defer ctrl.Finish()
@@ -200,7 +200,7 @@ func TestServiceUpdateHeroFailInternalServerError(t *testing.T) {
 		ctx  = context.Background()
 		ctrl = gomock.NewController(t)
 		l    = mock.NewMockLog(ctrl)
-		r    = mock.NewMockRepository(ctrl)
+		r    = mock.NewRepositoryMock(ctrl)
 		c    = mock.NewMockCache(ctrl)
 	)
 	defer ctrl.Finish()
@@ -229,7 +229,7 @@ func TestServiceDeleteHeroByIDSuccess(t *testing.T) {
 		ctx  = context.Background()
 		ctrl = gomock.NewController(t)
 		c    = mock.NewMockCache(ctrl)
-		r    = mock.NewMockRepository(ctrl)
+		r    = mock.NewRepositoryMock(ctrl)
 	)
 	defer ctrl.Finish()
 	c.EXPECT().DeleteHero(ctx, ironman.ID).Return(nil)
