@@ -48,7 +48,7 @@ func TestServiceRegisterHeroSuccess(t *testing.T) {
 		repository: rep,
 		cache:      c,
 	}
-	out, err := s.RegisterHero(ctx, superMan)
+	out, err := s.CreateHero(ctx, superMan)
 	assert.Equal(t, &dto.HeroResponse{
 		ID:        out.ID,
 		HeroName:  "super-man",
@@ -82,7 +82,7 @@ func TestServiceRegisterHeroFailInternalServerError(t *testing.T) {
 		cache:      c,
 	}
 
-	out, err := s.RegisterHero(ctx, superMan)
+	out, err := s.CreateHero(ctx, superMan)
 	assert.Equal(t, expected, out)
 	assert.ErrorIs(t, exception.ErrInternalServer, err)
 }

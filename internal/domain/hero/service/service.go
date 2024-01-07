@@ -18,7 +18,7 @@ import (
 
 //go:generate mockgen -destination ../../../mock/hero_mock.go -package=mock -source=service.go
 type Hero interface {
-	RegisterHero(ctx context.Context, request *dto.HeroRequest) (*dto.HeroResponse, error)
+	CreateHero(ctx context.Context, request *dto.HeroRequest) (*dto.HeroResponse, error)
 	UpdateHero(ctx context.Context, id string, request *dto.HeroRequest) error
 	GetHeroByID(ctx context.Context, id string) (*dto.HeroResponse, error)
 	DeleteHeroByID(ctx context.Context, id string) (err error)
@@ -26,7 +26,7 @@ type Hero interface {
 
 type service struct {
 	repository repository.HeroRepository
-	cache      cache.Cache
+	cache      cache.HeroCache
 	log        log.Log
 }
 
@@ -39,7 +39,7 @@ func New(repository repository.Repository, cache cache.Cache,
 	}
 }
 
-func (s *service) RegisterHero(ctx context.Context, request *dto.HeroRequest) (*dto.HeroResponse, error) {
+func (s *service) CreateHero(ctx context.Context, request *dto.HeroRequest) (*dto.HeroResponse, error) {
 	hero := model.NewHero(uuid.NewString(), request)
 	if err := s.repository.CreateHero(ctx, hero); err != nil {
 		s.log.SendErrorLog(ctx, err)

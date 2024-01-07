@@ -12,6 +12,7 @@ import (
 type Cache interface {
 	HeroCache
 	TeamCache
+	GameCache
 }
 
 type HeroCache interface {
@@ -27,7 +28,7 @@ type TeamCache interface {
 }
 
 type GameCache interface {
-	SetGame(ctx context.Context, game *game.Game, key string) (err error)
+	SetGame(ctx context.Context, game *game.Game) (err error)
 	GetGame(ctx context.Context, key string) (game *game.Game, err error)
 	DeleteGame(ctx context.Context, key string) (err error)
 }

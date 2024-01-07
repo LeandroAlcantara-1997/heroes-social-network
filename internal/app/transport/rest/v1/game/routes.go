@@ -29,4 +29,7 @@ func ConfigureTeamRoutes(r *gin.Engine, gameUseCase service.Game) {
 
 	gameRoute := r.Group("/v1/games").Use(m.Init)
 	gameRoute.POST("", game.postGame)
+	gameRoute.GET("", game.getGame)
+	gameRoute.DELETE("", game.deleteGame)
+	gameRoute.PUT("", game.putGame)
 }

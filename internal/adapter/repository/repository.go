@@ -32,4 +32,7 @@ type TeamRepository interface {
 
 type GameRepository interface {
 	CreateGame(ctx context.Context, game *game.Game) error
+	UpdateGame(ctx context.Context, game *game.Game) (err error)
+	GetGameByID(ctx context.Context, id string) (*game.Game, error)
+	DeleteGameByID(ctx context.Context, id string) error
 }

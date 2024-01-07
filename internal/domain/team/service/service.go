@@ -26,7 +26,7 @@ type Team interface {
 
 type service struct {
 	repository repository.TeamRepository
-	cache      cache.Cache
+	cache      cache.TeamCache
 	log        log.Log
 }
 
@@ -125,7 +125,7 @@ func (s *service) UpdateTeam(ctx context.Context, id string,
 	team.UpdatedAt = util.GerPointer(time.Now().UTC())
 	if err := s.repository.UpdateTeam(ctx, team); err != nil {
 		s.log.SendErrorLog(ctx, err)
-		if err := s.cache.DeleteHero(ctx, team.ID); err != nil {
+		if err := s.cache.DeleteTeam(ctx, team.ID); err != nil {
 			s.log.SendErrorLog(ctx, err)
 			return exception.ErrInternalServer
 		}
@@ -134,14 +134,14 @@ func (s *service) UpdateTeam(ctx context.Context, id string,
 
 	if err := s.cache.SetTeam(ctx, team, team.ID); err != nil {
 		s.log.SendErrorLog(ctx, err)
-		if err := s.cache.DeleteHero(ctx, team.ID); err != nil {
+		if err := s.cache.DeleteTeam(ctx, team.ID); err != nil {
 			s.log.SendErrorLog(ctx, err)
 		}
 	}
 
 	if err := s.cache.SetTeam(ctx, team, team.Name); err != nil {
 		s.log.SendErrorLog(ctx, err)
-		if err := s.cache.DeleteHero(ctx, team.Name); err != nil {
+		if err := s.cache.DeleteTeam(ctx, team.Name); err != nil {
 			s.log.SendErrorLog(ctx, err)
 		}
 	}

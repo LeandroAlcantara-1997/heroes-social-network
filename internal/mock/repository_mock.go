@@ -79,6 +79,20 @@ func (mr *RepositoryMockMockRecorder) CreateTeam(ctx, team interface{}) *gomock.
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateTeam", reflect.TypeOf((*RepositoryMock)(nil).CreateTeam), ctx, team)
 }
 
+// DeleteGameByID mocks base method.
+func (m *RepositoryMock) DeleteGameByID(ctx context.Context, id string) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "DeleteGameByID", ctx, id)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// DeleteGameByID indicates an expected call of DeleteGameByID.
+func (mr *RepositoryMockMockRecorder) DeleteGameByID(ctx, id interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteGameByID", reflect.TypeOf((*RepositoryMock)(nil).DeleteGameByID), ctx, id)
+}
+
 // DeleteHeroByID mocks base method.
 func (m *RepositoryMock) DeleteHeroByID(ctx context.Context, id string) error {
 	m.ctrl.T.Helper()
@@ -105,6 +119,21 @@ func (m *RepositoryMock) DeleteTeamByID(ctx context.Context, id string) error {
 func (mr *RepositoryMockMockRecorder) DeleteTeamByID(ctx, id interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteTeamByID", reflect.TypeOf((*RepositoryMock)(nil).DeleteTeamByID), ctx, id)
+}
+
+// GetGameByID mocks base method.
+func (m *RepositoryMock) GetGameByID(ctx context.Context, id string) (*model.Game, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetGameByID", ctx, id)
+	ret0, _ := ret[0].(*model.Game)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetGameByID indicates an expected call of GetGameByID.
+func (mr *RepositoryMockMockRecorder) GetGameByID(ctx, id interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetGameByID", reflect.TypeOf((*RepositoryMock)(nil).GetGameByID), ctx, id)
 }
 
 // GetHeroByID mocks base method.
@@ -150,6 +179,20 @@ func (m *RepositoryMock) GetTeamByName(ctx context.Context, name string) (*model
 func (mr *RepositoryMockMockRecorder) GetTeamByName(ctx, name interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetTeamByName", reflect.TypeOf((*RepositoryMock)(nil).GetTeamByName), ctx, name)
+}
+
+// UpdateGame mocks base method.
+func (m *RepositoryMock) UpdateGame(ctx context.Context, game *model.Game) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "UpdateGame", ctx, game)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// UpdateGame indicates an expected call of UpdateGame.
+func (mr *RepositoryMockMockRecorder) UpdateGame(ctx, game interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateGame", reflect.TypeOf((*RepositoryMock)(nil).UpdateGame), ctx, game)
 }
 
 // UpdateHero mocks base method.
@@ -390,4 +433,47 @@ func (m *MockGameRepository) CreateGame(ctx context.Context, game *model.Game) e
 func (mr *MockGameRepositoryMockRecorder) CreateGame(ctx, game interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateGame", reflect.TypeOf((*MockGameRepository)(nil).CreateGame), ctx, game)
+}
+
+// DeleteGameByID mocks base method.
+func (m *MockGameRepository) DeleteGameByID(ctx context.Context, id string) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "DeleteGameByID", ctx, id)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// DeleteGameByID indicates an expected call of DeleteGameByID.
+func (mr *MockGameRepositoryMockRecorder) DeleteGameByID(ctx, id interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteGameByID", reflect.TypeOf((*MockGameRepository)(nil).DeleteGameByID), ctx, id)
+}
+
+// GetGameByID mocks base method.
+func (m *MockGameRepository) GetGameByID(ctx context.Context, id string) (*model.Game, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetGameByID", ctx, id)
+	ret0, _ := ret[0].(*model.Game)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetGameByID indicates an expected call of GetGameByID.
+func (mr *MockGameRepositoryMockRecorder) GetGameByID(ctx, id interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetGameByID", reflect.TypeOf((*MockGameRepository)(nil).GetGameByID), ctx, id)
+}
+
+// UpdateGame mocks base method.
+func (m *MockGameRepository) UpdateGame(ctx context.Context, game *model.Game) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "UpdateGame", ctx, game)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// UpdateGame indicates an expected call of UpdateGame.
+func (mr *MockGameRepositoryMockRecorder) UpdateGame(ctx, game interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateGame", reflect.TypeOf((*MockGameRepository)(nil).UpdateGame), ctx, game)
 }

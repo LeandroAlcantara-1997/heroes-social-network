@@ -34,7 +34,7 @@ CREATE TABLE super_power(
 CREATE TABLE game(
     id UUID UNIQUE NOT NULL PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
-    release_year DATE NOT NULL,
+    release_year SMALLINT NOT NULL,
     universe UNIVERSE NOT NULL,
     created_at TIMESTAMP WITH TIME ZONE NOT NULL,
     updated_at TIMESTAMP WITH TIME ZONE
@@ -43,7 +43,7 @@ CREATE TABLE game(
 CREATE TABLE hq(
     id UUID PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
-    release_year DATE NOT NULL,
+    release_year SMALLINT NOT NULL,
     universe UNIVERSE NOT NULL,
     created_at TIMESTAMP WITH TIME ZONE NOT NULL,
     updated_at TIMESTAMP WITH TIME ZONE
@@ -52,7 +52,7 @@ CREATE TABLE hq(
 CREATE TABLE serie(
     id UUID PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
-    release_year DATE NOT NULL,
+    release_year SMALLINT NOT NULL,
     season SMALLINT NOT NULL,
     chapters SMALLINT NOT NULL,
     universe UNIVERSE NOT NULL,
@@ -63,7 +63,7 @@ CREATE TABLE serie(
 CREATE TABLE movie (
     id UUID PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
-    release_year DATE NOT NULL,
+    release_year SMALLINT NOT NULL,
     universe UNIVERSE NOT NULL,
     created_at TIMESTAMP WITH TIME ZONE NOT NULL,
     updated_at TIMESTAMP WITH TIME ZONE

@@ -11,6 +11,7 @@ var restErrorMap = map[error]int{
 	exception.ErrInvalidFields:    http.StatusBadRequest,
 	exception.ErrHeroNotFound:     http.StatusNotFound,
 	exception.ErrTeamNotFound:     http.StatusNotFound,
+	exception.ErrGameNotFound:     http.StatusNotFound,
 	exception.ErrInvalidRequest:   http.StatusForbidden,
 	exception.ErrTeamAlredyExists: http.StatusBadRequest,
 	exception.ErrHeroAlredyExists: http.StatusBadRequest,
@@ -19,7 +20,22 @@ var restErrorMap = map[error]int{
 func RestError(key error) (int, error) {
 	code := restErrorMap[key]
 	if code != 0 {
-		return code, exception.New(key.Error())
+		return code, New(key)
 	}
-	return http.StatusInternalServerError, exception.ErrInternalServer
+
+	return http.StatusInternalServerError, New(exception.ErrInternalServer)
+}
+
+type Exception struct {
+	Key string `json:"key"`
+}
+
+func New(err error) *Exception {
+	return &Exception{
+		Key: err.Error(),
+	}
+}
+
+func (e *Exception) Error() string {
+	return e.Key
 }

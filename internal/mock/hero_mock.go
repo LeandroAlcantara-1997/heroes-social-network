@@ -35,6 +35,21 @@ func (m *MockHero) EXPECT() *MockHeroMockRecorder {
 	return m.recorder
 }
 
+// CreateHero mocks base method.
+func (m *MockHero) CreateHero(ctx context.Context, request *dto.HeroRequest) (*dto.HeroResponse, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "CreateHero", ctx, request)
+	ret0, _ := ret[0].(*dto.HeroResponse)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// CreateHero indicates an expected call of CreateHero.
+func (mr *MockHeroMockRecorder) CreateHero(ctx, request interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateHero", reflect.TypeOf((*MockHero)(nil).CreateHero), ctx, request)
+}
+
 // DeleteHeroByID mocks base method.
 func (m *MockHero) DeleteHeroByID(ctx context.Context, id string) error {
 	m.ctrl.T.Helper()
@@ -62,21 +77,6 @@ func (m *MockHero) GetHeroByID(ctx context.Context, id string) (*dto.HeroRespons
 func (mr *MockHeroMockRecorder) GetHeroByID(ctx, id interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetHeroByID", reflect.TypeOf((*MockHero)(nil).GetHeroByID), ctx, id)
-}
-
-// RegisterHero mocks base method.
-func (m *MockHero) RegisterHero(ctx context.Context, request *dto.HeroRequest) (*dto.HeroResponse, error) {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "RegisterHero", ctx, request)
-	ret0, _ := ret[0].(*dto.HeroResponse)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// RegisterHero indicates an expected call of RegisterHero.
-func (mr *MockHeroMockRecorder) RegisterHero(ctx, request interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "RegisterHero", reflect.TypeOf((*MockHero)(nil).RegisterHero), ctx, request)
 }
 
 // UpdateHero mocks base method.

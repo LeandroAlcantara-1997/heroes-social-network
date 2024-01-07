@@ -53,7 +53,7 @@ func TestHandler_PostTeam(t *testing.T) {
 	h := Handler{
 		useCase,
 	}
-	h.PostTeam(ctx)
+	h.postTeam(ctx)
 }
 
 func TestHandlerPostTeamFailInvaliidUniverse(t *testing.T) {
@@ -78,7 +78,7 @@ func TestHandlerPostTeamFailInvaliidUniverse(t *testing.T) {
 	h := Handler{
 		useCase,
 	}
-	h.PostTeam(ctx)
+	h.postTeam(ctx)
 }
 
 func TestHandlerGetTeamByIDSuccess(t *testing.T) {
@@ -101,7 +101,7 @@ func TestHandlerGetTeamByIDSuccess(t *testing.T) {
 	h := Handler{
 		useCase,
 	}
-	h.GetTeamByID(ctx)
+	h.getTeamByID(ctx)
 }
 
 func TestHandlerGetTeamByIDFailTeamNotFound(t *testing.T) {
@@ -124,7 +124,7 @@ func TestHandlerGetTeamByIDFailTeamNotFound(t *testing.T) {
 	h := Handler{
 		useCase,
 	}
-	h.GetTeamByID(ctx)
+	h.getTeamByID(ctx)
 }
 
 func TestHandlerDeleteTeamByIDSuccess(t *testing.T) {
@@ -146,7 +146,7 @@ func TestHandlerDeleteTeamByIDSuccess(t *testing.T) {
 		useCase,
 	}
 
-	h.DeleteTeamByID(ctx)
+	h.deleteTeamByID(ctx)
 }
 
 func TestHandlerDeleteTeamByIDFail(t *testing.T) {
@@ -170,5 +170,5 @@ func TestHandlerDeleteTeamByIDFail(t *testing.T) {
 		useCase,
 	}
 
-	h.DeleteTeamByID(ctx)
+	h.deleteTeamByID(ctx)
 }

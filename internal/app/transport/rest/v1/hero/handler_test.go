@@ -10,6 +10,7 @@ import (
 	"testing"
 	"time"
 
+	"github.com/LeandroAlcantara-1997/heroes-social-network/internal/app/transport/rest/response"
 	"github.com/LeandroAlcantara-1997/heroes-social-network/internal/domain/hero/dto"
 	"github.com/LeandroAlcantara-1997/heroes-social-network/internal/exception"
 	"github.com/LeandroAlcantara-1997/heroes-social-network/internal/mock"
@@ -58,16 +59,16 @@ func TestHandlerPostHeroSuccess(t *testing.T) {
 					"universe": "DC"
 				}`),
 	)
-	useCase.EXPECT().RegisterHero(ctx, batmanRequest).Return(batmanResponse, nil)
+	useCase.EXPECT().CreateHero(ctx, batmanRequest).Return(batmanResponse, nil)
 	h := Handler{
 		useCase,
 	}
-	h.PostHero(ctx)
+	h.postHero(ctx)
 }
 
 func TestHandlerPostHeroFailInvalidField(t *testing.T) {
 	var (
-		response, _ = json.Marshal(exception.New(exception.ErrInvalidFields.Error()))
+		response, _ = json.Marshal(response.New(exception.ErrInvalidFields))
 		ctx, _      = gin.CreateTestContext(&httptest.ResponseRecorder{
 			Code: http.StatusBadRequest,
 			Body: bytes.NewBuffer(response),
@@ -89,12 +90,12 @@ func TestHandlerPostHeroFailInvalidField(t *testing.T) {
 	h := Handler{
 		useCase,
 	}
-	h.PostHero(ctx)
+	h.postHero(ctx)
 }
 
 func TestHandlerPostHeroFailInternalServerError(t *testing.T) {
 	var (
-		response, _ = json.Marshal(exception.New(exception.ErrInternalServer.Error()))
+		response, _ = json.Marshal(response.New(exception.ErrInternalServer))
 		ctx, _      = gin.CreateTestContext(&httptest.ResponseRecorder{
 			Code: http.StatusOK,
 			Body: bytes.NewBuffer(response),
@@ -113,11 +114,11 @@ func TestHandlerPostHeroFailInternalServerError(t *testing.T) {
 					"universe": "DC"
 				}`),
 	)
-	useCase.EXPECT().RegisterHero(ctx, batmanRequest).Return(nil, exception.ErrInternalServer)
+	useCase.EXPECT().CreateHero(ctx, batmanRequest).Return(nil, exception.ErrInternalServer)
 	h := Handler{
 		useCase,
 	}
-	h.PostHero(ctx)
+	h.postHero(ctx)
 }
 
 // PUT Hero
@@ -147,12 +148,12 @@ func TestHandlerPutHeroSuccess(t *testing.T) {
 	h := &Handler{
 		UseCase: useCase,
 	}
-	h.PutHero(ctx)
+	h.putHero(ctx)
 }
 
 func TestHandlerPutHeroFailInvalidField(t *testing.T) {
 	var (
-		response, _ = json.Marshal(exception.New(exception.ErrInvalidFields.Error()))
+		response, _ = json.Marshal(response.New(exception.ErrInvalidFields))
 		ctx, _      = gin.CreateTestContext(&httptest.ResponseRecorder{
 			Code: http.StatusBadRequest,
 			Body: bytes.NewBuffer(response),
@@ -174,12 +175,12 @@ func TestHandlerPutHeroFailInvalidField(t *testing.T) {
 	h := &Handler{
 		UseCase: useCase,
 	}
-	h.PutHero(ctx)
+	h.putHero(ctx)
 }
 
 func TestHandlerPutHeroFailInternalServerError(t *testing.T) {
 	var (
-		response, _ = json.Marshal(exception.New(exception.ErrInternalServer.Error()))
+		response, _ = json.Marshal(response.New(exception.ErrInternalServer))
 		ctx, _      = gin.CreateTestContext(&httptest.ResponseRecorder{
 			Code: http.StatusInternalServerError,
 			Body: bytes.NewBuffer(response),
@@ -203,13 +204,13 @@ func TestHandlerPutHeroFailInternalServerError(t *testing.T) {
 	h := &Handler{
 		UseCase: useCase,
 	}
-	h.PutHero(ctx)
+	h.putHero(ctx)
 }
 
 // GET
 func TestHandlerGetHeroByIDSucess(t *testing.T) {
 	var (
-		response, _ = json.Marshal(exception.New(exception.ErrInternalServer.Error()))
+		response, _ = json.Marshal(response.New(exception.ErrInternalServer))
 		ctx, _      = gin.CreateTestContext(&httptest.ResponseRecorder{
 			Code: http.StatusInternalServerError,
 			Body: bytes.NewBuffer(response),
@@ -228,12 +229,12 @@ func TestHandlerGetHeroByIDSucess(t *testing.T) {
 	h := &Handler{
 		UseCase: useCase,
 	}
-	h.GetHeroByID(ctx)
+	h.getHeroByID(ctx)
 }
 
 func TestHandlerGetHeroByIDFailHeroNotFound(t *testing.T) {
 	var (
-		response, _ = json.Marshal(exception.New(exception.ErrHeroNotFound.Error()))
+		response, _ = json.Marshal(response.New(exception.ErrHeroNotFound))
 		ctx, _      = gin.CreateTestContext(&httptest.ResponseRecorder{
 			Code: http.StatusInternalServerError,
 			Body: bytes.NewBuffer(response),
@@ -252,12 +253,12 @@ func TestHandlerGetHeroByIDFailHeroNotFound(t *testing.T) {
 	h := &Handler{
 		UseCase: useCase,
 	}
-	h.GetHeroByID(ctx)
+	h.getHeroByID(ctx)
 }
 
 func TestHandlerGetHeroByIDFailHInternalServerError(t *testing.T) {
 	var (
-		response, _ = json.Marshal(exception.New(exception.ErrInternalServer.Error()))
+		response, _ = json.Marshal(response.New(exception.ErrInternalServer))
 		ctx, _      = gin.CreateTestContext(&httptest.ResponseRecorder{
 			Code: http.StatusInternalServerError,
 			Body: bytes.NewBuffer(response),
@@ -276,7 +277,7 @@ func TestHandlerGetHeroByIDFailHInternalServerError(t *testing.T) {
 	h := &Handler{
 		UseCase: useCase,
 	}
-	h.GetHeroByID(ctx)
+	h.getHeroByID(ctx)
 }
 
 // Delete
@@ -301,12 +302,12 @@ func TestHandlerDeleteHeroByIDSuccess(t *testing.T) {
 	h := &Handler{
 		UseCase: useCase,
 	}
-	h.DeleteHeroByID(ctx)
+	h.deleteHeroByID(ctx)
 }
 
 func TestHandlerDeleteHeroByIDFailHeroNotFound(t *testing.T) {
 	var (
-		response, _ = json.Marshal(exception.New(exception.ErrHeroNotFound.Error()))
+		response, _ = json.Marshal(response.New(exception.ErrHeroNotFound))
 		ctx, _      = gin.CreateTestContext(&httptest.ResponseRecorder{
 			Code: http.StatusInternalServerError,
 			Body: bytes.NewBuffer(response),
@@ -325,12 +326,12 @@ func TestHandlerDeleteHeroByIDFailHeroNotFound(t *testing.T) {
 	h := &Handler{
 		UseCase: useCase,
 	}
-	h.DeleteHeroByID(ctx)
+	h.deleteHeroByID(ctx)
 }
 
 func TestHandlerDeleteHeroByIDFailInternalServerError(t *testing.T) {
 	var (
-		response, _ = json.Marshal(exception.New(exception.ErrInternalServer.Error()))
+		response, _ = json.Marshal(response.New(exception.ErrInternalServer))
 		ctx, _      = gin.CreateTestContext(&httptest.ResponseRecorder{
 			Code: http.StatusInternalServerError,
 			Body: bytes.NewBuffer(response),
@@ -349,5 +350,5 @@ func TestHandlerDeleteHeroByIDFailInternalServerError(t *testing.T) {
 	h := &Handler{
 		UseCase: useCase,
 	}
-	h.DeleteHeroByID(ctx)
+	h.deleteHeroByID(ctx)
 }

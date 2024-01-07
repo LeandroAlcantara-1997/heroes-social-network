@@ -9,14 +9,14 @@ import (
 	game "github.com/LeandroAlcantara-1997/heroes-social-network/internal/domain/game/model"
 )
 
-func (c *cache) SetGame(ctx context.Context, game *game.Game, key string) (err error) {
+func (c *cache) SetGame(ctx context.Context, game *game.Game) (err error) {
 	payload, err := json.Marshal(game)
 	if err != nil {
 		return
 	}
 
 	if cmd := c.redisClient.Set(ctx,
-		getGameKey(key), payload,
+		getGameKey(game.ID), payload,
 		time.Duration(time.Hour*24)); cmd.Err() != nil {
 		return cmd.Err()
 	}
