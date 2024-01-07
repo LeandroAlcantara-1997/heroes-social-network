@@ -28,7 +28,7 @@ func (h *Handler) postTeam(ctx *gin.Context) {
 		return
 	}
 
-	resp, err := h.UseCase.RegisterTeam(ctx, &request)
+	resp, err := h.UseCase.CreateTeam(ctx, &request)
 	if err != nil {
 		ctx.JSON(response.RestError(err))
 		return

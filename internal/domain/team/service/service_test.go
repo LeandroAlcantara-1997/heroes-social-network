@@ -43,12 +43,12 @@ func TestServiceRegisterTeamSuccess(t *testing.T) {
 	repositoryMock.EXPECT().CreateTeam(ctx, gomock.Any()).Return(nil)
 	cacheMock.EXPECT().SetTeam(ctx, gomock.Any(), gomock.Any()).Return(nil)
 	s := New(repositoryMock, cacheMock, logMock)
-	out, err := s.RegisterTeam(ctx, &dto.TeamRequest{
+	out, err := s.CreateTeam(ctx, &dto.TeamRequest{
 		Name:     "the avengers",
 		Universe: "MARVEL",
 	})
 	assert.Equal(t, dto.NewTeamResponse(out.ID, "the avengers", "MARVEL", out.CreatedAt, nil), out)
-	assert.ErrorIs(t, err, nil)
+	assert.NoError(t, err)
 }
 
 func TestServiceRegisterTeamFail(t *testing.T) {
@@ -63,7 +63,7 @@ func TestServiceRegisterTeamFail(t *testing.T) {
 	repositoryMock.EXPECT().CreateTeam(ctx, gomock.Any()).Return(exception.ErrTeamAlredyExists)
 	logMock.EXPECT().SendErrorLog(ctx, exception.ErrTeamAlredyExists)
 	s := New(repositoryMock, nil, logMock)
-	out, err := s.RegisterTeam(ctx, &dto.TeamRequest{
+	out, err := s.CreateTeam(ctx, &dto.TeamRequest{
 		Name:     "The Avengers",
 		Universe: "MARVEL",
 	})

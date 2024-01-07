@@ -49,7 +49,7 @@ func TestHandler_PostTeam(t *testing.T) {
 					"universe": "MARVEL"
 				}`),
 	)
-	useCase.EXPECT().RegisterTeam(ctx, xMenRequest).Return(xMenResponse, nil)
+	useCase.EXPECT().CreateTeam(ctx, xMenRequest).Return(xMenResponse, nil)
 	h := Handler{
 		useCase,
 	}

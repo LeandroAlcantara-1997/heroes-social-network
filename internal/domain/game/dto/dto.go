@@ -22,7 +22,7 @@ type GameResponse struct {
 	Universe    universe.Universe `json:"universe"`
 	TeamID      *string           `json:"teamId,omitempty"`
 	HeroID      *string           `json:"heroId,omitempty"`
-	CreatedAt   *time.Time        `json:"createdAt,omitempty"`
+	CreatedAt   time.Time         `json:"createdAt,omitempty"`
 	UpdatedAt   *time.Time        `json:"updatedAt,omitempty"`
 }
 
@@ -44,4 +44,18 @@ func (g *GameRequest) Validator() error {
 	}
 
 	return nil
+}
+
+func NewGameResponse(id, name string, releaseYear int, teamID, heroID *string, universe universe.Universe,
+	createdAt time.Time, updatedAt *time.Time) *GameResponse {
+	return &GameResponse{
+		ID:          id,
+		Name:        name,
+		ReleaseYear: releaseYear,
+		TeamID:      teamID,
+		HeroID:      heroID,
+		Universe:    universe,
+		CreatedAt:   createdAt,
+		UpdatedAt:   updatedAt,
+	}
 }

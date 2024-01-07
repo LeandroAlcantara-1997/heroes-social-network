@@ -15,28 +15,28 @@ var (
 	ErrGameNotFound     = errors.New("error.0008")
 )
 
-type errorWithTrace struct {
+type ErrorWithTrace struct {
 	trace string
 	err   error
 }
 
-func (e *errorWithTrace) GetError() error {
+func (e *ErrorWithTrace) GetError() error {
 	return e.err
 }
 
-func (e *errorWithTrace) Error() string {
+func (e *ErrorWithTrace) Error() string {
 	return e.err.Error()
 }
-func New(trace string, err error) *errorWithTrace {
-	var errTrace *errorWithTrace
+func New(trace string, err error) *ErrorWithTrace {
+	var errTrace *ErrorWithTrace
 	if errors.As(err, &errTrace) {
-		return &errorWithTrace{
+		return &ErrorWithTrace{
 			trace: errTrace.trace + trace,
 			err:   err,
 		}
 	}
 
-	return &errorWithTrace{
+	return &ErrorWithTrace{
 		trace: trace,
 		err:   err,
 	}

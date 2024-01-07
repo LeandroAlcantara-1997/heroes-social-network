@@ -21,7 +21,7 @@ func (h *Handler) postGame(ctx *gin.Context) {
 		ctx.AbortWithError(response.RestError(err))
 		return
 	}
-	resp, err := h.useCase.Create(ctx, req)
+	resp, err := h.useCase.CreateGame(ctx, req)
 	if err != nil {
 		ctx.AbortWithStatusJSON(response.RestError(err))
 		return

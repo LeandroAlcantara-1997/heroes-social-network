@@ -1,6 +1,7 @@
 package response
 
 import (
+	"errors"
 	"net/http"
 
 	"github.com/LeandroAlcantara-1997/heroes-social-network/internal/exception"
@@ -18,6 +19,11 @@ var restErrorMap = map[error]int{
 }
 
 func RestError(key error) (int, error) {
+	var err *exception.ErrorWithTrace
+
+	if errors.As(key, &err) {
+		key = err.GetError()
+	}
 	code := restErrorMap[key]
 	if code != 0 {
 		return code, New(key)
