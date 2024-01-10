@@ -15,6 +15,7 @@ import (
 	"github.com/google/uuid"
 )
 
+//go:generate mockgen -destination ../../../mock/game_mock.go -package=mock -source=service.go
 type Game interface {
 	CreateGame(ctx context.Context, req *dto.GameRequest) (*dto.GameResponse, error)
 	UpdateGame(ctx context.Context, id string, req *dto.GameRequest) error

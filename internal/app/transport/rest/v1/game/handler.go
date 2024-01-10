@@ -16,12 +16,18 @@ type Handler struct {
 }
 
 func (h *Handler) postGame(ctx *gin.Context) {
-	var req *dto.GameRequest
-	if err := ctx.Bind(&req); err != nil {
+	var req dto.GameRequest
+	if err := ctx.BindJSON(&req); err != nil {
 		ctx.AbortWithError(response.RestError(err))
 		return
 	}
-	resp, err := h.useCase.CreateGame(ctx, req)
+
+	if err := req.Validator(); err != nil {
+		ctx.AbortWithStatusJSON(response.RestError(exception.ErrInvalidRequest))
+		return
+	}
+
+	resp, err := h.useCase.CreateGame(ctx, &req)
 	if err != nil {
 		ctx.AbortWithStatusJSON(response.RestError(err))
 		return
