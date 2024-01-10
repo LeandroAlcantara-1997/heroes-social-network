@@ -83,8 +83,10 @@ func TestServiceRegisterHeroFailInternalServerError(t *testing.T) {
 	}
 
 	out, err := s.CreateHero(ctx, superMan)
+	var errorWithTrace *exception.ErrorWithTrace
 	assert.Equal(t, expected, out)
-	assert.ErrorIs(t, exception.ErrInternalServer, err)
+	assert.ErrorAs(t, err, &errorWithTrace)
+	assert.ErrorIs(t, errorWithTrace.GetError(), exception.ErrInternalServer)
 }
 
 // Get
@@ -135,9 +137,10 @@ func TestServiceGetHeroByIDFailHeroNotFoundError(t *testing.T) {
 		cache:      c,
 	}
 	out, err := s.GetHeroByID(ctx, ironman.ID)
+	var errorWithTrace *exception.ErrorWithTrace
 	assert.Equal(t, expected, out)
-
-	assert.ErrorIs(t, exception.ErrHeroNotFound, err)
+	assert.ErrorAs(t, err, &errorWithTrace)
+	assert.ErrorIs(t, errorWithTrace.GetError(), exception.ErrHeroNotFound)
 }
 
 func TestServiceGetHeroByIDFailInternalServerError(t *testing.T) {
@@ -161,9 +164,11 @@ func TestServiceGetHeroByIDFailInternalServerError(t *testing.T) {
 		cache:      c,
 	}
 	out, err := s.GetHeroByID(ctx, ironman.ID)
-	assert.Equal(t, expected, out)
+	var errorWithTrace *exception.ErrorWithTrace
 
-	assert.ErrorIs(t, exception.ErrInternalServer, err)
+	assert.Equal(t, expected, out)
+	assert.ErrorAs(t, err, &errorWithTrace)
+	assert.ErrorIs(t, errorWithTrace.GetError(), exception.ErrInternalServer)
 }
 
 // Update
@@ -206,7 +211,6 @@ func TestServiceUpdateHeroFailInternalServerError(t *testing.T) {
 	defer ctrl.Finish()
 	l.EXPECT().SendErrorLog(ctx, gomock.Any())
 	r.EXPECT().UpdateHero(ctx, gomock.Any()).Return(exception.ErrInternalServer)
-	c.EXPECT().DeleteHero(ctx, gomock.Any()).Return(nil)
 	s := &service{
 		repository: r,
 		log:        l,
@@ -219,7 +223,9 @@ func TestServiceUpdateHeroFailInternalServerError(t *testing.T) {
 		Universe:  ironman.Universe,
 	})
 
-	assert.ErrorIs(t, exception.ErrInternalServer, err)
+	var errWithTrace *exception.ErrorWithTrace
+	assert.ErrorAs(t, err, &errWithTrace)
+	assert.ErrorIs(t, errWithTrace.GetError(), exception.ErrInternalServer)
 }
 
 // Delete
@@ -250,5 +256,7 @@ func TestServiceDeleteHeroByIDFailInternalServerError(t *testing.T) {
 	l.EXPECT().SendErrorLog(ctx, gomock.Any())
 	s := New(nil, c, l)
 	err := s.DeleteHeroByID(ctx, ironman.ID)
-	assert.ErrorIs(t, exception.ErrInternalServer, err)
+	var errorWithTrace *exception.ErrorWithTrace
+	assert.ErrorAs(t, err, &errorWithTrace)
+	assert.ErrorIs(t, errorWithTrace.GetError(), exception.ErrInternalServer)
 }
