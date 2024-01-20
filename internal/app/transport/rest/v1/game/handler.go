@@ -18,7 +18,7 @@ type Handler struct {
 func (h *Handler) postGame(ctx *gin.Context) {
 	var req dto.GameRequest
 	if err := ctx.BindJSON(&req); err != nil {
-		ctx.AbortWithError(response.RestError(err))
+		ctx.AbortWithStatusJSON(response.RestError(err))
 		return
 	}
 

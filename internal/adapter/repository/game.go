@@ -19,11 +19,11 @@ func (r *repository) CreateGame(ctx context.Context, game *game.Game) (err error
 		return
 	}
 
-	_, err = tx.Exec(ctx, query, game.ID, game.Name,
-		game.ReleaseYear, game.Universe, game.CreatedAt)
-	if err != nil {
+	if _, err = tx.Exec(ctx, query, game.ID, game.Name,
+		game.ReleaseYear, game.Universe, game.CreatedAt); err != nil {
 		return
 	}
+
 	if game.TeamID != nil {
 		if err := r.createRelationShipTeamGame(ctx, game.ID, *game.TeamID, tx); err != nil {
 			if rollbackErr := tx.Rollback(ctx); rollbackErr != nil {
@@ -42,6 +42,14 @@ func (r *repository) CreateGame(ctx context.Context, game *game.Game) (err error
 
 			return exception.New(fmt.Sprintf("createRelationShipHeroGame -> %s", err.Error()), exception.ErrHeroNotFound)
 		}
+	}
+
+	if err := r.createRelationShipGameConsole(ctx, tx, game.ID, game.Consoles); err != nil {
+		if rollbackErr := tx.Rollback(ctx); rollbackErr != nil {
+			return rollbackErr
+		}
+
+		return err
 	}
 
 	if err = tx.Commit(ctx); err != nil {

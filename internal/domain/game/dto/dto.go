@@ -4,6 +4,7 @@ import (
 	"errors"
 	"time"
 
+	console "github.com/LeandroAlcantara-1997/heroes-social-network/internal/domain/console/model"
 	"github.com/LeandroAlcantara-1997/heroes-social-network/internal/pkg/universe"
 )
 
@@ -13,6 +14,7 @@ type GameRequest struct {
 	TeamID      *string           `json:"teamId"`
 	HeroID      *string           `json:"heroId"`
 	Universe    universe.Universe `json:"universe"`
+	Consoles    []console.Console `json:"consoles"`
 }
 
 type GameResponse struct {
@@ -24,6 +26,7 @@ type GameResponse struct {
 	HeroID      *string           `json:"heroId,omitempty"`
 	CreatedAt   time.Time         `json:"createdAt,omitempty"`
 	UpdatedAt   *time.Time        `json:"updatedAt,omitempty"`
+	Consoles    []console.Console `json:"consoles"`
 }
 
 func (g *GameRequest) Validator() error {
@@ -43,11 +46,16 @@ func (g *GameRequest) Validator() error {
 		return errors.New("invalid universe")
 	}
 
+	for c := range g.Consoles {
+		if g.Consoles[c] == "" {
+			return errors.New("invalid console")
+		}
+	}
 	return nil
 }
 
 func NewGameResponse(id, name string, releaseYear int, teamID, heroID *string, universe universe.Universe,
-	createdAt time.Time, updatedAt *time.Time) *GameResponse {
+	createdAt time.Time, updatedAt *time.Time, consoles []console.Console) *GameResponse {
 	return &GameResponse{
 		ID:          id,
 		Name:        name,
@@ -57,5 +65,6 @@ func NewGameResponse(id, name string, releaseYear int, teamID, heroID *string, u
 		Universe:    universe,
 		CreatedAt:   createdAt,
 		UpdatedAt:   updatedAt,
+		Consoles:    consoles,
 	}
 }

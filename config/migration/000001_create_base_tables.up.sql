@@ -69,6 +69,10 @@ CREATE TABLE movie (
     updated_at TIMESTAMP WITH TIME ZONE
 );
 
+CREATE TABLE console (
+    name VARCHAR(20) PRIMARY KEY
+);
+
 CREATE TABLE character_serie(
     fk_character UUID,
     fk_serie UUID,
@@ -107,6 +111,11 @@ CREATE TABLE team_game(
     CONSTRAINT pk_team_game PRIMARY KEY (fk_team,fk_game),
     FOREIGN KEY (fk_team) REFERENCES team(id),
     FOREIGN KEY (fk_game) REFERENCES game(id)
+);
+
+CREATE TABLE console_game(
+    fk_game UUID,
+    fk_console VARCHAR(20)
 );
 
 CREATE TABLE character_movie(

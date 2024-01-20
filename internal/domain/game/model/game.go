@@ -3,6 +3,7 @@ package model
 import (
 	"time"
 
+	console "github.com/LeandroAlcantara-1997/heroes-social-network/internal/domain/console/model"
 	"github.com/LeandroAlcantara-1997/heroes-social-network/internal/domain/game/dto"
 	"github.com/LeandroAlcantara-1997/heroes-social-network/internal/pkg/universe"
 )
@@ -16,6 +17,7 @@ type Game struct {
 	Universe    universe.Universe
 	CreatedAt   time.Time
 	UpdatedAt   *time.Time
+	Consoles    []console.Console
 }
 
 func NewGame(id string, req *dto.GameRequest) *Game {
@@ -27,5 +29,6 @@ func NewGame(id string, req *dto.GameRequest) *Game {
 		HeroID:      req.HeroID,
 		TeamID:      req.TeamID,
 		CreatedAt:   time.Now().UTC(),
+		Consoles:    req.Consoles,
 	}
 }

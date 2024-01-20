@@ -8,9 +8,10 @@ import (
 	context "context"
 	reflect "reflect"
 
-	model "github.com/LeandroAlcantara-1997/heroes-social-network/internal/domain/game/model"
-	model0 "github.com/LeandroAlcantara-1997/heroes-social-network/internal/domain/hero/model"
-	model1 "github.com/LeandroAlcantara-1997/heroes-social-network/internal/domain/team/model"
+	model "github.com/LeandroAlcantara-1997/heroes-social-network/internal/domain/console/model"
+	model0 "github.com/LeandroAlcantara-1997/heroes-social-network/internal/domain/game/model"
+	model1 "github.com/LeandroAlcantara-1997/heroes-social-network/internal/domain/hero/model"
+	model2 "github.com/LeandroAlcantara-1997/heroes-social-network/internal/domain/team/model"
 	gomock "github.com/golang/mock/gomock"
 )
 
@@ -38,7 +39,7 @@ func (m *RepositoryMock) EXPECT() *RepositoryMockMockRecorder {
 }
 
 // CreateGame mocks base method.
-func (m *RepositoryMock) CreateGame(ctx context.Context, game *model.Game) error {
+func (m *RepositoryMock) CreateGame(ctx context.Context, game *model0.Game) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "CreateGame", ctx, game)
 	ret0, _ := ret[0].(error)
@@ -52,7 +53,7 @@ func (mr *RepositoryMockMockRecorder) CreateGame(ctx, game interface{}) *gomock.
 }
 
 // CreateHero mocks base method.
-func (m *RepositoryMock) CreateHero(ctx context.Context, hero *model0.Hero) error {
+func (m *RepositoryMock) CreateHero(ctx context.Context, hero *model1.Hero) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "CreateHero", ctx, hero)
 	ret0, _ := ret[0].(error)
@@ -66,7 +67,7 @@ func (mr *RepositoryMockMockRecorder) CreateHero(ctx, hero interface{}) *gomock.
 }
 
 // CreateTeam mocks base method.
-func (m *RepositoryMock) CreateTeam(ctx context.Context, team *model1.Team) error {
+func (m *RepositoryMock) CreateTeam(ctx context.Context, team *model2.Team) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "CreateTeam", ctx, team)
 	ret0, _ := ret[0].(error)
@@ -122,10 +123,10 @@ func (mr *RepositoryMockMockRecorder) DeleteTeamByID(ctx, id interface{}) *gomoc
 }
 
 // GetGameByID mocks base method.
-func (m *RepositoryMock) GetGameByID(ctx context.Context, id string) (*model.Game, error) {
+func (m *RepositoryMock) GetGameByID(ctx context.Context, id string) (*model0.Game, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetGameByID", ctx, id)
-	ret0, _ := ret[0].(*model.Game)
+	ret0, _ := ret[0].(*model0.Game)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -137,10 +138,10 @@ func (mr *RepositoryMockMockRecorder) GetGameByID(ctx, id interface{}) *gomock.C
 }
 
 // GetHeroByID mocks base method.
-func (m *RepositoryMock) GetHeroByID(ctx context.Context, id string) (*model0.Hero, error) {
+func (m *RepositoryMock) GetHeroByID(ctx context.Context, id string) (*model1.Hero, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetHeroByID", ctx, id)
-	ret0, _ := ret[0].(*model0.Hero)
+	ret0, _ := ret[0].(*model1.Hero)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -152,10 +153,10 @@ func (mr *RepositoryMockMockRecorder) GetHeroByID(ctx, id interface{}) *gomock.C
 }
 
 // GetTeamByID mocks base method.
-func (m *RepositoryMock) GetTeamByID(ctx context.Context, id string) (*model1.Team, error) {
+func (m *RepositoryMock) GetTeamByID(ctx context.Context, id string) (*model2.Team, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetTeamByID", ctx, id)
-	ret0, _ := ret[0].(*model1.Team)
+	ret0, _ := ret[0].(*model2.Team)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -167,10 +168,10 @@ func (mr *RepositoryMockMockRecorder) GetTeamByID(ctx, id interface{}) *gomock.C
 }
 
 // GetTeamByName mocks base method.
-func (m *RepositoryMock) GetTeamByName(ctx context.Context, name string) (*model1.Team, error) {
+func (m *RepositoryMock) GetTeamByName(ctx context.Context, name string) (*model2.Team, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetTeamByName", ctx, name)
-	ret0, _ := ret[0].(*model1.Team)
+	ret0, _ := ret[0].(*model2.Team)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -182,7 +183,7 @@ func (mr *RepositoryMockMockRecorder) GetTeamByName(ctx, name interface{}) *gomo
 }
 
 // UpdateGame mocks base method.
-func (m *RepositoryMock) UpdateGame(ctx context.Context, game *model.Game) error {
+func (m *RepositoryMock) UpdateGame(ctx context.Context, game *model0.Game) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "UpdateGame", ctx, game)
 	ret0, _ := ret[0].(error)
@@ -196,7 +197,7 @@ func (mr *RepositoryMockMockRecorder) UpdateGame(ctx, game interface{}) *gomock.
 }
 
 // UpdateHero mocks base method.
-func (m *RepositoryMock) UpdateHero(ctx context.Context, hero *model0.Hero) error {
+func (m *RepositoryMock) UpdateHero(ctx context.Context, hero *model1.Hero) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "UpdateHero", ctx, hero)
 	ret0, _ := ret[0].(error)
@@ -210,7 +211,7 @@ func (mr *RepositoryMockMockRecorder) UpdateHero(ctx, hero interface{}) *gomock.
 }
 
 // UpdateTeam mocks base method.
-func (m *RepositoryMock) UpdateTeam(ctx context.Context, team *model1.Team) error {
+func (m *RepositoryMock) UpdateTeam(ctx context.Context, team *model2.Team) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "UpdateTeam", ctx, team)
 	ret0, _ := ret[0].(error)
@@ -247,7 +248,7 @@ func (m *MockHeroRepository) EXPECT() *MockHeroRepositoryMockRecorder {
 }
 
 // CreateHero mocks base method.
-func (m *MockHeroRepository) CreateHero(ctx context.Context, hero *model0.Hero) error {
+func (m *MockHeroRepository) CreateHero(ctx context.Context, hero *model1.Hero) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "CreateHero", ctx, hero)
 	ret0, _ := ret[0].(error)
@@ -275,10 +276,10 @@ func (mr *MockHeroRepositoryMockRecorder) DeleteHeroByID(ctx, id interface{}) *g
 }
 
 // GetHeroByID mocks base method.
-func (m *MockHeroRepository) GetHeroByID(ctx context.Context, id string) (*model0.Hero, error) {
+func (m *MockHeroRepository) GetHeroByID(ctx context.Context, id string) (*model1.Hero, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetHeroByID", ctx, id)
-	ret0, _ := ret[0].(*model0.Hero)
+	ret0, _ := ret[0].(*model1.Hero)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -290,7 +291,7 @@ func (mr *MockHeroRepositoryMockRecorder) GetHeroByID(ctx, id interface{}) *gomo
 }
 
 // UpdateHero mocks base method.
-func (m *MockHeroRepository) UpdateHero(ctx context.Context, hero *model0.Hero) error {
+func (m *MockHeroRepository) UpdateHero(ctx context.Context, hero *model1.Hero) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "UpdateHero", ctx, hero)
 	ret0, _ := ret[0].(error)
@@ -327,7 +328,7 @@ func (m *MockTeamRepository) EXPECT() *MockTeamRepositoryMockRecorder {
 }
 
 // CreateTeam mocks base method.
-func (m *MockTeamRepository) CreateTeam(ctx context.Context, team *model1.Team) error {
+func (m *MockTeamRepository) CreateTeam(ctx context.Context, team *model2.Team) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "CreateTeam", ctx, team)
 	ret0, _ := ret[0].(error)
@@ -355,10 +356,10 @@ func (mr *MockTeamRepositoryMockRecorder) DeleteTeamByID(ctx, id interface{}) *g
 }
 
 // GetTeamByID mocks base method.
-func (m *MockTeamRepository) GetTeamByID(ctx context.Context, id string) (*model1.Team, error) {
+func (m *MockTeamRepository) GetTeamByID(ctx context.Context, id string) (*model2.Team, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetTeamByID", ctx, id)
-	ret0, _ := ret[0].(*model1.Team)
+	ret0, _ := ret[0].(*model2.Team)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -370,10 +371,10 @@ func (mr *MockTeamRepositoryMockRecorder) GetTeamByID(ctx, id interface{}) *gomo
 }
 
 // GetTeamByName mocks base method.
-func (m *MockTeamRepository) GetTeamByName(ctx context.Context, name string) (*model1.Team, error) {
+func (m *MockTeamRepository) GetTeamByName(ctx context.Context, name string) (*model2.Team, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetTeamByName", ctx, name)
-	ret0, _ := ret[0].(*model1.Team)
+	ret0, _ := ret[0].(*model2.Team)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -385,7 +386,7 @@ func (mr *MockTeamRepositoryMockRecorder) GetTeamByName(ctx, name interface{}) *
 }
 
 // UpdateTeam mocks base method.
-func (m *MockTeamRepository) UpdateTeam(ctx context.Context, team *model1.Team) error {
+func (m *MockTeamRepository) UpdateTeam(ctx context.Context, team *model2.Team) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "UpdateTeam", ctx, team)
 	ret0, _ := ret[0].(error)
@@ -422,7 +423,7 @@ func (m *MockGameRepository) EXPECT() *MockGameRepositoryMockRecorder {
 }
 
 // CreateGame mocks base method.
-func (m *MockGameRepository) CreateGame(ctx context.Context, game *model.Game) error {
+func (m *MockGameRepository) CreateGame(ctx context.Context, game *model0.Game) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "CreateGame", ctx, game)
 	ret0, _ := ret[0].(error)
@@ -450,10 +451,10 @@ func (mr *MockGameRepositoryMockRecorder) DeleteGameByID(ctx, id interface{}) *g
 }
 
 // GetGameByID mocks base method.
-func (m *MockGameRepository) GetGameByID(ctx context.Context, id string) (*model.Game, error) {
+func (m *MockGameRepository) GetGameByID(ctx context.Context, id string) (*model0.Game, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetGameByID", ctx, id)
-	ret0, _ := ret[0].(*model.Game)
+	ret0, _ := ret[0].(*model0.Game)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -465,7 +466,7 @@ func (mr *MockGameRepositoryMockRecorder) GetGameByID(ctx, id interface{}) *gomo
 }
 
 // UpdateGame mocks base method.
-func (m *MockGameRepository) UpdateGame(ctx context.Context, game *model.Game) error {
+func (m *MockGameRepository) UpdateGame(ctx context.Context, game *model0.Game) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "UpdateGame", ctx, game)
 	ret0, _ := ret[0].(error)
@@ -476,4 +477,56 @@ func (m *MockGameRepository) UpdateGame(ctx context.Context, game *model.Game) e
 func (mr *MockGameRepositoryMockRecorder) UpdateGame(ctx, game interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateGame", reflect.TypeOf((*MockGameRepository)(nil).UpdateGame), ctx, game)
+}
+
+// MockConsoleRepository is a mock of ConsoleRepository interface.
+type MockConsoleRepository struct {
+	ctrl     *gomock.Controller
+	recorder *MockConsoleRepositoryMockRecorder
+}
+
+// MockConsoleRepositoryMockRecorder is the mock recorder for MockConsoleRepository.
+type MockConsoleRepositoryMockRecorder struct {
+	mock *MockConsoleRepository
+}
+
+// NewMockConsoleRepository creates a new mock instance.
+func NewMockConsoleRepository(ctrl *gomock.Controller) *MockConsoleRepository {
+	mock := &MockConsoleRepository{ctrl: ctrl}
+	mock.recorder = &MockConsoleRepositoryMockRecorder{mock}
+	return mock
+}
+
+// EXPECT returns an object that allows the caller to indicate expected use.
+func (m *MockConsoleRepository) EXPECT() *MockConsoleRepositoryMockRecorder {
+	return m.recorder
+}
+
+// CreateConsoles mocks base method.
+func (m *MockConsoleRepository) CreateConsoles(ctx context.Context, consoles []model.Console) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "CreateConsoles", ctx, consoles)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// CreateConsoles indicates an expected call of CreateConsoles.
+func (mr *MockConsoleRepositoryMockRecorder) CreateConsoles(ctx, consoles interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateConsoles", reflect.TypeOf((*MockConsoleRepository)(nil).CreateConsoles), ctx, consoles)
+}
+
+// GetConsoles mocks base method.
+func (m *MockConsoleRepository) GetConsoles(ctx context.Context) ([]model.Console, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetConsoles", ctx)
+	ret0, _ := ret[0].([]model.Console)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetConsoles indicates an expected call of GetConsoles.
+func (mr *MockConsoleRepositoryMockRecorder) GetConsoles(ctx interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetConsoles", reflect.TypeOf((*MockConsoleRepository)(nil).GetConsoles), ctx)
 }

@@ -58,7 +58,7 @@ func (s *service) createGame(ctx context.Context, req *dto.GameRequest) (*dto.Ga
 
 	return dto.NewGameResponse(game.ID, game.Name, game.ReleaseYear,
 		game.TeamID, game.HeroID, game.Universe, game.CreatedAt,
-		game.UpdatedAt), nil
+		game.UpdatedAt, game.Consoles), nil
 }
 
 func (s *service) UpdateGame(ctx context.Context, id string, req *dto.GameRequest) error {
@@ -113,6 +113,7 @@ func (s *service) getByID(ctx context.Context, id string) (*dto.GameResponse, er
 		game.Universe,
 		game.CreatedAt,
 		game.UpdatedAt,
+		game.Consoles,
 	), nil
 }
 func (s *service) Delete(ctx context.Context, id string) error {

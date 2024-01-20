@@ -44,7 +44,7 @@ func TestServiceCreateSuccess(t *testing.T) {
 	assert.NoError(t, err)
 	assert.Equal(t, dto.NewGameResponse(out.ID, spiderManGame.Name, spiderManGame.ReleaseYear,
 		spiderManGame.TeamID, spiderManGame.HeroID,
-		spiderManGame.Universe, out.CreatedAt, out.UpdatedAt), out)
+		spiderManGame.Universe, out.CreatedAt, out.UpdatedAt, out.Consoles), out)
 }
 
 func TestServiceCreateFail(t *testing.T) {
@@ -67,7 +67,7 @@ func TestServiceCreateFail(t *testing.T) {
 	assert.NoError(t, err)
 	assert.Equal(t, dto.NewGameResponse(out.ID, spiderManGame.Name, spiderManGame.ReleaseYear,
 		spiderManGame.TeamID, spiderManGame.HeroID,
-		spiderManGame.Universe, out.CreatedAt, out.UpdatedAt), out)
+		spiderManGame.Universe, out.CreatedAt, out.UpdatedAt, out.Consoles), out)
 }
 
 func TestServiceUpdateGameSuccess(t *testing.T) {
