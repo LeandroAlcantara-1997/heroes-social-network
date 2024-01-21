@@ -8,6 +8,8 @@ import (
 	"github.com/LeandroAlcantara-1997/heroes-social-network/internal/adapter/cache"
 	log "github.com/LeandroAlcantara-1997/heroes-social-network/internal/adapter/log"
 	"github.com/LeandroAlcantara-1997/heroes-social-network/internal/adapter/repository"
+	console "github.com/LeandroAlcantara-1997/heroes-social-network/internal/domain/console/service"
+	game "github.com/LeandroAlcantara-1997/heroes-social-network/internal/domain/game/service"
 	hero "github.com/LeandroAlcantara-1997/heroes-social-network/internal/domain/hero/service"
 	team "github.com/LeandroAlcantara-1997/heroes-social-network/internal/domain/team/service"
 	"github.com/jackc/pgx/v5"
@@ -15,8 +17,10 @@ import (
 )
 
 type Container struct {
-	HeroUseCase hero.Hero
-	TeamUseCase team.Team
+	HeroUseCase    hero.Hero
+	TeamUseCase    team.Team
+	GameUseCase    game.Game
+	ConsoleUseCase console.Console
 }
 
 type components struct {
@@ -44,9 +48,22 @@ func New() (context.Context, *Container, error) {
 		cmp.splunkClient,
 	)
 
+	gameService := game.New(
+		repository.New(cmp.pgxClient),
+		cache.New(cmp.redisClient),
+		cmp.splunkClient,
+	)
+
+	consoleService := console.New(
+		repository.New(cmp.pgxClient),
+		cmp.splunkClient,
+	)
+
 	return ctx, &Container{
-		HeroUseCase: heroService,
-		TeamUseCase: teamService,
+		HeroUseCase:    heroService,
+		TeamUseCase:    teamService,
+		GameUseCase:    gameService,
+		ConsoleUseCase: consoleService,
 	}, nil
 }
 

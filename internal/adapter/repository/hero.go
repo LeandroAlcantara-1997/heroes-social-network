@@ -17,7 +17,7 @@ func (r *repository) CreateHero(ctx context.Context, hero *model.Hero) error {
 				return err
 			}
 			if !exists {
-				return errors.New("team do not exists")
+				return exception.ErrTeamNotFound
 			}
 		}
 	}

@@ -34,7 +34,7 @@ CREATE TABLE super_power(
 CREATE TABLE game(
     id UUID UNIQUE NOT NULL PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
-    release_year DATE NOT NULL,
+    release_year SMALLINT NOT NULL,
     universe UNIVERSE NOT NULL,
     created_at TIMESTAMP WITH TIME ZONE NOT NULL,
     updated_at TIMESTAMP WITH TIME ZONE
@@ -43,7 +43,7 @@ CREATE TABLE game(
 CREATE TABLE hq(
     id UUID PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
-    release_year DATE NOT NULL,
+    release_year SMALLINT NOT NULL,
     universe UNIVERSE NOT NULL,
     created_at TIMESTAMP WITH TIME ZONE NOT NULL,
     updated_at TIMESTAMP WITH TIME ZONE
@@ -52,7 +52,7 @@ CREATE TABLE hq(
 CREATE TABLE serie(
     id UUID PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
-    release_year DATE NOT NULL,
+    release_year SMALLINT NOT NULL,
     season SMALLINT NOT NULL,
     chapters SMALLINT NOT NULL,
     universe UNIVERSE NOT NULL,
@@ -63,10 +63,14 @@ CREATE TABLE serie(
 CREATE TABLE movie (
     id UUID PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
-    release_year DATE NOT NULL,
+    release_year SMALLINT NOT NULL,
     universe UNIVERSE NOT NULL,
     created_at TIMESTAMP WITH TIME ZONE NOT NULL,
     updated_at TIMESTAMP WITH TIME ZONE
+);
+
+CREATE TABLE console (
+    name VARCHAR(20) PRIMARY KEY
 );
 
 CREATE TABLE character_serie(
@@ -99,6 +103,19 @@ CREATE TABLE character_game(
     CONSTRAINT pk_character_game PRIMARY KEY (fk_character,fk_game),
     FOREIGN KEY (fk_character) REFERENCES character(id),
     FOREIGN KEY (fk_game) REFERENCES game(id)
+);
+
+CREATE TABLE team_game(
+    fk_team UUID,
+    fk_game UUID,
+    CONSTRAINT pk_team_game PRIMARY KEY (fk_team,fk_game),
+    FOREIGN KEY (fk_team) REFERENCES team(id),
+    FOREIGN KEY (fk_game) REFERENCES game(id)
+);
+
+CREATE TABLE console_game(
+    fk_game UUID,
+    fk_console VARCHAR(20)
 );
 
 CREATE TABLE character_movie(

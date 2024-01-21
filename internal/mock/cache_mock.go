@@ -8,8 +8,9 @@ import (
 	context "context"
 	reflect "reflect"
 
-	model "github.com/LeandroAlcantara-1997/heroes-social-network/internal/domain/hero/model"
-	model0 "github.com/LeandroAlcantara-1997/heroes-social-network/internal/domain/team/model"
+	model "github.com/LeandroAlcantara-1997/heroes-social-network/internal/domain/game/model"
+	model0 "github.com/LeandroAlcantara-1997/heroes-social-network/internal/domain/hero/model"
+	model1 "github.com/LeandroAlcantara-1997/heroes-social-network/internal/domain/team/model"
 	gomock "github.com/golang/mock/gomock"
 )
 
@@ -34,6 +35,20 @@ func NewMockCache(ctrl *gomock.Controller) *MockCache {
 // EXPECT returns an object that allows the caller to indicate expected use.
 func (m *MockCache) EXPECT() *MockCacheMockRecorder {
 	return m.recorder
+}
+
+// DeleteGame mocks base method.
+func (m *MockCache) DeleteGame(ctx context.Context, key string) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "DeleteGame", ctx, key)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// DeleteGame indicates an expected call of DeleteGame.
+func (mr *MockCacheMockRecorder) DeleteGame(ctx, key interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteGame", reflect.TypeOf((*MockCache)(nil).DeleteGame), ctx, key)
 }
 
 // DeleteHero mocks base method.
@@ -64,11 +79,26 @@ func (mr *MockCacheMockRecorder) DeleteTeam(ctx, key interface{}) *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteTeam", reflect.TypeOf((*MockCache)(nil).DeleteTeam), ctx, key)
 }
 
+// GetGame mocks base method.
+func (m *MockCache) GetGame(ctx context.Context, key string) (*model.Game, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetGame", ctx, key)
+	ret0, _ := ret[0].(*model.Game)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetGame indicates an expected call of GetGame.
+func (mr *MockCacheMockRecorder) GetGame(ctx, key interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetGame", reflect.TypeOf((*MockCache)(nil).GetGame), ctx, key)
+}
+
 // GetHero mocks base method.
-func (m *MockCache) GetHero(ctx context.Context, key string) (*model.Hero, error) {
+func (m *MockCache) GetHero(ctx context.Context, key string) (*model0.Hero, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetHero", ctx, key)
-	ret0, _ := ret[0].(*model.Hero)
+	ret0, _ := ret[0].(*model0.Hero)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -80,10 +110,10 @@ func (mr *MockCacheMockRecorder) GetHero(ctx, key interface{}) *gomock.Call {
 }
 
 // GetTeam mocks base method.
-func (m *MockCache) GetTeam(ctx context.Context, key string) (*model0.Team, error) {
+func (m *MockCache) GetTeam(ctx context.Context, key string) (*model1.Team, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetTeam", ctx, key)
-	ret0, _ := ret[0].(*model0.Team)
+	ret0, _ := ret[0].(*model1.Team)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -94,8 +124,22 @@ func (mr *MockCacheMockRecorder) GetTeam(ctx, key interface{}) *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetTeam", reflect.TypeOf((*MockCache)(nil).GetTeam), ctx, key)
 }
 
+// SetGame mocks base method.
+func (m *MockCache) SetGame(ctx context.Context, game *model.Game) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "SetGame", ctx, game)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// SetGame indicates an expected call of SetGame.
+func (mr *MockCacheMockRecorder) SetGame(ctx, game interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SetGame", reflect.TypeOf((*MockCache)(nil).SetGame), ctx, game)
+}
+
 // SetHero mocks base method.
-func (m *MockCache) SetHero(ctx context.Context, hero *model.Hero) error {
+func (m *MockCache) SetHero(ctx context.Context, hero *model0.Hero) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "SetHero", ctx, hero)
 	ret0, _ := ret[0].(error)
@@ -109,7 +153,7 @@ func (mr *MockCacheMockRecorder) SetHero(ctx, hero interface{}) *gomock.Call {
 }
 
 // SetTeam mocks base method.
-func (m *MockCache) SetTeam(ctx context.Context, team *model0.Team, key string) error {
+func (m *MockCache) SetTeam(ctx context.Context, team *model1.Team, key string) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "SetTeam", ctx, team, key)
 	ret0, _ := ret[0].(error)
@@ -160,10 +204,10 @@ func (mr *MockHeroCacheMockRecorder) DeleteHero(ctx, key interface{}) *gomock.Ca
 }
 
 // GetHero mocks base method.
-func (m *MockHeroCache) GetHero(ctx context.Context, key string) (*model.Hero, error) {
+func (m *MockHeroCache) GetHero(ctx context.Context, key string) (*model0.Hero, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetHero", ctx, key)
-	ret0, _ := ret[0].(*model.Hero)
+	ret0, _ := ret[0].(*model0.Hero)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -175,7 +219,7 @@ func (mr *MockHeroCacheMockRecorder) GetHero(ctx, key interface{}) *gomock.Call 
 }
 
 // SetHero mocks base method.
-func (m *MockHeroCache) SetHero(ctx context.Context, hero *model.Hero) error {
+func (m *MockHeroCache) SetHero(ctx context.Context, hero *model0.Hero) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "SetHero", ctx, hero)
 	ret0, _ := ret[0].(error)
@@ -226,10 +270,10 @@ func (mr *MockTeamCacheMockRecorder) DeleteTeam(ctx, key interface{}) *gomock.Ca
 }
 
 // GetTeam mocks base method.
-func (m *MockTeamCache) GetTeam(ctx context.Context, key string) (*model0.Team, error) {
+func (m *MockTeamCache) GetTeam(ctx context.Context, key string) (*model1.Team, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetTeam", ctx, key)
-	ret0, _ := ret[0].(*model0.Team)
+	ret0, _ := ret[0].(*model1.Team)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -241,7 +285,7 @@ func (mr *MockTeamCacheMockRecorder) GetTeam(ctx, key interface{}) *gomock.Call 
 }
 
 // SetTeam mocks base method.
-func (m *MockTeamCache) SetTeam(ctx context.Context, team *model0.Team, key string) error {
+func (m *MockTeamCache) SetTeam(ctx context.Context, team *model1.Team, key string) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "SetTeam", ctx, team, key)
 	ret0, _ := ret[0].(error)
@@ -252,4 +296,70 @@ func (m *MockTeamCache) SetTeam(ctx context.Context, team *model0.Team, key stri
 func (mr *MockTeamCacheMockRecorder) SetTeam(ctx, team, key interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SetTeam", reflect.TypeOf((*MockTeamCache)(nil).SetTeam), ctx, team, key)
+}
+
+// MockGameCache is a mock of GameCache interface.
+type MockGameCache struct {
+	ctrl     *gomock.Controller
+	recorder *MockGameCacheMockRecorder
+}
+
+// MockGameCacheMockRecorder is the mock recorder for MockGameCache.
+type MockGameCacheMockRecorder struct {
+	mock *MockGameCache
+}
+
+// NewMockGameCache creates a new mock instance.
+func NewMockGameCache(ctrl *gomock.Controller) *MockGameCache {
+	mock := &MockGameCache{ctrl: ctrl}
+	mock.recorder = &MockGameCacheMockRecorder{mock}
+	return mock
+}
+
+// EXPECT returns an object that allows the caller to indicate expected use.
+func (m *MockGameCache) EXPECT() *MockGameCacheMockRecorder {
+	return m.recorder
+}
+
+// DeleteGame mocks base method.
+func (m *MockGameCache) DeleteGame(ctx context.Context, key string) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "DeleteGame", ctx, key)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// DeleteGame indicates an expected call of DeleteGame.
+func (mr *MockGameCacheMockRecorder) DeleteGame(ctx, key interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteGame", reflect.TypeOf((*MockGameCache)(nil).DeleteGame), ctx, key)
+}
+
+// GetGame mocks base method.
+func (m *MockGameCache) GetGame(ctx context.Context, key string) (*model.Game, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetGame", ctx, key)
+	ret0, _ := ret[0].(*model.Game)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetGame indicates an expected call of GetGame.
+func (mr *MockGameCacheMockRecorder) GetGame(ctx, key interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetGame", reflect.TypeOf((*MockGameCache)(nil).GetGame), ctx, key)
+}
+
+// SetGame mocks base method.
+func (m *MockGameCache) SetGame(ctx context.Context, game *model.Game) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "SetGame", ctx, game)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// SetGame indicates an expected call of SetGame.
+func (mr *MockGameCacheMockRecorder) SetGame(ctx, game interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SetGame", reflect.TypeOf((*MockGameCache)(nil).SetGame), ctx, game)
 }

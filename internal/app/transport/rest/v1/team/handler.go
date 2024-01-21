@@ -16,7 +16,7 @@ type Handler struct {
 	UseCase service.Team
 }
 
-func (h *Handler) PostTeam(ctx *gin.Context) {
+func (h *Handler) postTeam(ctx *gin.Context) {
 	var request dto.TeamRequest
 	if err := ctx.BindJSON(&request); err != nil {
 		ctx.AbortWithError(http.StatusBadRequest, err)
@@ -28,7 +28,7 @@ func (h *Handler) PostTeam(ctx *gin.Context) {
 		return
 	}
 
-	resp, err := h.UseCase.RegisterTeam(ctx, &request)
+	resp, err := h.UseCase.CreateTeam(ctx, &request)
 	if err != nil {
 		ctx.JSON(response.RestError(err))
 		return
@@ -38,7 +38,7 @@ func (h *Handler) PostTeam(ctx *gin.Context) {
 	ctx.JSON(http.StatusCreated, resp)
 }
 
-func (h *Handler) GetTeamByID(ctx *gin.Context) {
+func (h *Handler) getTeamByID(ctx *gin.Context) {
 	var id, ok = ctx.GetQuery("id")
 	if ok {
 		if !validator.UUIDValidator(id) {
@@ -54,7 +54,7 @@ func (h *Handler) GetTeamByID(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, resp)
 }
 
-func (h *Handler) DeleteTeamByID(ctx *gin.Context) {
+func (h *Handler) deleteTeamByID(ctx *gin.Context) {
 	id, ok := ctx.GetQuery("id")
 	if ok {
 		if !validator.UUIDValidator(id) {
@@ -69,7 +69,7 @@ func (h *Handler) DeleteTeamByID(ctx *gin.Context) {
 	ctx.AbortWithStatus(http.StatusOK)
 }
 
-func (h *Handler) GetTeamByName(ctx *gin.Context) {
+func (h *Handler) getTeamByName(ctx *gin.Context) {
 	var request *dto.GetTeamByName
 	if err := ctx.BindUri(&request); err != nil {
 		ctx.AbortWithStatusJSON(http.StatusBadRequest, err)
@@ -83,7 +83,7 @@ func (h *Handler) GetTeamByName(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, resp)
 }
 
-func (h *Handler) UpdateTeam(ctx *gin.Context) {
+func (h *Handler) updateTeam(ctx *gin.Context) {
 	var request *dto.TeamRequest
 	id, ok := ctx.GetQuery("id")
 	if ok {

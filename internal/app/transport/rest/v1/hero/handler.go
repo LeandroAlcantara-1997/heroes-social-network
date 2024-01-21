@@ -15,7 +15,7 @@ type Handler struct {
 	UseCase service.Hero
 }
 
-func (h *Handler) PostHero(ctx *gin.Context) {
+func (h *Handler) postHero(ctx *gin.Context) {
 	var request dto.HeroRequest
 
 	if err := ctx.BindJSON(&request); err != nil {
@@ -28,7 +28,7 @@ func (h *Handler) PostHero(ctx *gin.Context) {
 		return
 	}
 
-	resp, err := h.UseCase.RegisterHero(ctx, &request)
+	resp, err := h.UseCase.CreateHero(ctx, &request)
 	if err != nil {
 		ctx.JSON(response.RestError(err))
 		return
@@ -37,7 +37,7 @@ func (h *Handler) PostHero(ctx *gin.Context) {
 	ctx.JSON(http.StatusCreated, resp)
 }
 
-func (h *Handler) PutHero(ctx *gin.Context) {
+func (h *Handler) putHero(ctx *gin.Context) {
 	var (
 		id, ok  = ctx.GetQuery("id")
 		request dto.HeroRequest
@@ -67,7 +67,7 @@ func (h *Handler) PutHero(ctx *gin.Context) {
 	ctx.Status(http.StatusOK)
 }
 
-func (h *Handler) GetHeroByID(ctx *gin.Context) {
+func (h *Handler) getHeroByID(ctx *gin.Context) {
 	var id, ok = ctx.GetQuery("id")
 	if ok && !validator.UUIDValidator(id) {
 		ctx.AbortWithStatusJSON(response.RestError(exception.ErrInvalidFields))
@@ -83,7 +83,7 @@ func (h *Handler) GetHeroByID(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, resp)
 }
 
-func (h *Handler) DeleteHeroByID(ctx *gin.Context) {
+func (h *Handler) deleteHeroByID(ctx *gin.Context) {
 	if id, ok := ctx.GetQuery("id"); ok {
 		if !validator.UUIDValidator(id) {
 			ctx.AbortWithStatusJSON(response.RestError(exception.ErrInvalidFields))

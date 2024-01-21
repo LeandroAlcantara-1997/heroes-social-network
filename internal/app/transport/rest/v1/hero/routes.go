@@ -29,8 +29,8 @@ func ConfigureHeroRoutes(r *gin.Engine, heroUseCase service.Hero) {
 	}
 
 	heroesRoute := r.Group("/v1/heroes").Use(m.Init)
-	heroesRoute.POST("", hero.PostHero)
-	heroesRoute.PUT("", hero.PutHero)
-	heroesRoute.GET("", hero.GetHeroByID)
-	heroesRoute.DELETE("", hero.DeleteHeroByID)
+	heroesRoute.POST("", hero.postHero)
+	heroesRoute.PUT("", hero.putHero)
+	heroesRoute.GET("", hero.getHeroByID)
+	heroesRoute.DELETE("", hero.deleteHeroByID)
 }

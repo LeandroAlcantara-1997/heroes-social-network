@@ -35,6 +35,21 @@ func (m *MockTeam) EXPECT() *MockTeamMockRecorder {
 	return m.recorder
 }
 
+// CreateTeam mocks base method.
+func (m *MockTeam) CreateTeam(ctx context.Context, request *dto.TeamRequest) (*dto.TeamResponse, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "CreateTeam", ctx, request)
+	ret0, _ := ret[0].(*dto.TeamResponse)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// CreateTeam indicates an expected call of CreateTeam.
+func (mr *MockTeamMockRecorder) CreateTeam(ctx, request interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateTeam", reflect.TypeOf((*MockTeam)(nil).CreateTeam), ctx, request)
+}
+
 // DeleteTeamByID mocks base method.
 func (m *MockTeam) DeleteTeamByID(ctx context.Context, id string) error {
 	m.ctrl.T.Helper()
@@ -77,21 +92,6 @@ func (m *MockTeam) GetTeamByName(ctx context.Context, name *dto.GetTeamByName) (
 func (mr *MockTeamMockRecorder) GetTeamByName(ctx, name interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetTeamByName", reflect.TypeOf((*MockTeam)(nil).GetTeamByName), ctx, name)
-}
-
-// RegisterTeam mocks base method.
-func (m *MockTeam) RegisterTeam(ctx context.Context, request *dto.TeamRequest) (*dto.TeamResponse, error) {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "RegisterTeam", ctx, request)
-	ret0, _ := ret[0].(*dto.TeamResponse)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// RegisterTeam indicates an expected call of RegisterTeam.
-func (mr *MockTeamMockRecorder) RegisterTeam(ctx, request interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "RegisterTeam", reflect.TypeOf((*MockTeam)(nil).RegisterTeam), ctx, request)
 }
 
 // UpdateTeam mocks base method.

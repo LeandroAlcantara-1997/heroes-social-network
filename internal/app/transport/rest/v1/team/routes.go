@@ -28,10 +28,10 @@ func ConfigureTeamRoutes(r *gin.Engine, teamUseCase service.Team) {
 	}
 
 	teamsRoute := r.Group("/v1/teams").Use(m.Init)
-	teamsRoute.POST("", team.PostTeam)
-	teamsRoute.PUT("", team.UpdateTeam)
-	teamsRoute.GET("", team.GetTeamByID)
-	teamsRoute.GET(":name", team.GetTeamByName)
-	teamsRoute.DELETE("", team.DeleteTeamByID)
+	teamsRoute.POST("", team.postTeam)
+	teamsRoute.PUT("", team.updateTeam)
+	teamsRoute.GET("", team.getTeamByID)
+	teamsRoute.GET(":name", team.getTeamByName)
+	teamsRoute.DELETE("", team.deleteTeamByID)
 
 }

@@ -15,6 +15,6 @@ func ChunkTextByComma(text string) []string {
 	}
 }
 
-func GerPointer[T time.Time](value T) *T {
+func GerPointer[T time.Time | string](value T) *T {
 	return &value
 }

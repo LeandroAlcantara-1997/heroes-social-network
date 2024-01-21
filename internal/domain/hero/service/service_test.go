@@ -36,7 +36,7 @@ func TestServiceRegisterHeroSuccess(t *testing.T) {
 	var (
 		ctx  = context.Background()
 		ctrl = gomock.NewController(t)
-		rep  = mock.NewMockRepository(ctrl)
+		rep  = mock.NewRepositoryMock(ctrl)
 		c    = mock.NewMockCache(ctrl)
 	)
 	defer ctrl.Finish()
@@ -48,7 +48,7 @@ func TestServiceRegisterHeroSuccess(t *testing.T) {
 		repository: rep,
 		cache:      c,
 	}
-	out, err := s.RegisterHero(ctx, superMan)
+	out, err := s.CreateHero(ctx, superMan)
 	assert.Equal(t, &dto.HeroResponse{
 		ID:        out.ID,
 		HeroName:  "super-man",
@@ -66,7 +66,7 @@ func TestServiceRegisterHeroFailInternalServerError(t *testing.T) {
 	var (
 		ctx      = context.Background()
 		ctrl     = gomock.NewController(t)
-		rep      = mock.NewMockRepository(ctrl)
+		rep      = mock.NewRepositoryMock(ctrl)
 		l        = mock.NewMockLog(ctrl)
 		c        = mock.NewMockCache(ctrl)
 		expected *dto.HeroResponse
@@ -82,9 +82,11 @@ func TestServiceRegisterHeroFailInternalServerError(t *testing.T) {
 		cache:      c,
 	}
 
-	out, err := s.RegisterHero(ctx, superMan)
+	out, err := s.CreateHero(ctx, superMan)
+	var errorWithTrace *exception.ErrorWithTrace
 	assert.Equal(t, expected, out)
-	assert.ErrorIs(t, exception.ErrInternalServer, err)
+	assert.ErrorAs(t, err, &errorWithTrace)
+	assert.ErrorIs(t, errorWithTrace.GetError(), exception.ErrInternalServer)
 }
 
 // Get
@@ -118,7 +120,7 @@ func TestServiceGetHeroByIDFailHeroNotFoundError(t *testing.T) {
 	var (
 		ctx      = context.Background()
 		ctrl     = gomock.NewController(t)
-		rep      = mock.NewMockRepository(ctrl)
+		rep      = mock.NewRepositoryMock(ctrl)
 		l        = mock.NewMockLog(ctrl)
 		c        = mock.NewMockCache(ctrl)
 		expected *dto.HeroResponse
@@ -135,16 +137,17 @@ func TestServiceGetHeroByIDFailHeroNotFoundError(t *testing.T) {
 		cache:      c,
 	}
 	out, err := s.GetHeroByID(ctx, ironman.ID)
+	var errorWithTrace *exception.ErrorWithTrace
 	assert.Equal(t, expected, out)
-
-	assert.ErrorIs(t, exception.ErrHeroNotFound, err)
+	assert.ErrorAs(t, err, &errorWithTrace)
+	assert.ErrorIs(t, errorWithTrace.GetError(), exception.ErrHeroNotFound)
 }
 
 func TestServiceGetHeroByIDFailInternalServerError(t *testing.T) {
 	var (
 		ctx      = context.Background()
 		ctrl     = gomock.NewController(t)
-		rep      = mock.NewMockRepository(ctrl)
+		rep      = mock.NewRepositoryMock(ctrl)
 		l        = mock.NewMockLog(ctrl)
 		c        = mock.NewMockCache(ctrl)
 		expected *dto.HeroResponse
@@ -161,9 +164,11 @@ func TestServiceGetHeroByIDFailInternalServerError(t *testing.T) {
 		cache:      c,
 	}
 	out, err := s.GetHeroByID(ctx, ironman.ID)
-	assert.Equal(t, expected, out)
+	var errorWithTrace *exception.ErrorWithTrace
 
-	assert.ErrorIs(t, exception.ErrInternalServer, err)
+	assert.Equal(t, expected, out)
+	assert.ErrorAs(t, err, &errorWithTrace)
+	assert.ErrorIs(t, errorWithTrace.GetError(), exception.ErrInternalServer)
 }
 
 // Update
@@ -172,7 +177,7 @@ func TestServiceUpdateHeroSuccess(t *testing.T) {
 	var (
 		ctx  = context.Background()
 		ctrl = gomock.NewController(t)
-		rep  = mock.NewMockRepository(ctrl)
+		rep  = mock.NewRepositoryMock(ctrl)
 		c    = mock.NewMockCache(ctrl)
 	)
 	defer ctrl.Finish()
@@ -200,13 +205,12 @@ func TestServiceUpdateHeroFailInternalServerError(t *testing.T) {
 		ctx  = context.Background()
 		ctrl = gomock.NewController(t)
 		l    = mock.NewMockLog(ctrl)
-		r    = mock.NewMockRepository(ctrl)
+		r    = mock.NewRepositoryMock(ctrl)
 		c    = mock.NewMockCache(ctrl)
 	)
 	defer ctrl.Finish()
 	l.EXPECT().SendErrorLog(ctx, gomock.Any())
 	r.EXPECT().UpdateHero(ctx, gomock.Any()).Return(exception.ErrInternalServer)
-	c.EXPECT().DeleteHero(ctx, gomock.Any()).Return(nil)
 	s := &service{
 		repository: r,
 		log:        l,
@@ -219,7 +223,9 @@ func TestServiceUpdateHeroFailInternalServerError(t *testing.T) {
 		Universe:  ironman.Universe,
 	})
 
-	assert.ErrorIs(t, exception.ErrInternalServer, err)
+	var errWithTrace *exception.ErrorWithTrace
+	assert.ErrorAs(t, err, &errWithTrace)
+	assert.ErrorIs(t, errWithTrace.GetError(), exception.ErrInternalServer)
 }
 
 // Delete
@@ -229,7 +235,7 @@ func TestServiceDeleteHeroByIDSuccess(t *testing.T) {
 		ctx  = context.Background()
 		ctrl = gomock.NewController(t)
 		c    = mock.NewMockCache(ctrl)
-		r    = mock.NewMockRepository(ctrl)
+		r    = mock.NewRepositoryMock(ctrl)
 	)
 	defer ctrl.Finish()
 	c.EXPECT().DeleteHero(ctx, ironman.ID).Return(nil)
@@ -250,5 +256,7 @@ func TestServiceDeleteHeroByIDFailInternalServerError(t *testing.T) {
 	l.EXPECT().SendErrorLog(ctx, gomock.Any())
 	s := New(nil, c, l)
 	err := s.DeleteHeroByID(ctx, ironman.ID)
-	assert.ErrorIs(t, exception.ErrInternalServer, err)
+	var errorWithTrace *exception.ErrorWithTrace
+	assert.ErrorAs(t, err, &errorWithTrace)
+	assert.ErrorIs(t, errorWithTrace.GetError(), exception.ErrInternalServer)
 }
