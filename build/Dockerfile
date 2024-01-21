@@ -2,7 +2,10 @@
 
 # [Choice] Go version (use -bullseye variants on local arm64/Apple Silicon): 1, 1.19, 1.18, 1-bullseye, 1.19-bullseye, 1.18-bullseye, 1-buster, 1.19-buster, 1.18-buster
 ARG VARIANT="1.20-bullseye"
-FROM mcr.microsoft.com/vscode/devcontainers/go:0-${VARIANT}
+FROM mcr.microsoft.com/vscode/devcontainers/go:0-${VARIANT} as development
+
+# RUN chmod -R a+w /go/pkg
+# FROM golang:1.21-alpine3.18
 
 COPY Makefile .
 # RUN make setup

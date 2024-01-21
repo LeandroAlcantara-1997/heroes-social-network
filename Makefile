@@ -60,19 +60,19 @@ setup:
 .PHONY: migration-up
 migration-up:
 	@echo ${DB_URL}
-	@migrate -database ${DB_URL} -path migration up
+	@migrate -database ${DB_URL} -path config/migration up
 
 
 .PHONY: migration-down
 migration-down:
 	@echo ${DB_URL}
-	@migrate -database ${DB_URL} -path migration down
+	@migrate -database ${DB_URL} -path config/migration down
 
 .PHONY: migration-drop
 migration-drop:
 	@echo ${DB_URL}
-	@migrate -database ${DB_URL} -path migration drop -f
+	@migrate -database ${DB_URL} -path config/migration drop -f
 
 .PHONY: migration-create
 migration-create:
-	@migrate create -ext sql -dir migration/ -seq create_base_tables
+	@migrate create -ext sql -dir config/migration/ -seq create_base_tables
