@@ -98,3 +98,19 @@ func (h *Handler) deleteHeroByID(ctx *gin.Context) {
 
 	ctx.Status(http.StatusAccepted)
 }
+
+func (h *Handler) postAddAbilityToHero(ctx *gin.Context) {
+	var request dto.AddAbilityToHeroRequest
+
+	if err := ctx.ShouldBindQuery(&request); err != nil {
+		ctx.JSON(http.StatusBadRequest, err)
+		return
+	}
+
+	if err := h.UseCase.AddAbilityToHero(ctx, request.AbilityID, request.HeroID); err != nil {
+		ctx.JSON(response.RestError(err))
+		return
+	}
+
+	ctx.Status(http.StatusCreated)
+}

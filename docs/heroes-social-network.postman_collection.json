@@ -1,0 +1,489 @@
+{
+	"info": {
+		"_postman_id": "15290da9-1bdf-435c-a636-1a073d476f01",
+		"name": "heroes-social-network",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "17064032"
+	},
+	"item": [
+		{
+			"name": "heroes",
+			"item": [
+				{
+					"name": "post hero",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"heroName\": \"Iron Man\",\n    \"civilName\": \"Tony Stark\",\n    \"hero\":  true,\n    \"universe\": \"MARVEL\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{local}}/v1/heroes",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"v1",
+								"heroes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "put hero",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"heroName\": \"Batman-Coringa\",\n    \"civilName\": \"Bruce Wayne\",\n    \"hero\":  true,\n    \"universe\": \"DC\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{local}}/v1/heroes?id=dd9d0839-92bb-4d67-870d-a9338960b464",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"v1",
+								"heroes"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "dd9d0839-92bb-4d67-870d-a9338960b464"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get hero",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{local}}/v1/heroes?id=69c5feab-52b7-46ee-ab38-db523b414447",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"v1",
+								"heroes"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "69c5feab-52b7-46ee-ab38-db523b414447"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete hero",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{local}}/v1/heroes?id=4e54d469-35d4-45bf-a8ac-d94ecccc6395",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"v1",
+								"heroes"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "4e54d469-35d4-45bf-a8ac-d94ecccc6395"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "teams",
+			"item": [
+				{
+					"name": "post team",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Teen Titans\",\n    \"universe\": \"DC\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{local}}/v1/teams",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"v1",
+								"teams"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get team",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{local}}/v1/teams?id=dd9d0839-92bb-4d67-870d-a9338960b464",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"v1",
+								"teams"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "dd9d0839-92bb-4d67-870d-a9338960b464"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get team by name",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{local}}/v1/teams/:name",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"v1",
+								"teams",
+								":name"
+							],
+							"variable": [
+								{
+									"key": "name",
+									"value": "Justice League"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete team",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{local}}/v1/teams?id=adf7a8c2-52cc-43f9-b3d6-92de4a58faa6",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"v1",
+								"teams"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "adf7a8c2-52cc-43f9-b3d6-92de4a58faa6"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "put team",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"heroName\": \"Batman-Coringa\",\n    \"civilName\": \"Bruce Wayne\",\n    \"hero\":  true,\n    \"universe\": \"DC\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{local}}/v1/teams?id=dd9d0839-92bb-4d67-870d-a9338960b464",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"v1",
+								"teams"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "dd9d0839-92bb-4d67-870d-a9338960b464"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "games",
+			"item": [
+				{
+					"name": "post game",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Iron Man 2\",\n    \"releaseYear\": 2023,\n    \"universe\": \"MARVEL\",\n    \"heroId\": \"5bdd5fe6-aadc-4ad3-855d-6ad47927bdef\",\n    \"consoles\": [\n        \"Playstation1\"\n    ]   \n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{local}}/v1/games",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"v1",
+								"games"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "put game",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Batman Gotham City\",\n    \"releaseYear\": 2000,\n    \"universe\": \"DC\",\n    \"heroId\": \"b4606b93-15a2-4314-9ffd-e84c9b5fe8b8\"    \n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{local}}/v1/games?id=3fcee602-da45-4f68-8d19-f7ba08765af9",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"v1",
+								"games"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "3fcee602-da45-4f68-8d19-f7ba08765af9"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get game",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{local}}/v1/games?id=b4606b93-15a2-4314-9ffd-e84c9b5fe8b8",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"v1",
+								"games"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "b4606b93-15a2-4314-9ffd-e84c9b5fe8b8"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete game",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Batman Arkhan City\",\n    \"releaseYear\": 2023,\n    \"universe\": \"DC\",\n    \"heroId\": \"b4606b93-15a2-4314-9ffd-e84c9b5fe8b8\"    \n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{local}}/v1/games?id=1137db19-11bb-4efb-a446-8c061bfbbae9",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"v1",
+								"games"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "1137db19-11bb-4efb-a446-8c061bfbbae9"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "consoles",
+			"item": [
+				{
+					"name": "post consoles",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"consoles\": [\n        \"XboxOne\"\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{local}}/v1/consoles",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"v1",
+								"consoles"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get  consoles",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"consoles\": [\n        \"XboxOne\"\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{local}}/v1/consoles",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"v1",
+								"consoles"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "health-check",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:8080/health-check",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"health-check"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "local",
+			"value": "http://localhost:8080"
+		}
+	]
+}

@@ -22,14 +22,12 @@ CREATE TABLE character(
 );
 
 
-CREATE TABLE super_power(
+CREATE TABLE ability(
     id UUID UNIQUE NOT NULL PRIMARY KEY,
     description VARCHAR(300) NOT NULL,
     created_at TIMESTAMP WITH TIME ZONE NOT NULL,
     updated_at TIMESTAMP WITH TIME ZONE
 );
-
-
 
 CREATE TABLE game(
     id UUID UNIQUE NOT NULL PRIMARY KEY,
@@ -89,12 +87,12 @@ CREATE TABLE character_hq(
     FOREIGN KEY (fk_hq) REFERENCES hq(id)
 );
 
-CREATE TABLE character_super_power(
+CREATE TABLE character_ability(
     fk_character UUID,
-    fk_super_power UUID,
-    CONSTRAINT pk_character_super_power PRIMARY KEY (fk_character,fk_super_power),
+    fk_ability UUID,
+    CONSTRAINT pk_character_ability PRIMARY KEY (fk_character,fk_ability),
     FOREIGN KEY (fk_character) REFERENCES character(id),
-    FOREIGN KEY (fk_super_power) REFERENCES super_power(id)
+    FOREIGN KEY (fk_ability) REFERENCES ability(id)
 );
 
 CREATE TABLE character_game(

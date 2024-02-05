@@ -16,6 +16,7 @@ var restErrorMap = map[error]int{
 	exception.ErrInvalidRequest:   http.StatusForbidden,
 	exception.ErrTeamAlredyExists: http.StatusBadRequest,
 	exception.ErrHeroAlredyExists: http.StatusBadRequest,
+	exception.ErrAbilityNotFound:  http.StatusNotFound,
 }
 
 func RestError(key error) (int, error) {
