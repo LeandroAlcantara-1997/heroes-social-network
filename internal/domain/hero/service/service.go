@@ -22,6 +22,7 @@ type Hero interface {
 	UpdateHero(ctx context.Context, id string, request *dto.HeroRequest) error
 	GetHeroByID(ctx context.Context, id string) (*dto.HeroResponse, error)
 	DeleteHeroByID(ctx context.Context, id string) (err error)
+	AddAbilityToHero(ctx context.Context, abilityID, heroID string) error
 }
 
 type service struct {
@@ -128,4 +129,20 @@ func (s *service) deleteHeroByID(ctx context.Context, id string) (err error) {
 		return exception.New(fmt.Sprintf("deleteHeroByID\n%s", err.Error()), err)
 	}
 	return
+}
+
+func (s *service) AddAbilityToHero(ctx context.Context, abilityID, heroID string) error {
+	if err := s.addAbilityToHero(ctx, abilityID, heroID); err != nil {
+		s.log.SendErrorLog(ctx, err)
+		return err
+	}
+
+	return nil
+}
+
+func (s *service) addAbilityToHero(ctx context.Context, abilityID, heroID string) error {
+	if err := s.repository.AddAbilityToHero(ctx, abilityID, heroID); err != nil {
+		return exception.New(fmt.Sprintf("AddAbilityToHero\n%s", err.Error()), err)
+	}
+	return nil
 }

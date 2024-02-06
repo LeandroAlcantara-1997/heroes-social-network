@@ -3,6 +3,7 @@ package cache
 import (
 	"context"
 
+	ability "github.com/LeandroAlcantara-1997/heroes-social-network/internal/domain/ability/model"
 	game "github.com/LeandroAlcantara-1997/heroes-social-network/internal/domain/game/model"
 	hero "github.com/LeandroAlcantara-1997/heroes-social-network/internal/domain/hero/model"
 	team "github.com/LeandroAlcantara-1997/heroes-social-network/internal/domain/team/model"
@@ -31,4 +32,10 @@ type GameCache interface {
 	SetGame(ctx context.Context, game *game.Game) (err error)
 	GetGame(ctx context.Context, key string) (game *game.Game, err error)
 	DeleteGame(ctx context.Context, key string) (err error)
+}
+
+type AbilityCache interface {
+	SetAbility(ctx context.Context, ability *ability.Ability) (err error)
+	GetAbility(ctx context.Context, key string) (ability *ability.Ability, err error)
+	DeleteAbility(ctx context.Context, key string) (err error)
 }

@@ -145,3 +145,10 @@ func (r *repository) GetHeroByName(ctx context.Context, name string) (*model.Her
 
 	return hero, nil
 }
+
+func (r *repository) AddAbilityToHero(ctx context.Context, abilityID, heroID string) error {
+	if err := r.reateRelationShipAbilityHero(ctx, abilityID, heroID); err != nil {
+		return fmt.Errorf("reateRelationShipAbilityHero\n%w", err)
+	}
+	return nil
+}

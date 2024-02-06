@@ -1,37 +1,34 @@
-package hero
+package ability
 
 import (
 	"net/http"
 
 	"github.com/LeandroAlcantara-1997/heroes-social-network/config/env"
 	"github.com/LeandroAlcantara-1997/heroes-social-network/internal/app/transport/rest/middleware"
-	service "github.com/LeandroAlcantara-1997/heroes-social-network/internal/domain/hero/service"
+	service "github.com/LeandroAlcantara-1997/heroes-social-network/internal/domain/ability/service"
 	"github.com/LeandroAlcantara-1997/heroes-social-network/pkg/util"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
 
-func ConfigureHeroRoutes(r *gin.Engine, heroUseCase service.Hero) {
-	hero := Handler{
-		UseCase: heroUseCase,
+func ConfigureGameRoutes(r *gin.Engine, abilityUseCase service.Ability) {
+	ability := Handler{
+		useCase: abilityUseCase,
 	}
-
 	m := &middleware.Middleware{
 		Admin: false,
 		Origin: middleware.Origin{
 			Cors: &cors.Config{
 				AllowOrigins:  util.ChunkTextByComma(env.Env.AllowOrigins),
-				AllowMethods:  []string{http.MethodPost, http.MethodGet, http.MethodPut, http.MethodDelete},
+				AllowMethods:  []string{http.MethodPost, http.MethodGet, http.MethodDelete, http.MethodPut},
 				AllowHeaders:  []string{"*"},
 				ExposeHeaders: []string{"Content-Length", "content-type"},
 			},
 		},
 	}
 
-	heroesRoute := r.Group("/v1/heroes").Use(m.Init)
-	heroesRoute.POST("", hero.postHero)
-	heroesRoute.PUT("", hero.putHero)
-	heroesRoute.GET("", hero.getHeroByID)
-	heroesRoute.DELETE("", hero.deleteHeroByID)
-	heroesRoute.POST("/abilities", hero.postAddAbilityToHero)
+	abilityRoute := r.Group("/v1/abilities").Use(m.Init)
+	abilityRoute.POST("", ability.postAbility)
+	abilityRoute.GET("", ability.getAbilityByID)
+	abilityRoute.GET("/heroes", ability.getAbilitiesByHeroID)
 }

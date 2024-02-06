@@ -8,6 +8,7 @@ import (
 	"github.com/LeandroAlcantara-1997/heroes-social-network/internal/adapter/cache"
 	log "github.com/LeandroAlcantara-1997/heroes-social-network/internal/adapter/log"
 	"github.com/LeandroAlcantara-1997/heroes-social-network/internal/adapter/repository"
+	ability "github.com/LeandroAlcantara-1997/heroes-social-network/internal/domain/ability/service"
 	console "github.com/LeandroAlcantara-1997/heroes-social-network/internal/domain/console/service"
 	game "github.com/LeandroAlcantara-1997/heroes-social-network/internal/domain/game/service"
 	hero "github.com/LeandroAlcantara-1997/heroes-social-network/internal/domain/hero/service"
@@ -21,6 +22,7 @@ type Container struct {
 	TeamUseCase    team.Team
 	GameUseCase    game.Game
 	ConsoleUseCase console.Console
+	AbilityUseCase ability.Ability
 }
 
 type components struct {
@@ -59,11 +61,18 @@ func New() (context.Context, *Container, error) {
 		cmp.splunkClient,
 	)
 
+	abilityService := ability.New(
+		repository.New(cmp.pgxClient),
+		cache.New(cmp.redisClient),
+		cmp.splunkClient,
+	)
+
 	return ctx, &Container{
 		HeroUseCase:    heroService,
 		TeamUseCase:    teamService,
 		GameUseCase:    gameService,
 		ConsoleUseCase: consoleService,
+		AbilityUseCase: abilityService,
 	}, nil
 }
 
