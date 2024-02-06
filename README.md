@@ -14,8 +14,8 @@ Heroes social network is a project created to make life easier for superhero fan
 
 ## Here you will find characters from companies such as:
 
-<img align="center" width="160px" src="docs/assets/marvel.png">
-<img align="center" width="100px" src="docs/assets/DC_Comics_logo.png">
+<img align="center" width="140px" src="docs/assets/marvel.png">
+<img align="center" width="80px" src="docs/assets/DC_Comics_logo.png">
 
 
 
@@ -32,6 +32,14 @@ make run
 ~~~
 
 #### To access the API contracts, import the heroes-social-network.postman_collection.json file in Postman or access the documentation on the [Wiki](https://github.com/LeandroAlcantara-1997/heroes-social-network/wiki)
+
+
+## Technologies
+
+* Golang 1.20;
+* PostgreSQL;
+* Cache;
+* Splunk;
 
 
 ## Entity relationship diagram

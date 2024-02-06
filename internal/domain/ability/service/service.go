@@ -98,6 +98,8 @@ func (s *service) getAbilitiesByHeroID(ctx context.Context, id string) ([]dto.Ab
 		resp[a] = dto.AbilityResponse{
 			ID:          abilities[a].ID,
 			Description: abilities[a].Description,
+			CreatedAt:   abilities[a].CreatedAt,
+			UpdatedAt:   abilities[a].UpdatedAt,
 		}
 	}
 	return resp, nil
