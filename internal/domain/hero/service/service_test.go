@@ -12,6 +12,8 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+const abilityID = "68ed1b87-ce4c-4645-a88a-144398e65db2"
+
 var (
 	superMan = &dto.HeroRequest{
 		HeroName:  "Super-man",
@@ -259,4 +261,19 @@ func TestServiceDeleteHeroByIDFailInternalServerError(t *testing.T) {
 	var errorWithTrace *exception.ErrorWithTrace
 	assert.ErrorAs(t, err, &errorWithTrace)
 	assert.ErrorIs(t, errorWithTrace.GetError(), exception.ErrInternalServer)
+}
+
+func TestServiceAddAbilityToHeroSuccess(t *testing.T) {
+	var (
+		ctx  = context.Background()
+		ctrl = gomock.NewController(t)
+		r    = mock.NewRepositoryMock(ctrl)
+	)
+
+	r.EXPECT().AddAbilityToHero(ctx, abilityID, ironman.ID).Return(nil)
+	s := &service{
+		repository: r,
+	}
+	err := s.AddAbilityToHero(ctx, abilityID, ironman.ID)
+	assert.NoError(t, err)
 }

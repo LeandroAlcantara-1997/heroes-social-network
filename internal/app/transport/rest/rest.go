@@ -12,6 +12,7 @@ import (
 	"time"
 
 	"github.com/LeandroAlcantara-1997/heroes-social-network/internal/app/container"
+	"github.com/LeandroAlcantara-1997/heroes-social-network/internal/app/transport/rest/v1/ability"
 	"github.com/LeandroAlcantara-1997/heroes-social-network/internal/app/transport/rest/v1/console"
 	"github.com/LeandroAlcantara-1997/heroes-social-network/internal/app/transport/rest/v1/game"
 	"github.com/LeandroAlcantara-1997/heroes-social-network/internal/app/transport/rest/v1/hero"
@@ -53,6 +54,7 @@ func (a *api) NewServer(ctx context.Context) {
 	team.ConfigureTeamRoutes(r, a.container.TeamUseCase)
 	game.ConfigureGameRoutes(r, a.container.GameUseCase)
 	console.ConfigureConsoleRoutes(r, a.container.ConsoleUseCase)
+	ability.ConfigureGameRoutes(r, a.container.AbilityUseCase)
 
 	log.Default().Printf("Server listening in :%s", a.port)
 

@@ -3,6 +3,7 @@ package repository
 import (
 	"context"
 
+	ability "github.com/LeandroAlcantara-1997/heroes-social-network/internal/domain/ability/model"
 	console "github.com/LeandroAlcantara-1997/heroes-social-network/internal/domain/console/model"
 	game "github.com/LeandroAlcantara-1997/heroes-social-network/internal/domain/game/model"
 	hero "github.com/LeandroAlcantara-1997/heroes-social-network/internal/domain/hero/model"
@@ -21,6 +22,7 @@ type HeroRepository interface {
 	UpdateHero(ctx context.Context, hero *hero.Hero) (err error)
 	GetHeroByID(ctx context.Context, id string) (*hero.Hero, error)
 	DeleteHeroByID(ctx context.Context, id string) (err error)
+	AddAbilityToHero(ctx context.Context, abilityID, heroID string) error
 }
 
 type TeamRepository interface {
@@ -41,4 +43,10 @@ type GameRepository interface {
 type ConsoleRepository interface {
 	CreateConsoles(ctx context.Context, consoles []console.Console) error
 	GetConsoles(ctx context.Context) ([]console.Console, error)
+}
+
+type AbilityRepository interface {
+	CreateAbility(ctx context.Context, ability *ability.Ability) error
+	GetAbilityByID(ctx context.Context, id string) (*ability.Ability, error)
+	GetAbilitiesByHeroID(ctx context.Context, id string) ([]ability.Ability, error)
 }

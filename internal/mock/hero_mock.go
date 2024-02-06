@@ -35,6 +35,20 @@ func (m *MockHero) EXPECT() *MockHeroMockRecorder {
 	return m.recorder
 }
 
+// AddAbilityToHero mocks base method.
+func (m *MockHero) AddAbilityToHero(ctx context.Context, abilityID, heroID string) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "AddAbilityToHero", ctx, abilityID, heroID)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// AddAbilityToHero indicates an expected call of AddAbilityToHero.
+func (mr *MockHeroMockRecorder) AddAbilityToHero(ctx, abilityID, heroID interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "AddAbilityToHero", reflect.TypeOf((*MockHero)(nil).AddAbilityToHero), ctx, abilityID, heroID)
+}
+
 // CreateHero mocks base method.
 func (m *MockHero) CreateHero(ctx context.Context, request *dto.HeroRequest) (*dto.HeroResponse, error) {
 	m.ctrl.T.Helper()

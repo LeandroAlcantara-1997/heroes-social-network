@@ -13,6 +13,7 @@ var (
 	ErrTeamAlredyExists = errors.New("error.0006")
 	ErrHeroAlredyExists = errors.New("error.0007")
 	ErrGameNotFound     = errors.New("error.0008")
+	ErrAbilityNotFound  = errors.New("error.0009")
 )
 
 type ErrorWithTrace struct {

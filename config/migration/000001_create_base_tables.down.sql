@@ -4,7 +4,7 @@ DROP TABLE IF EXISTS team;;
 
 DROP TABLE IF EXISTS  character;
 
-DROP TABLE IF EXISTS  super_power;
+DROP TABLE IF EXISTS  ability;
 
 DROP TABLE IF EXISTS  game;
 
@@ -16,7 +16,7 @@ DROP TABLE IF EXISTS character_serie;
 
 DROP TABLE IF EXISTS character_hq;
 
-DROP TABLE IF EXISTS character_super_power;
+DROP TABLE IF EXISTS character_ability;
 
 DROP TABLE IF EXISTS  character_game;
 

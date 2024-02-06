@@ -56,3 +56,8 @@ func (h *HeroRequest) Validator() error {
 
 	return nil
 }
+
+type AddAbilityToHeroRequest struct {
+	AbilityID string `form:"ability" binding:"required,uuid"`
+	HeroID    string `form:"hero" binding:"required,uuid"`
+}
