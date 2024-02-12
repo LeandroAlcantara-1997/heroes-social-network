@@ -72,7 +72,7 @@ func (h *Handler) getGame(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusCreated, resp)
+	ctx.JSON(http.StatusOK, resp)
 }
 
 // @Summary      Delete Game By ID

@@ -31,4 +31,5 @@ func ConfigureGameRoutes(r *gin.Engine, abilityUseCase service.Ability) {
 	abilityRoute.POST("", ability.postAbility)
 	abilityRoute.GET("", ability.getAbilityByID)
 	abilityRoute.GET("/heroes", ability.getAbilitiesByHeroID)
+	abilityRoute.DELETE("", ability.deleteAbility)
 }

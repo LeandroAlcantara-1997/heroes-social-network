@@ -123,7 +123,7 @@ func (h *Handler) getHeroByID(ctx *gin.Context) {
 // @Accept       json
 // @Produce      json
 // @Param id query string true "hero id"
-// @Success      202
+// @Success      204
 // @Failure      400  {object}  error
 // @Failure      404  {object}  error
 // @Failure      500  {object}  error
@@ -141,7 +141,7 @@ func (h *Handler) deleteHeroByID(ctx *gin.Context) {
 		}
 	}
 
-	ctx.Status(http.StatusAccepted)
+	ctx.Status(http.StatusNoContent)
 }
 
 // @Summary      Add Ability for Hero

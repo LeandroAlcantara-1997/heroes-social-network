@@ -108,6 +108,45 @@ const docTemplate = `{
                         "schema": {}
                     }
                 }
+            },
+            "delete": {
+                "description": "Delete Ability By ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Abilities"
+                ],
+                "summary": "Delete Ability By ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "ability id",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {}
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {}
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {}
+                    }
+                }
             }
         },
         "/abilities/heroes": {
@@ -563,8 +602,8 @@ const docTemplate = `{
                     }
                 ],
                 "responses": {
-                    "202": {
-                        "description": "Accepted"
+                    "204": {
+                        "description": "No Content"
                     },
                     "400": {
                         "description": "Bad Request",
@@ -866,7 +905,42 @@ const docTemplate = `{
             }
         },
         "dto.GameRequest": {
-            "type": "object"
+            "type": "object",
+            "properties": {
+                "consoles": {
+                    "type": "array",
+                    "items": {}
+                },
+                "heroId": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "example": [
+                        "c184abee-d573-442d-b1b7-ba93aff61fb6"
+                    ]
+                },
+                "name": {
+                    "type": "string",
+                    "example": "X-Men Legends"
+                },
+                "releaseYear": {
+                    "type": "integer",
+                    "example": 2004
+                },
+                "teamId": {
+                    "type": "string",
+                    "example": "c184abee-d573-442d-b1b7-ba93aff61fb6"
+                },
+                "universe": {
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/universe.Universe"
+                        }
+                    ],
+                    "example": "MARVEL"
+                }
+            }
         },
         "dto.GameResponse": {
             "type": "object",
@@ -879,7 +953,10 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "heroId": {
-                    "type": "string"
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
                 },
                 "id": {
                     "type": "string"
