@@ -12,7 +12,7 @@ type Game struct {
 	ID          string
 	Name        string
 	TeamID      *string
-	HeroID      *string
+	HeroID      []string
 	ReleaseYear int
 	Universe    universe.Universe
 	CreatedAt   time.Time

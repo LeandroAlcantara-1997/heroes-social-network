@@ -1,4 +1,4 @@
-# Hero Social Network
+# Heroes Social Network
 
 <img align="right" width="220px" src="docs/assets/ironman.png">
 
@@ -42,6 +42,8 @@ make run
 * Cache;
 * Splunk;
 * Swagger;
+* Graceful Shutdown;
+* Dev Container com Docker;
 
 
 ## Diagrama de entidade relacionamento:

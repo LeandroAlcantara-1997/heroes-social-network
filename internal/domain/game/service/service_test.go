@@ -8,7 +8,6 @@ import (
 	"github.com/LeandroAlcantara-1997/heroes-social-network/internal/domain/game/model"
 	"github.com/LeandroAlcantara-1997/heroes-social-network/internal/mock"
 	"github.com/LeandroAlcantara-1997/heroes-social-network/internal/pkg/universe"
-	"github.com/LeandroAlcantara-1997/heroes-social-network/pkg/util"
 	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/assert"
 )
@@ -19,7 +18,7 @@ var (
 	spiderManGame = &dto.GameRequest{
 		Name:        "Spider Man",
 		ReleaseYear: 2023,
-		HeroID:      util.GerPointer("b4606b93-15a2-4314-9ffd-e84c9b5fe8b8"),
+		HeroID:      []string{"b4606b93-15a2-4314-9ffd-e84c9b5fe8b8"},
 		Universe:    universe.Marvel,
 	}
 )
@@ -43,8 +42,8 @@ func TestServiceCreateSuccess(t *testing.T) {
 
 	assert.NoError(t, err)
 	assert.Equal(t, dto.NewGameResponse(out.ID, spiderManGame.Name, spiderManGame.ReleaseYear,
-		spiderManGame.TeamID, spiderManGame.HeroID,
-		spiderManGame.Universe, out.CreatedAt, out.UpdatedAt, out.Consoles), out)
+		spiderManGame.TeamID,
+		spiderManGame.Universe, out.CreatedAt, out.UpdatedAt, spiderManGame.HeroID, out.Consoles), out)
 }
 
 func TestServiceCreateFail(t *testing.T) {
@@ -66,8 +65,8 @@ func TestServiceCreateFail(t *testing.T) {
 
 	assert.NoError(t, err)
 	assert.Equal(t, dto.NewGameResponse(out.ID, spiderManGame.Name, spiderManGame.ReleaseYear,
-		spiderManGame.TeamID, spiderManGame.HeroID,
-		spiderManGame.Universe, out.CreatedAt, out.UpdatedAt, out.Consoles), out)
+		spiderManGame.TeamID,
+		spiderManGame.Universe, out.CreatedAt, out.UpdatedAt, spiderManGame.HeroID, out.Consoles), out)
 }
 
 func TestServiceUpdateGameSuccess(t *testing.T) {
@@ -87,7 +86,7 @@ func TestServiceUpdateGameSuccess(t *testing.T) {
 	err := s.UpdateGame(ctx, id, &dto.GameRequest{
 		Name:        "Spider Man 3",
 		ReleaseYear: 2023,
-		HeroID:      util.GerPointer(id),
+		HeroID:      spiderManGame.HeroID,
 		Universe:    universe.Marvel,
 	})
 	assert.NoError(t, err)

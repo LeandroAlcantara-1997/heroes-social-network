@@ -49,4 +49,5 @@ type AbilityRepository interface {
 	CreateAbility(ctx context.Context, ability *ability.Ability) error
 	GetAbilityByID(ctx context.Context, id string) (*ability.Ability, error)
 	GetAbilitiesByHeroID(ctx context.Context, id string) ([]ability.Ability, error)
+	DeleteAbilityByID(ctx context.Context, id string) error
 }

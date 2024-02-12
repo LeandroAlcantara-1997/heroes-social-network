@@ -35,7 +35,7 @@ func (r *repository) CreateGame(ctx context.Context, game *game.Game) (err error
 	}
 
 	if game.HeroID != nil {
-		if err := r.createRelationShipHeroGame(ctx, game.ID, *game.HeroID, tx); err != nil {
+		if err := r.createRelationShipHeroGame(ctx, game.ID, game.HeroID, tx); err != nil {
 			if rollbackErr := tx.Rollback(ctx); rollbackErr != nil {
 				return rollbackErr
 			}
@@ -61,15 +61,14 @@ func (r *repository) CreateGame(ctx context.Context, game *game.Game) (err error
 
 func (r *repository) GetGameByID(ctx context.Context, id string) (*game.Game, error) {
 	var (
-		query = `SELECT id, name, team_id,hero_id, release_year, universe, created_at, updated_at
+		query = `SELECT id, name, release_year, universe, created_at, updated_at
 	FROM game
 	WHERE id = $1;`
 		game = &game.Game{}
 	)
 
 	row := r.client.QueryRow(ctx, query, id)
-	if err := row.Scan(&game.ID, &game.Name, &game.TeamID,
-		&game.HeroID, &game.ReleaseYear, &game.Universe, &game.CreatedAt, &game.UpdatedAt); err != nil {
+	if err := row.Scan(&game.ID, &game.Name, &game.ReleaseYear, &game.Universe, &game.CreatedAt, &game.UpdatedAt); err != nil {
 		if errors.Is(err, pgx.ErrNoRows) {
 			return nil, exception.ErrGameNotFound
 		}

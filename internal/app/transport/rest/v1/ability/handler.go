@@ -104,3 +104,30 @@ func (h *Handler) getAbilitiesByHeroID(ctx *gin.Context) {
 
 	ctx.JSON(http.StatusOK, resp)
 }
+
+// @Summary      Delete Ability By ID
+// @Description  Delete Ability By ID
+// @Tags         Abilities
+// @Accept       json
+// @Produce      json
+// @Param id query string true "ability id"
+// @Success      204
+// @Failure      400  {object}  error
+// @Failure      404  {object}  error
+// @Failure      500  {object}  error
+// @Router       /abilities [delete]
+func (h *Handler) deleteAbility(ctx *gin.Context) {
+	var id, ok = ctx.GetQuery("id")
+	if ok {
+		if !validator.UUIDValidator(id) {
+			ctx.AbortWithStatusJSON(response.RestError(exception.ErrInvalidFields))
+			return
+		}
+	}
+	if err := h.useCase.DeleteAbility(ctx, id); err != nil {
+		ctx.AbortWithStatusJSON(response.RestError(err))
+		return
+	}
+
+	ctx.Status(http.StatusNoContent)
+}

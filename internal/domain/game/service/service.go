@@ -57,8 +57,8 @@ func (s *service) createGame(ctx context.Context, req *dto.GameRequest) (*dto.Ga
 	}
 
 	return dto.NewGameResponse(game.ID, game.Name, game.ReleaseYear,
-		game.TeamID, game.HeroID, game.Universe, game.CreatedAt,
-		game.UpdatedAt, game.Consoles), nil
+		game.TeamID, game.Universe, game.CreatedAt,
+		game.UpdatedAt, game.HeroID, game.Consoles), nil
 }
 
 func (s *service) UpdateGame(ctx context.Context, id string, req *dto.GameRequest) error {
@@ -109,10 +109,10 @@ func (s *service) getByID(ctx context.Context, id string) (*dto.GameResponse, er
 		game.Name,
 		game.ReleaseYear,
 		game.TeamID,
-		game.HeroID,
 		game.Universe,
 		game.CreatedAt,
 		game.UpdatedAt,
+		game.HeroID,
 		game.Consoles,
 	), nil
 }

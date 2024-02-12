@@ -597,6 +597,20 @@ func (mr *MockAbilityRepositoryMockRecorder) CreateAbility(ctx, ability interfac
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateAbility", reflect.TypeOf((*MockAbilityRepository)(nil).CreateAbility), ctx, ability)
 }
 
+// DeleteAbilityByID mocks base method.
+func (m *MockAbilityRepository) DeleteAbilityByID(ctx context.Context, id string) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "DeleteAbilityByID", ctx, id)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// DeleteAbilityByID indicates an expected call of DeleteAbilityByID.
+func (mr *MockAbilityRepositoryMockRecorder) DeleteAbilityByID(ctx, id interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteAbilityByID", reflect.TypeOf((*MockAbilityRepository)(nil).DeleteAbilityByID), ctx, id)
+}
+
 // GetAbilitiesByHeroID mocks base method.
 func (m *MockAbilityRepository) GetAbilitiesByHeroID(ctx context.Context, id string) ([]model.Ability, error) {
 	m.ctrl.T.Helper()
