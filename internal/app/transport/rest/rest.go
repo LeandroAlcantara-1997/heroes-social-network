@@ -20,6 +20,8 @@ import (
 	"github.com/LeandroAlcantara-1997/heroes-social-network/pkg/util"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+	swaggerfiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
 type api struct {
@@ -43,6 +45,7 @@ func (a *api) NewServer(ctx context.Context) {
 		ctx.Status(http.StatusOK)
 	})
 
+	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 	r.Use(cors.New(cors.Config{
 		AllowOrigins:  util.ChunkTextByComma(a.allowOrigins),
 		AllowMethods:  []string{http.MethodGet},

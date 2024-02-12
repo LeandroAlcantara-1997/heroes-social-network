@@ -71,7 +71,7 @@ func (r *repository) GetGameByID(ctx context.Context, id string) (*game.Game, er
 	if err := row.Scan(&game.ID, &game.Name, &game.TeamID,
 		&game.HeroID, &game.ReleaseYear, &game.Universe, &game.CreatedAt, &game.UpdatedAt); err != nil {
 		if errors.Is(err, pgx.ErrNoRows) {
-			return nil, exception.ErrHeroNotFound
+			return nil, exception.ErrGameNotFound
 		}
 		return nil, err
 	}
