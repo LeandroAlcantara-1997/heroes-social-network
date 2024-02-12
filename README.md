@@ -19,7 +19,7 @@ Heroes social network is a project created to make life easier for superhero fan
 
 
 
-## How to execute?
+## How to execute
 
 1. Climb the dependencies
 ~~~ make 
@@ -31,7 +31,7 @@ make docker-up
 make run
 ~~~
 
-#### To access the API contracts, import the heroes-social-network.postman_collection.json file in Postman or access the documentation on the [Wiki](https://github.com/LeandroAlcantara-1997/heroes-social-network/wiki)
+#### To access the API contracts, run the application and access localhost:port/swagger/index.html#/, access [swagger editor](https://editor.swagger.io/) or import the Heroes-social-network.postman_collection.json file into Postman.For more information about the project, visit: [Wiki](https://github.com/LeandroAlcantara-1997/heroes-social-network/wiki)
 
 
 ## Technologies

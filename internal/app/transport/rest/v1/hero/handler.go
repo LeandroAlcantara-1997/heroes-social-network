@@ -15,6 +15,17 @@ type Handler struct {
 	UseCase service.Hero
 }
 
+// @Summary      Create Hero
+// @Description  Create hero
+// @Tags         Heroes
+// @Accept       json
+// @Produce      json
+// @Param hero body dto.HeroRequest true "hero"
+// @Success      200  {object}  dto.HeroResponse
+// @Failure      400  {object}  error
+// @Failure      404  {object}  error
+// @Failure      500  {object}  error
+// @Router       /heroes [post]
 func (h *Handler) postHero(ctx *gin.Context) {
 	var request dto.HeroRequest
 
@@ -37,6 +48,18 @@ func (h *Handler) postHero(ctx *gin.Context) {
 	ctx.JSON(http.StatusCreated, resp)
 }
 
+// @Summary      Update Hero
+// @Description  Update hero
+// @Tags         Heroes
+// @Accept       json
+// @Produce      json
+// @Param id query string true "hero id"
+// @Param hero body dto.HeroRequest true "body hero"
+// @Success      200  {object}  dto.HeroResponse
+// @Failure      400  {object}  error
+// @Failure      404  {object}  error
+// @Failure      500  {object}  error
+// @Router       /heroes [put]
 func (h *Handler) putHero(ctx *gin.Context) {
 	var (
 		id, ok  = ctx.GetQuery("id")
@@ -67,6 +90,17 @@ func (h *Handler) putHero(ctx *gin.Context) {
 	ctx.Status(http.StatusOK)
 }
 
+// @Summary      Get Hero By ID
+// @Description  Get Hero By ID
+// @Tags         Heroes
+// @Accept       json
+// @Produce      json
+// @Param id query string true "hero id"
+// @Success      200  {object}  dto.HeroResponse
+// @Failure      400  {object}  error
+// @Failure      404  {object}  error
+// @Failure      500  {object}  error
+// @Router       /heroes [get]
 func (h *Handler) getHeroByID(ctx *gin.Context) {
 	var id, ok = ctx.GetQuery("id")
 	if ok && !validator.UUIDValidator(id) {
@@ -83,6 +117,17 @@ func (h *Handler) getHeroByID(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, resp)
 }
 
+// @Summary      Delete Hero By ID
+// @Description  Delete Hero By ID
+// @Tags         Heroes
+// @Accept       json
+// @Produce      json
+// @Param id query string true "hero id"
+// @Success      202
+// @Failure      400  {object}  error
+// @Failure      404  {object}  error
+// @Failure      500  {object}  error
+// @Router       /heroes [delete]
 func (h *Handler) deleteHeroByID(ctx *gin.Context) {
 	if id, ok := ctx.GetQuery("id"); ok {
 		if !validator.UUIDValidator(id) {
@@ -99,6 +144,18 @@ func (h *Handler) deleteHeroByID(ctx *gin.Context) {
 	ctx.Status(http.StatusAccepted)
 }
 
+// @Summary      Add Ability for Hero
+// @Description  Add Ability for Hero
+// @Tags         Heroes
+// @Accept       json
+// @Produce      json
+// @Param ability query string true "ability id"
+// @Param hero query string true "hero id"
+// @Success      201
+// @Failure      400  {object}  error
+// @Failure      404  {object}  error
+// @Failure      500  {object}  error
+// @Router       /heroes/abilities [post]
 func (h *Handler) postAddAbilityToHero(ctx *gin.Context) {
 	var request dto.AddAbilityToHeroRequest
 

@@ -1,0 +1,667 @@
+basePath: /v1
+definitions:
+  dto.AbilityRequest:
+    properties:
+      description:
+        type: string
+    type: object
+  dto.AbilityResponse:
+    properties:
+      createdAt:
+        type: string
+      description:
+        type: string
+      id:
+        type: string
+      updatedAt:
+        type: string
+    type: object
+  dto.ConsoleRequest:
+    properties:
+      consoles:
+        items:
+          type: string
+        type: array
+    type: object
+  dto.ConsoleResponse:
+    properties:
+      consoles:
+        items:
+          type: string
+        type: array
+    type: object
+  dto.GameRequest:
+    properties:
+      consoles:
+        items: {}
+        type: array
+      heroId:
+        type: string
+      name:
+        type: string
+      releaseYear:
+        type: integer
+      teamId:
+        type: string
+      universe:
+        $ref: '#/definitions/universe.Universe'
+    type: object
+  dto.GameResponse:
+    properties:
+      consoles:
+        items: {}
+        type: array
+      createdAt:
+        type: string
+      heroId:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      releaseYear:
+        type: integer
+      teamId:
+        type: string
+      universe:
+        $ref: '#/definitions/universe.Universe'
+      updatedAt:
+        type: string
+    type: object
+  dto.HeroRequest:
+    properties:
+      civilName:
+        type: string
+      hero:
+        type: boolean
+      heroName:
+        type: string
+      team:
+        type: string
+      universe:
+        type: string
+    required:
+    - civilName
+    - hero
+    - heroName
+    - universe
+    type: object
+  dto.HeroResponse:
+    properties:
+      civilName:
+        type: string
+      createdAt:
+        type: string
+      hero:
+        type: boolean
+      heroName:
+        type: string
+      id:
+        type: string
+      team:
+        type: string
+      universe:
+        type: string
+      updatedAt:
+        type: string
+    type: object
+  dto.TeamRequest:
+    properties:
+      name:
+        type: string
+      universe:
+        type: string
+    required:
+    - name
+    - universe
+    type: object
+  dto.TeamResponse:
+    properties:
+      createdAt:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      universe:
+        type: string
+      updatedAt:
+        type: string
+    type: object
+  universe.Universe:
+    enum:
+    - MARVEL
+    - DC
+    - DC|MARVEL
+    type: string
+    x-enum-varnames:
+    - Marvel
+    - DC
+    - DCMarvel
+externalDocs:
+  description: OpenAPI
+  url: https://swagger.io/resources/open-api/
+host: localhost:8080
+info:
+  contact:
+    url: https://www.linkedin.com/in/leandro-alcantara-pro
+  description: Heroes social network is a project created to make life easier for
+    superhero fans.
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: Heroes Social Network
+  version: "1.0"
+paths:
+  /abilities:
+    get:
+      consumes:
+      - application/json
+      description: Get Ability By ID
+      parameters:
+      - description: ability
+        in: query
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/dto.AbilityResponse'
+        "400":
+          description: Bad Request
+          schema: {}
+        "404":
+          description: Not Found
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      summary: Get Ability By ID
+      tags:
+      - Abilities
+    post:
+      consumes:
+      - application/json
+      description: Create Ability
+      parameters:
+      - description: ability
+        in: body
+        name: ability
+        required: true
+        schema:
+          $ref: '#/definitions/dto.AbilityRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/dto.AbilityResponse'
+        "400":
+          description: Bad Request
+          schema: {}
+        "404":
+          description: Not Found
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      summary: Create Ability
+      tags:
+      - Abilities
+  /abilities/heroes:
+    get:
+      consumes:
+      - application/json
+      description: Get Ability By Hero ID
+      parameters:
+      - description: heroId
+        in: query
+        name: heroId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/dto.AbilityResponse'
+            type: array
+        "400":
+          description: Bad Request
+          schema: {}
+        "404":
+          description: Not Found
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      summary: Get Ability By Hero ID
+      tags:
+      - Abilities
+  /consoles:
+    get:
+      consumes:
+      - application/json
+      description: Get All Consoles
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.ConsoleResponse'
+        "400":
+          description: Bad Request
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      summary: Get All Consoles
+      tags:
+      - Consoles
+    post:
+      consumes:
+      - application/json
+      description: Create new Console
+      parameters:
+      - description: consoles
+        in: body
+        name: console
+        required: true
+        schema:
+          $ref: '#/definitions/dto.ConsoleRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/dto.ConsoleResponse'
+        "400":
+          description: Bad Request
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      summary: Create Console
+      tags:
+      - Consoles
+  /games:
+    delete:
+      consumes:
+      - application/json
+      description: Delete Game BY ID
+      parameters:
+      - description: game id
+        in: query
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Bad Request
+          schema: {}
+        "404":
+          description: Not Found
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      summary: Delete Game By ID
+      tags:
+      - Games
+    get:
+      consumes:
+      - application/json
+      description: Get Game BY ID
+      parameters:
+      - description: game id
+        in: query
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/dto.GameResponse'
+        "400":
+          description: Bad Request
+          schema: {}
+        "404":
+          description: Not Found
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      summary: Get Game By ID
+      tags:
+      - Games
+    post:
+      consumes:
+      - application/json
+      description: Create Game
+      parameters:
+      - description: game
+        in: body
+        name: game
+        required: true
+        schema:
+          $ref: '#/definitions/dto.GameRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/dto.GameResponse'
+        "400":
+          description: Bad Request
+          schema: {}
+        "404":
+          description: Not Found
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      summary: Create Game
+      tags:
+      - Games
+    put:
+      consumes:
+      - application/json
+      description: Update Game
+      parameters:
+      - description: game id
+        in: query
+        name: id
+        required: true
+        type: string
+      - description: body game
+        in: body
+        name: game
+        required: true
+        schema:
+          $ref: '#/definitions/dto.GameRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+          schema: {}
+        "404":
+          description: Not Found
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      summary: Update Game
+      tags:
+      - Games
+  /heroes:
+    delete:
+      consumes:
+      - application/json
+      description: Delete Hero By ID
+      parameters:
+      - description: hero id
+        in: query
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "202":
+          description: Accepted
+        "400":
+          description: Bad Request
+          schema: {}
+        "404":
+          description: Not Found
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      summary: Delete Hero By ID
+      tags:
+      - Heroes
+    get:
+      consumes:
+      - application/json
+      description: Get Hero By ID
+      parameters:
+      - description: hero id
+        in: query
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.HeroResponse'
+        "400":
+          description: Bad Request
+          schema: {}
+        "404":
+          description: Not Found
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      summary: Get Hero By ID
+      tags:
+      - Heroes
+    post:
+      consumes:
+      - application/json
+      description: Create hero
+      parameters:
+      - description: hero
+        in: body
+        name: hero
+        required: true
+        schema:
+          $ref: '#/definitions/dto.HeroRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.HeroResponse'
+        "400":
+          description: Bad Request
+          schema: {}
+        "404":
+          description: Not Found
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      summary: Create Hero
+      tags:
+      - Heroes
+    put:
+      consumes:
+      - application/json
+      description: Update hero
+      parameters:
+      - description: hero id
+        in: query
+        name: id
+        required: true
+        type: string
+      - description: body hero
+        in: body
+        name: hero
+        required: true
+        schema:
+          $ref: '#/definitions/dto.HeroRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.HeroResponse'
+        "400":
+          description: Bad Request
+          schema: {}
+        "404":
+          description: Not Found
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      summary: Update Hero
+      tags:
+      - Heroes
+  /heroes/abilities:
+    post:
+      consumes:
+      - application/json
+      description: Add Ability for Hero
+      parameters:
+      - description: ability id
+        in: query
+        name: ability
+        required: true
+        type: string
+      - description: hero id
+        in: query
+        name: hero
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+        "400":
+          description: Bad Request
+          schema: {}
+        "404":
+          description: Not Found
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      summary: Add Ability for Hero
+      tags:
+      - Heroes
+  /teams:
+    delete:
+      consumes:
+      - application/json
+      description: Delete Team
+      parameters:
+      - description: team
+        in: formData
+        name: teamId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Bad Request
+          schema: {}
+        "404":
+          description: Not Found
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      summary: Delete Team
+      tags:
+      - Teams
+    get:
+      consumes:
+      - application/json
+      description: Get Team By Name
+      parameters:
+      - description: team
+        in: path
+        name: name
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.TeamResponse'
+        "400":
+          description: Bad Request
+          schema: {}
+        "404":
+          description: Not Found
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      summary: Get Team By Name
+      tags:
+      - Teams
+    post:
+      consumes:
+      - application/json
+      description: Update Team
+      parameters:
+      - description: team
+        in: formData
+        name: teamId
+        required: true
+        type: string
+      - description: team
+        in: body
+        name: team
+        required: true
+        schema:
+          $ref: '#/definitions/dto.TeamRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.TeamResponse'
+        "400":
+          description: Bad Request
+          schema: {}
+        "404":
+          description: Not Found
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      summary: Update Team
+      tags:
+      - Teams
+securityDefinitions:
+  BasicAuth:
+    type: basic
+swagger: "2.0"
