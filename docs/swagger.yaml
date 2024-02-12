@@ -34,6 +34,29 @@ definitions:
         type: array
     type: object
   dto.GameRequest:
+    properties:
+      consoles:
+        items: {}
+        type: array
+      heroId:
+        example:
+        - c184abee-d573-442d-b1b7-ba93aff61fb6
+        items:
+          type: string
+        type: array
+      name:
+        example: X-Men Legends
+        type: string
+      releaseYear:
+        example: 2004
+        type: integer
+      teamId:
+        example: c184abee-d573-442d-b1b7-ba93aff61fb6
+        type: string
+      universe:
+        allOf:
+        - $ref: '#/definitions/universe.Universe'
+        example: MARVEL
     type: object
   dto.GameResponse:
     properties:
@@ -43,7 +66,9 @@ definitions:
       createdAt:
         type: string
       heroId:
-        type: string
+        items:
+          type: string
+        type: array
       id:
         type: string
       name:
@@ -151,6 +176,33 @@ info:
   version: "1.0"
 paths:
   /abilities:
+    delete:
+      consumes:
+      - application/json
+      description: Delete Ability By ID
+      parameters:
+      - description: ability id
+        in: query
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Bad Request
+          schema: {}
+        "404":
+          description: Not Found
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      summary: Delete Ability By ID
+      tags:
+      - Abilities
     get:
       consumes:
       - application/json
@@ -424,8 +476,8 @@ paths:
       produces:
       - application/json
       responses:
-        "202":
-          description: Accepted
+        "204":
+          description: No Content
         "400":
           description: Bad Request
           schema: {}

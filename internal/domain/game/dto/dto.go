@@ -12,9 +12,9 @@ type GameRequest struct {
 	Name        string            `json:"name" example:"X-Men Legends"`
 	ReleaseYear int               `json:"releaseYear" example:"2004"`
 	TeamID      *string           `json:"teamId" example:"c184abee-d573-442d-b1b7-ba93aff61fb6"`
-	HeroID      *string           `json:"heroId" example:"c184abee-d573-442d-b1b7-ba93aff61fb6"`
+	HeroID      []string          `json:"heroId" example:"c184abee-d573-442d-b1b7-ba93aff61fb6"`
 	Universe    universe.Universe `json:"universe" example:"MARVEL"`
-	Consoles    []console.Console `json:"consoles" example:"Playstation2"`
+	Consoles    []console.Console `json:"consoles"`
 }
 
 type GameResponse struct {
@@ -23,7 +23,7 @@ type GameResponse struct {
 	ReleaseYear int               `json:"releaseYear"`
 	Universe    universe.Universe `json:"universe"`
 	TeamID      *string           `json:"teamId,omitempty"`
-	HeroID      *string           `json:"heroId,omitempty"`
+	HeroID      []string          `json:"heroId,omitempty"`
 	CreatedAt   time.Time         `json:"createdAt,omitempty"`
 	UpdatedAt   *time.Time        `json:"updatedAt,omitempty"`
 	Consoles    []console.Console `json:"consoles"`
@@ -54,8 +54,8 @@ func (g *GameRequest) Validator() error {
 	return nil
 }
 
-func NewGameResponse(id, name string, releaseYear int, teamID, heroID *string, universe universe.Universe,
-	createdAt time.Time, updatedAt *time.Time, consoles []console.Console) *GameResponse {
+func NewGameResponse(id, name string, releaseYear int, teamID *string, universe universe.Universe,
+	createdAt time.Time, updatedAt *time.Time, heroID []string, consoles []console.Console) *GameResponse {
 	return &GameResponse{
 		ID:          id,
 		Name:        name,

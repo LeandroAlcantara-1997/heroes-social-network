@@ -1,6 +1,6 @@
-# Hero Social Network
+# Heroes Social Network
 
-[README in Português](README_pt.md)
+[README in Portuguese](README_pt.md)
 <img align="right" width="220px" src="docs/assets/ironman.png">
 
 ## About
@@ -41,6 +41,8 @@ make run
 * Cache;
 * Splunk;
 * Swagger;
+* Graceful shutdown;
+* Dev Container with Docker;
 
 
 ## Entity relationship diagram

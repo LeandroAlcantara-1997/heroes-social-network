@@ -6,6 +6,7 @@ import (
 	"fmt"
 
 	ability "github.com/LeandroAlcantara-1997/heroes-social-network/internal/domain/ability/model"
+	"github.com/LeandroAlcantara-1997/heroes-social-network/internal/exception"
 )
 
 func (r *repository) CreateAbility(ctx context.Context, ability *ability.Ability) error {
@@ -82,6 +83,36 @@ func (r *repository) GetAbilitiesByHeroID(ctx context.Context, id string) ([]abi
 
 	defer rows.Close()
 	return abilities, nil
+}
+
+func (r *repository) DeleteAbilityByID(ctx context.Context, id string) error {
+	var query = `DELETE FROM ability 
+	WHERE id = $1;`
+
+	tx, err := r.client.Begin(ctx)
+	if err != nil {
+		return fmt.Errorf("begin\n%w", err)
+	}
+	tag, err := tx.Exec(ctx, query, id)
+	if err != nil {
+		if rollbackErr := tx.Rollback(ctx); rollbackErr != nil {
+			return fmt.Errorf("rollback\n%w", err)
+		}
+		return fmt.Errorf("exec\n%w", err)
+	}
+
+	if tag.RowsAffected() == 0 {
+		if rollbackErr := tx.Rollback(ctx); rollbackErr != nil {
+			return fmt.Errorf("rollback\n%w", err)
+		}
+		return exception.ErrAbilityNotFound
+	}
+
+	if err := tx.Commit(ctx); err != nil {
+		return fmt.Errorf("commit\n%w", err)
+	}
+
+	return nil
 }
 
 func arrayHandling(ids []string) string {

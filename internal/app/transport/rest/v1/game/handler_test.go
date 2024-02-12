@@ -14,7 +14,6 @@ import (
 	"github.com/LeandroAlcantara-1997/heroes-social-network/internal/exception"
 	"github.com/LeandroAlcantara-1997/heroes-social-network/internal/mock"
 	"github.com/LeandroAlcantara-1997/heroes-social-network/internal/pkg/universe"
-	"github.com/LeandroAlcantara-1997/heroes-social-network/pkg/util"
 	"github.com/gin-gonic/gin"
 	"github.com/golang/mock/gomock"
 )
@@ -25,7 +24,7 @@ var (
 	ironManTwoGameRequest = &dto.GameRequest{
 		Name:        "Iron Man 2",
 		ReleaseYear: 2008,
-		HeroID:      util.GerPointer(id),
+		HeroID:      []string{id},
 		Universe:    universe.Marvel,
 	}
 
@@ -34,7 +33,7 @@ var (
 		Name:        ironManTwoGameRequest.Name,
 		ReleaseYear: ironManTwoGameRequest.ReleaseYear,
 		Universe:    universe.Marvel,
-		HeroID:      util.GerPointer(id),
+		HeroID:      []string{id},
 		CreatedAt:   time.Now().UTC(),
 	}
 )
@@ -57,7 +56,9 @@ func TestHandlerPostGameSuccess(t *testing.T) {
 		"/v1/games",
 		strings.NewReader(`{
 					"name": "Iron Man 2",
-					"heroId":  "b4606b93-15a2-4314-9ffd-e84c9b5fe8b8",
+					"heroId":  [
+						"b4606b93-15a2-4314-9ffd-e84c9b5fe8b8"
+					],
 					"universe": "MARVEL",
 					"releaseYear": 2008
 				}`),
@@ -138,7 +139,9 @@ func TestHandlerPutGameSuccess(t *testing.T) {
 		strings.NewReader(`
 		{
 			"name": "Iron Man 2",
-			"heroId":  "b4606b93-15a2-4314-9ffd-e84c9b5fe8b8",
+			"heroId":  [
+				"b4606b93-15a2-4314-9ffd-e84c9b5fe8b8"
+			],
 			"universe": "MARVEL",
 			"releaseYear": 2008
 		}`),

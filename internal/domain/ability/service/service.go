@@ -12,10 +12,12 @@ import (
 	"github.com/LeandroAlcantara-1997/heroes-social-network/internal/exception"
 )
 
+//go:generate mockgen -destination ../../../mock/ability_mock.go -package=mock -source=service.go
 type Ability interface {
 	CreateAbility(ctx context.Context, req *dto.AbilityRequest) (*dto.AbilityResponse, error)
 	GetAbilityByID(ctx context.Context, id string) (*dto.AbilityResponse, error)
 	GetAbilitiesByHeroID(ctx context.Context, id string) ([]dto.AbilityResponse, error)
+	DeleteAbility(ctx context.Context, id string) error
 }
 
 type service struct {
@@ -103,4 +105,24 @@ func (s *service) getAbilitiesByHeroID(ctx context.Context, id string) ([]dto.Ab
 		}
 	}
 	return resp, nil
+}
+
+func (s *service) DeleteAbility(ctx context.Context, id string) error {
+	if err := s.deleteAbility(ctx, id); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (s *service) deleteAbility(ctx context.Context, id string) error {
+	if err := s.cache.DeleteAbility(ctx, id); err != nil {
+		return exception.New(fmt.Sprintf("deleteAbility\n%s", err.Error()), err)
+	}
+
+	if err := s.repository.DeleteAbilityByID(ctx, id); err != nil {
+		return exception.New(fmt.Sprintf("deleteAbilityByID\n%s", err.Error()), err)
+	}
+
+	return nil
 }

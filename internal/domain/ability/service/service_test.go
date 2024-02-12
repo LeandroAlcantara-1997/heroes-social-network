@@ -78,3 +78,20 @@ func TestServiceGetAbilitiesByHeroID(t *testing.T) {
 	assert.Equal(t, id, out[0].ID)
 	assert.NoError(t, err)
 }
+
+func TestServiceDeleteAbilitySuccess(t *testing.T) {
+	var (
+		ctx  = context.Background()
+		ctrl = gomock.NewController(t)
+		r    = mock.NewMockAbilityRepository(ctrl)
+		c    = mock.NewMockAbilityCache(ctrl)
+	)
+	r.EXPECT().DeleteAbilityByID(ctx, id).Return(nil)
+	c.EXPECT().DeleteAbility(ctx, id).Return(nil)
+	s := &service{
+		repository: r,
+		cache:      c,
+	}
+	err := s.DeleteAbility(ctx, id)
+	assert.NoError(t, err)
+}
