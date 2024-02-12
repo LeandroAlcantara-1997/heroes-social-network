@@ -15,6 +15,17 @@ type Handler struct {
 	useCase service.Ability
 }
 
+// @Summary      Create Ability
+// @Description  Create Ability
+// @Tags         Abilities
+// @Accept       json
+// @Produce      json
+// @Param ability body dto.AbilityRequest true "ability"
+// @Success      201  {object}  dto.AbilityResponse
+// @Failure      400  {object}  error
+// @Failure      404  {object}  error
+// @Failure      500  {object}  error
+// @Router       /abilities [post]
 func (h *Handler) postAbility(ctx *gin.Context) {
 	var req dto.AbilityRequest
 	if err := ctx.BindJSON(&req); err != nil {
@@ -36,6 +47,17 @@ func (h *Handler) postAbility(ctx *gin.Context) {
 	ctx.JSON(http.StatusCreated, resp)
 }
 
+// @Summary      Get Ability By ID
+// @Description  Get Ability By ID
+// @Tags         Abilities
+// @Accept       json
+// @Produce      json
+// @Param id query string true "ability"
+// @Success      201  {object}  dto.AbilityResponse
+// @Failure      400  {object}  error
+// @Failure      404  {object}  error
+// @Failure      500  {object}  error
+// @Router       /abilities [get]
 func (h *Handler) getAbilityByID(ctx *gin.Context) {
 	var id, ok = ctx.GetQuery("id")
 	if ok {
@@ -51,9 +73,20 @@ func (h *Handler) getAbilityByID(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusCreated, resp)
+	ctx.JSON(http.StatusOK, resp)
 }
 
+// @Summary      Get Ability By Hero ID
+// @Description  Get Ability By Hero ID
+// @Tags         Abilities
+// @Accept       json
+// @Produce      json
+// @Param heroId query string true "heroId"
+// @Success      200  {array}  dto.AbilityResponse
+// @Failure      400  {object}  error
+// @Failure      404  {object}  error
+// @Failure      500  {object}  error
+// @Router       /abilities/heroes [get]
 func (h *Handler) getAbilitiesByHeroID(ctx *gin.Context) {
 	var id, ok = ctx.GetQuery("heroId")
 	if ok {
@@ -69,5 +102,5 @@ func (h *Handler) getAbilitiesByHeroID(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusCreated, resp)
+	ctx.JSON(http.StatusOK, resp)
 }

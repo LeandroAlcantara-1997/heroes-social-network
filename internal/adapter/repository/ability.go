@@ -80,6 +80,7 @@ func (r *repository) GetAbilitiesByHeroID(ctx context.Context, id string) ([]abi
 		a++
 	}
 
+	defer rows.Close()
 	return abilities, nil
 }
 

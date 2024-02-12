@@ -9,12 +9,12 @@ import (
 )
 
 type GameRequest struct {
-	Name        string            `json:"name"`
-	ReleaseYear int               `json:"releaseYear"`
-	TeamID      *string           `json:"teamId"`
-	HeroID      *string           `json:"heroId"`
-	Universe    universe.Universe `json:"universe"`
-	Consoles    []console.Console `json:"consoles"`
+	Name        string            `json:"name" example:"X-Men Legends"`
+	ReleaseYear int               `json:"releaseYear" example:"2004"`
+	TeamID      *string           `json:"teamId" example:"c184abee-d573-442d-b1b7-ba93aff61fb6"`
+	HeroID      *string           `json:"heroId" example:"c184abee-d573-442d-b1b7-ba93aff61fb6"`
+	Universe    universe.Universe `json:"universe" example:"MARVEL"`
+	Consoles    []console.Console `json:"consoles" example:"Playstation2"`
 }
 
 type GameResponse struct {

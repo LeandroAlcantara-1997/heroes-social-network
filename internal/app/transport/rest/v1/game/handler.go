@@ -15,6 +15,17 @@ type Handler struct {
 	useCase service.Game
 }
 
+// @Summary      Create Game
+// @Description  Create Game
+// @Tags         Games
+// @Accept       json
+// @Produce      json
+// @Param game body dto.GameRequest true "game"
+// @Success      201  {object}  dto.GameResponse
+// @Failure      400  {object}  error
+// @Failure      404  {object}  error
+// @Failure      500  {object}  error
+// @Router       /games [post]
 func (h *Handler) postGame(ctx *gin.Context) {
 	var req dto.GameRequest
 	if err := ctx.BindJSON(&req); err != nil {
@@ -36,6 +47,17 @@ func (h *Handler) postGame(ctx *gin.Context) {
 	ctx.JSON(http.StatusCreated, resp)
 }
 
+// @Summary      Get Game By ID
+// @Description  Get Game BY ID
+// @Tags         Games
+// @Accept       json
+// @Produce      json
+// @Param id query string true "game id"
+// @Success      201  {object}  dto.GameResponse
+// @Failure      400  {object}  error
+// @Failure      404  {object}  error
+// @Failure      500  {object}  error
+// @Router       /games [get]
 func (h *Handler) getGame(ctx *gin.Context) {
 	var id, ok = ctx.GetQuery("id")
 	if ok {
@@ -53,6 +75,17 @@ func (h *Handler) getGame(ctx *gin.Context) {
 	ctx.JSON(http.StatusCreated, resp)
 }
 
+// @Summary      Delete Game By ID
+// @Description  Delete Game BY ID
+// @Tags         Games
+// @Accept       json
+// @Produce      json
+// @Param id query string true "game id"
+// @Success      204
+// @Failure      400  {object}  error
+// @Failure      404  {object}  error
+// @Failure      500  {object}  error
+// @Router       /games [delete]
 func (h *Handler) deleteGame(ctx *gin.Context) {
 	var id, ok = ctx.GetQuery("id")
 	if ok {
@@ -69,6 +102,18 @@ func (h *Handler) deleteGame(ctx *gin.Context) {
 	ctx.Status(http.StatusNoContent)
 }
 
+// @Summary      Update Game
+// @Description  Update Game
+// @Tags         Games
+// @Accept       json
+// @Produce      json
+// @Param id query string true "game id"
+// @Param game body dto.GameRequest true "body game"
+// @Success      200
+// @Failure      400  {object}  error
+// @Failure      404  {object}  error
+// @Failure      500  {object}  error
+// @Router       /games [put]
 func (h *Handler) putGame(ctx *gin.Context) {
 	var (
 		id, ok  = ctx.GetQuery("id")

@@ -46,5 +46,7 @@ func (r *repository) GetConsoles(ctx context.Context) ([]console.Console, error)
 		}
 		consoles = append(consoles, console)
 	}
+
+	defer rows.Close()
 	return consoles, nil
 }
