@@ -49,12 +49,13 @@ func (h *Handler) postTeam(ctx *gin.Context) {
 	ctx.JSON(http.StatusCreated, resp)
 }
 
-// @Summary      Get Team By ID
-// @Description  Get Team By ID
+// @Summary      Get Team By ID or Name
+// @Description  Get Team By ID or Name
 // @Tags         Teams
 // @Accept       json
 // @Produce      json
-// @Param teamId formData string true "team"
+// @Param id query string false "team"
+// @Param name path string false "team"
 // @Success      200  {object}  dto.TeamResponse
 // @Failure      400  {object}  error
 // @Failure      404  {object}  error
@@ -76,12 +77,26 @@ func (h *Handler) getTeamByID(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, resp)
 }
 
+func (h *Handler) getTeamByName(ctx *gin.Context) {
+	var request *dto.GetTeamByName
+	if err := ctx.BindUri(&request); err != nil {
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, err)
+		return
+	}
+	resp, err := h.UseCase.GetTeamByName(ctx, request)
+	if err != nil {
+		ctx.AbortWithStatusJSON(response.RestError(err))
+		return
+	}
+	ctx.JSON(http.StatusOK, resp)
+}
+
 // @Summary      Delete Team
 // @Description  Delete Team
 // @Tags         Teams
 // @Accept       json
 // @Produce      json
-// @Param teamId formData string true "team"
+// @Param teamId query string true "team"
 // @Success      204
 // @Failure      400  {object}  error
 // @Failure      404  {object}  error
@@ -102,43 +117,18 @@ func (h *Handler) deleteTeamByID(ctx *gin.Context) {
 	ctx.AbortWithStatus(http.StatusOK)
 }
 
-// @Summary      Get Team By Name
-// @Description  Get Team By Name
-// @Tags         Teams
-// @Accept       json
-// @Produce      json
-// @Param name path string true "team"
-// @Success      200  {object}  dto.TeamResponse
-// @Failure      400  {object}  error
-// @Failure      404  {object}  error
-// @Failure      500  {object}  error
-// @Router       /teams [get]
-func (h *Handler) getTeamByName(ctx *gin.Context) {
-	var request *dto.GetTeamByName
-	if err := ctx.BindUri(&request); err != nil {
-		ctx.AbortWithStatusJSON(http.StatusBadRequest, err)
-		return
-	}
-	resp, err := h.UseCase.GetTeamByName(ctx, request)
-	if err != nil {
-		ctx.AbortWithStatusJSON(response.RestError(err))
-		return
-	}
-	ctx.JSON(http.StatusOK, resp)
-}
-
 // @Summary      Update Team
 // @Description  Update Team
 // @Tags         Teams
 // @Accept       json
 // @Produce      json
-// @Param teamId formData string true "team"
+// @Param teamId query string true "team"
 // @Param team body dto.TeamRequest true "team"
 // @Success      200  {object}  dto.TeamResponse
 // @Failure      400  {object}  error
 // @Failure      404  {object}  error
 // @Failure      500  {object}  error
-// @Router       /teams [post]
+// @Router       /teams [put]
 func (h *Handler) updateTeam(ctx *gin.Context) {
 	var request *dto.TeamRequest
 	id, ok := ctx.GetQuery("id")

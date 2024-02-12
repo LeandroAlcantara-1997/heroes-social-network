@@ -8,8 +8,8 @@ import (
 )
 
 type TeamRequest struct {
-	Name     string `json:"name" validate:"required"`
-	Universe string `json:"universe" validate:"universe,required"`
+	Name     string `json:"name" validate:"required" example:"X-Men"`
+	Universe string `json:"universe" validate:"universe,required" example:"MARVEL"`
 }
 
 type GetTeamByName struct {

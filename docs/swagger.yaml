@@ -3,6 +3,7 @@ definitions:
   dto.AbilityRequest:
     properties:
       description:
+        example: laser ray
         type: string
     type: object
   dto.AbilityResponse:
@@ -19,6 +20,8 @@ definitions:
   dto.ConsoleRequest:
     properties:
       consoles:
+        example:
+        - Playstation5
         items:
           type: string
         type: array
@@ -31,20 +34,6 @@ definitions:
         type: array
     type: object
   dto.GameRequest:
-    properties:
-      consoles:
-        items: {}
-        type: array
-      heroId:
-        type: string
-      name:
-        type: string
-      releaseYear:
-        type: integer
-      teamId:
-        type: string
-      universe:
-        $ref: '#/definitions/universe.Universe'
     type: object
   dto.GameResponse:
     properties:
@@ -71,14 +60,19 @@ definitions:
   dto.HeroRequest:
     properties:
       civilName:
+        example: Scott Summers
         type: string
       hero:
+        example: true
         type: boolean
       heroName:
+        example: Cyclop
         type: string
       team:
+        example: c184abee-d573-442d-b1b7-ba93aff61fb6
         type: string
       universe:
+        example: MARVEL
         type: string
     required:
     - civilName
@@ -108,8 +102,10 @@ definitions:
   dto.TeamRequest:
     properties:
       name:
+        example: X-Men
         type: string
       universe:
+        example: MARVEL
         type: string
     required:
     - name
@@ -576,7 +572,7 @@ paths:
       description: Delete Team
       parameters:
       - description: team
-        in: formData
+        in: query
         name: teamId
         required: true
         type: string
@@ -600,12 +596,15 @@ paths:
     get:
       consumes:
       - application/json
-      description: Get Team By Name
+      description: Get Team By ID or Name
       parameters:
+      - description: team
+        in: query
+        name: id
+        type: string
       - description: team
         in: path
         name: name
-        required: true
         type: string
       produces:
       - application/json
@@ -623,16 +622,46 @@ paths:
         "500":
           description: Internal Server Error
           schema: {}
-      summary: Get Team By Name
+      summary: Get Team By ID or Name
       tags:
       - Teams
     post:
       consumes:
       - application/json
+      description: Create Team
+      parameters:
+      - description: team
+        in: body
+        name: team
+        required: true
+        schema:
+          $ref: '#/definitions/dto.TeamRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/dto.TeamResponse'
+        "400":
+          description: Bad Request
+          schema: {}
+        "404":
+          description: Not Found
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      summary: Create Team
+      tags:
+      - Teams
+    put:
+      consumes:
+      - application/json
       description: Update Team
       parameters:
       - description: team
-        in: formData
+        in: query
         name: teamId
         required: true
         type: string

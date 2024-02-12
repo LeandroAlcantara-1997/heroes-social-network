@@ -6,7 +6,7 @@ import (
 )
 
 type AbilityRequest struct {
-	Description string `json:"description"`
+	Description string `json:"description" example:"laser ray"`
 }
 
 type AbilityResponse struct {

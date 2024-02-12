@@ -7,7 +7,7 @@ import (
 )
 
 type ConsoleRequest struct {
-	Names []model.Console `json:"consoles"`
+	Names []model.Console `json:"consoles" example:"Playstation5"`
 }
 
 type ConsoleResponse struct {

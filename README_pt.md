@@ -32,7 +32,7 @@ make docker-up
 make run
 ~~~
 
-#### Para acessar os contratos da API, execute a aplicação e acesse localhost:port/swagger/index.html#/, ou acesse [swagger editor](https://editor.swagger.io/) ou importe o arquivo Heroes-social-network.postman_collection.json em seu Postman. Para mais informações sobre o projeto, visite: [Wiki](https://github.com/LeandroAlcantara-1997/heroes-social-network/wiki)
+#### Para acessar os contratos da API, execute a aplicação e acesse http://localhost:8080/swagger/index.html#/, ou importe o arquivo [swagger.yaml](/docs/swagger.yaml) no [swagger editor](https://editor.swagger.io/) ou importe o arquivo [Heroes-social-network.postman_collection.json](/docs/heroes-social-network.postman_collection.json) em seu Postman. Para mais informações sobre o projeto, visite: [Wiki](https://github.com/LeandroAlcantara-1997/heroes-social-network/wiki)
 
 
 ## Tecnologias utilizadas:
@@ -41,6 +41,7 @@ make run
 * PostgreSQL;
 * Cache;
 * Splunk;
+* Swagger;
 
 
 ## Diagrama de entidade relacionamento:

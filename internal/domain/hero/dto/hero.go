@@ -8,11 +8,11 @@ import (
 )
 
 type HeroRequest struct {
-	HeroName  string  `json:"heroName" validate:"required"`
-	CivilName string  `json:"civilName" validate:"required"`
-	Hero      bool    `json:"hero" validate:"required"`
-	Universe  string  `json:"universe" validate:"universe,required"`
-	Team      *string `json:"team,omitempty"`
+	HeroName  string  `json:"heroName" validate:"required" example:"Cyclop"`
+	CivilName string  `json:"civilName" validate:"required" example:"Scott Summers"`
+	Hero      bool    `json:"hero" validate:"required" example:"true"`
+	Universe  string  `json:"universe" validate:"universe,required" example:"MARVEL"`
+	Team      *string `json:"team,omitempty" example:"c184abee-d573-442d-b1b7-ba93aff61fb6"`
 }
 
 type HeroResponse struct {

@@ -1,5 +1,6 @@
 # Hero Social Network
 
+[README in Português](README_pt.md)
 <img align="right" width="220px" src="docs/assets/ironman.png">
 
 ## About
@@ -30,8 +31,7 @@ make docker-up
 ~~~
 make run
 ~~~
-
-#### To access the API contracts, run the application and access localhost:port/swagger/index.html#/, access [swagger editor](https://editor.swagger.io/) or import the Heroes-social-network.postman_collection.json file into Postman.For more information about the project, visit: [Wiki](https://github.com/LeandroAlcantara-1997/heroes-social-network/wiki)
+#### To access the API contracts, run the application and access http://localhost:8080/swagger/index.html#/, or import the [swagger.yaml](/docs/swagger.yaml) file into the [swagger editor](https://editor.swagger.io/) or import the [Heroes-social-network.postman_collection.json](/docs/heroes-social-network.postman_collection.json) file into Postman .For more information about the project, visit: [Wiki](https://github.com/LeandroAlcantara-1997/heroes-social-network/wiki)
 
 
 ## Technologies
@@ -40,6 +40,7 @@ make run
 * PostgreSQL;
 * Cache;
 * Splunk;
+* Swagger;
 
 
 ## Entity relationship diagram

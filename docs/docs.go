@@ -631,7 +631,7 @@ const docTemplate = `{
         },
         "/teams": {
             "get": {
-                "description": "Get Team By Name",
+                "description": "Get Team By ID or Name",
                 "consumes": [
                     "application/json"
                 ],
@@ -641,14 +641,70 @@ const docTemplate = `{
                 "tags": [
                     "Teams"
                 ],
-                "summary": "Get Team By Name",
+                "summary": "Get Team By ID or Name",
                 "parameters": [
                     {
                         "type": "string",
                         "description": "team",
+                        "name": "id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "team",
                         "name": "name",
-                        "in": "path",
+                        "in": "path"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/dto.TeamResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {}
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {}
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {}
+                    }
+                }
+            },
+            "put": {
+                "description": "Update Team",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Teams"
+                ],
+                "summary": "Update Team",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "team",
+                        "name": "teamId",
+                        "in": "query",
                         "required": true
+                    },
+                    {
+                        "description": "team",
+                        "name": "team",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.TeamRequest"
+                        }
                     }
                 ],
                 "responses": {
@@ -673,7 +729,7 @@ const docTemplate = `{
                 }
             },
             "post": {
-                "description": "Update Team",
+                "description": "Create Team",
                 "consumes": [
                     "application/json"
                 ],
@@ -683,15 +739,8 @@ const docTemplate = `{
                 "tags": [
                     "Teams"
                 ],
-                "summary": "Update Team",
+                "summary": "Create Team",
                 "parameters": [
-                    {
-                        "type": "string",
-                        "description": "team",
-                        "name": "teamId",
-                        "in": "formData",
-                        "required": true
-                    },
                     {
                         "description": "team",
                         "name": "team",
@@ -703,8 +752,8 @@ const docTemplate = `{
                     }
                 ],
                 "responses": {
-                    "200": {
-                        "description": "OK",
+                    "201": {
+                        "description": "Created",
                         "schema": {
                             "$ref": "#/definitions/dto.TeamResponse"
                         }
@@ -740,7 +789,7 @@ const docTemplate = `{
                         "type": "string",
                         "description": "team",
                         "name": "teamId",
-                        "in": "formData",
+                        "in": "query",
                         "required": true
                     }
                 ],
@@ -769,7 +818,8 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "description": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "laser ray"
                 }
             }
         },
@@ -797,7 +847,10 @@ const docTemplate = `{
                     "type": "array",
                     "items": {
                         "type": "string"
-                    }
+                    },
+                    "example": [
+                        "Playstation5"
+                    ]
                 }
             }
         },
@@ -813,28 +866,7 @@ const docTemplate = `{
             }
         },
         "dto.GameRequest": {
-            "type": "object",
-            "properties": {
-                "consoles": {
-                    "type": "array",
-                    "items": {}
-                },
-                "heroId": {
-                    "type": "string"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "releaseYear": {
-                    "type": "integer"
-                },
-                "teamId": {
-                    "type": "string"
-                },
-                "universe": {
-                    "$ref": "#/definitions/universe.Universe"
-                }
-            }
+            "type": "object"
         },
         "dto.GameResponse": {
             "type": "object",
@@ -879,19 +911,24 @@ const docTemplate = `{
             ],
             "properties": {
                 "civilName": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "Scott Summers"
                 },
                 "hero": {
-                    "type": "boolean"
+                    "type": "boolean",
+                    "example": true
                 },
                 "heroName": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "Cyclop"
                 },
                 "team": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "c184abee-d573-442d-b1b7-ba93aff61fb6"
                 },
                 "universe": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "MARVEL"
                 }
             }
         },
@@ -932,10 +969,12 @@ const docTemplate = `{
             ],
             "properties": {
                 "name": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "X-Men"
                 },
                 "universe": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "MARVEL"
                 }
             }
         },
