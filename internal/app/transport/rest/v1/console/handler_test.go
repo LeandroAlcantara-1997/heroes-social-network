@@ -30,7 +30,7 @@ func TestHandlerPostConsoles(t *testing.T) {
 		useCase = mock.NewMockConsole(ctrl)
 	)
 	defer ctrl.Finish()
-	useCase.EXPECT().CreateConsoles(ctx, &dto.ConsoleRequest{
+	useCase.EXPECT().CreateConsoles(gomock.Any(), &dto.ConsoleRequest{
 		Names: []model.Console{
 			"Playstaton1",
 		},
@@ -69,7 +69,7 @@ func TestHandlerGetConsoles(t *testing.T) {
 		useCase = mock.NewMockConsole(ctrl)
 	)
 	defer ctrl.Finish()
-	useCase.EXPECT().GetConsoles(ctx).Return(&dto.ConsoleResponse{
+	useCase.EXPECT().GetConsoles(gomock.Any()).Return(&dto.ConsoleResponse{
 		Names: []model.Console{
 			"Playstaton1",
 		},

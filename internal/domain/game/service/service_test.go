@@ -31,8 +31,8 @@ func TestServiceCreateSuccess(t *testing.T) {
 		cacheMock      = mock.NewMockGameCache(ctrl)
 	)
 
-	repositoryMock.EXPECT().CreateGame(ctx, gomock.Any()).Return(nil)
-	cacheMock.EXPECT().SetGame(ctx, gomock.Any()).Return(nil)
+	repositoryMock.EXPECT().CreateGame(gomock.Any(), gomock.Any()).Return(nil)
+	cacheMock.EXPECT().SetGame(gomock.Any(), gomock.Any()).Return(nil)
 	s := &service{
 		repository: repositoryMock,
 		cache:      cacheMock,
@@ -54,8 +54,8 @@ func TestServiceCreateFail(t *testing.T) {
 		cacheMock      = mock.NewMockGameCache(ctrl)
 	)
 
-	repositoryMock.EXPECT().CreateGame(ctx, gomock.Any()).Return(nil)
-	cacheMock.EXPECT().SetGame(ctx, gomock.Any()).Return(nil)
+	repositoryMock.EXPECT().CreateGame(gomock.Any(), gomock.Any()).Return(nil)
+	cacheMock.EXPECT().SetGame(gomock.Any(), gomock.Any()).Return(nil)
 	s := &service{
 		repository: repositoryMock,
 		cache:      cacheMock,
@@ -77,8 +77,8 @@ func TestServiceUpdateGameSuccess(t *testing.T) {
 		c    = mock.NewMockGameCache(ctrl)
 	)
 
-	rep.EXPECT().UpdateGame(ctx, gomock.Any()).Return(nil)
-	c.EXPECT().SetGame(ctx, gomock.Any())
+	rep.EXPECT().UpdateGame(gomock.Any(), gomock.Any()).Return(nil)
+	c.EXPECT().SetGame(gomock.Any(), gomock.Any())
 	s := &service{
 		repository: rep,
 		cache:      c,
@@ -99,7 +99,7 @@ func TestServiceGetByIDSuccess(t *testing.T) {
 		rep  = mock.NewMockGameRepository(ctrl)
 		c    = mock.NewMockGameCache(ctrl)
 	)
-	c.EXPECT().GetGame(ctx, id).Return(model.NewGame(id, spiderManGame), nil)
+	c.EXPECT().GetGame(gomock.Any(), id).Return(model.NewGame(id, spiderManGame), nil)
 	s := &service{
 		repository: rep,
 		cache:      c,
@@ -117,8 +117,8 @@ func TestServiceDeleteSuccess(t *testing.T) {
 		c    = mock.NewMockGameCache(ctrl)
 	)
 
-	rep.EXPECT().DeleteGameByID(ctx, id).Return(nil)
-	c.EXPECT().DeleteGame(ctx, id)
+	rep.EXPECT().DeleteGameByID(gomock.Any(), id).Return(nil)
+	c.EXPECT().DeleteGame(gomock.Any(), id)
 	s := &service{
 		repository: rep,
 		cache:      c,

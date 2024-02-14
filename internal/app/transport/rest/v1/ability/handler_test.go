@@ -47,7 +47,7 @@ func TestHandlerPostAbility(t *testing.T) {
 					"description": "fly"
 				}`),
 	)
-	useCase.EXPECT().CreateAbility(ctx, abilityRequest).Return(abilityResponse, nil)
+	useCase.EXPECT().CreateAbility(gomock.Any(), abilityRequest).Return(abilityResponse, nil)
 	h := Handler{
 		useCase,
 	}
@@ -70,7 +70,7 @@ func TestHandlerGetAbilityByID(t *testing.T) {
 		"/v1/abilities?id="+id,
 		nil,
 	)
-	useCase.EXPECT().GetAbilityByID(ctx, id).Return(abilityResponse, nil)
+	useCase.EXPECT().GetAbilityByID(gomock.Any(), id).Return(abilityResponse, nil)
 	h := Handler{
 		useCase,
 	}
@@ -93,7 +93,7 @@ func TestHandlerGetAbilityByHeroID(t *testing.T) {
 		"/v1/abilities?heroId="+id,
 		nil,
 	)
-	useCase.EXPECT().GetAbilitiesByHeroID(ctx, id).Return([]dto.AbilityResponse{
+	useCase.EXPECT().GetAbilitiesByHeroID(gomock.Any(), id).Return([]dto.AbilityResponse{
 		*abilityResponse,
 	}, nil)
 	h := Handler{
@@ -117,7 +117,7 @@ func TestHandlerDeleteAbility(t *testing.T) {
 		"/v1/abilities?id="+id,
 		nil,
 	)
-	useCase.EXPECT().DeleteAbility(ctx, id).Return(nil)
+	useCase.EXPECT().DeleteAbility(gomock.Any(), id).Return(nil)
 	h := Handler{
 		useCase,
 	}

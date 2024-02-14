@@ -27,7 +27,12 @@ Heroes social network é um projeto criado com a finalidade de facilitar a vida 
 make docker-up
 ~~~
 
-2. Após subir as dependências, inicialize a aplicação com o comando:
+2. Configure as tabelas no banco de dados com o seguinte comando:
+~~~
+make migration-up
+~~~
+
+3. Após subir as dependências, inicialize a aplicação com o comando:
 ~~~
 make run
 ~~~
@@ -39,8 +44,10 @@ make run
 
 * Golang 1.20;
 * PostgreSQL;
-* Cache;
+* Redis as cache;
 * Splunk;
+* Trace com Jaeger;
+* OpenTelemetry;
 * Swagger;
 * Graceful Shutdown;
 * Dev Container com Docker;

@@ -15,6 +15,8 @@ type environment struct {
 	CachePort     string `env:"CACHE_PORT"`
 	CachePassword string `env:"CACHE_PASSWORD"`
 	AllowOrigins  string `env:"ALLOW_ORIGINS"`
+	ServiceName   string `env:"SERVICE_NAME"`
+	Environment   string `env:"ENVIRONMENT"`
 }
 
 var Env environment

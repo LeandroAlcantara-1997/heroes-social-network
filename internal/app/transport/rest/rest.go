@@ -41,6 +41,12 @@ func New(port, allowOrigins string, container *container.Container) *api {
 func (a *api) NewServer(ctx context.Context) {
 	r := gin.Default()
 
+	// otelShutdown, err := otel.SetupOTelSDK(ctx)
+	// defer func() {
+	// 	err = errors.Join(err, otelShutdown(context.Background()))
+	// }()
+
+	// r.Use(otelgin.Middleware("heroes-social-network"))
 	r.GET("/health-check", func(ctx *gin.Context) {
 		ctx.Status(http.StatusOK)
 	})
@@ -59,7 +65,7 @@ func (a *api) NewServer(ctx context.Context) {
 	console.ConfigureConsoleRoutes(r, a.container.ConsoleUseCase)
 	ability.ConfigureGameRoutes(r, a.container.AbilityUseCase)
 
-	log.Default().Printf("Server listening in :%s", a.port)
+	log.Printf("Server listening in :%s", a.port)
 
 	a.shutdown(&http.Server{
 		Addr:    fmt.Sprintf(":%s", a.port),

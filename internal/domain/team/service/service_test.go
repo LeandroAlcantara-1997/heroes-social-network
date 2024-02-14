@@ -40,8 +40,8 @@ func TestServiceRegisterTeamSuccess(t *testing.T) {
 		logMock        = mock.NewMockLog(ctrl)
 	)
 
-	repositoryMock.EXPECT().CreateTeam(ctx, gomock.Any()).Return(nil)
-	cacheMock.EXPECT().SetTeam(ctx, gomock.Any(), gomock.Any()).Return(nil)
+	repositoryMock.EXPECT().CreateTeam(gomock.Any(), gomock.Any()).Return(nil)
+	cacheMock.EXPECT().SetTeam(gomock.Any(), gomock.Any(), gomock.Any()).Return(nil)
 	s := New(repositoryMock, cacheMock, logMock)
 	out, err := s.CreateTeam(ctx, &dto.TeamRequest{
 		Name:     "the avengers",
@@ -60,8 +60,8 @@ func TestServiceRegisterTeamFail(t *testing.T) {
 		expected       *dto.TeamResponse
 	)
 
-	repositoryMock.EXPECT().CreateTeam(ctx, gomock.Any()).Return(exception.ErrTeamAlredyExists)
-	logMock.EXPECT().SendErrorLog(ctx, gomock.Any())
+	repositoryMock.EXPECT().CreateTeam(gomock.Any(), gomock.Any()).Return(exception.ErrTeamAlredyExists)
+	logMock.EXPECT().SendErrorLog(gomock.Any(), gomock.Any())
 	s := New(repositoryMock, nil, logMock)
 	out, err := s.CreateTeam(ctx, &dto.TeamRequest{
 		Name:     "The Avengers",
@@ -79,7 +79,7 @@ func TestServiceGetTeamByIDSuccessByCache(t *testing.T) {
 		ctrl      = gomock.NewController(t)
 		cacheMock = mock.NewMockCache(ctrl)
 	)
-	cacheMock.EXPECT().GetTeam(ctx, "0c2ab516-d1b9-4ba4-bbf2-a7b77b21e8a0").Return(teenTitans, nil)
+	cacheMock.EXPECT().GetTeam(gomock.Any(), "0c2ab516-d1b9-4ba4-bbf2-a7b77b21e8a0").Return(teenTitans, nil)
 	s := New(nil, cacheMock, nil)
 	out, err := s.GetTeamByID(ctx, "0c2ab516-d1b9-4ba4-bbf2-a7b77b21e8a0")
 	assert.Equal(t, teenTitansResponse, out)
@@ -94,9 +94,9 @@ func TestServiceGetTeamByIDSuccessByRepository(t *testing.T) {
 		cacheMock      = mock.NewMockCache(ctrl)
 		logMock        = mock.NewMockLog(ctrl)
 	)
-	cacheCall := cacheMock.EXPECT().GetTeam(ctx, "0c2ab516-d1b9-4ba4-bbf2-a7b77b21e8a0").Return(nil, errors.New("unexpected error"))
-	logMock.EXPECT().SendErrorLog(ctx, gomock.Any()).After(cacheCall)
-	repositoryMock.EXPECT().GetTeamByID(ctx, "0c2ab516-d1b9-4ba4-bbf2-a7b77b21e8a0").Return(teenTitans, nil)
+	cacheCall := cacheMock.EXPECT().GetTeam(gomock.Any(), "0c2ab516-d1b9-4ba4-bbf2-a7b77b21e8a0").Return(nil, errors.New("unexpected error"))
+	logMock.EXPECT().SendErrorLog(gomock.Any(), gomock.Any()).After(cacheCall)
+	repositoryMock.EXPECT().GetTeamByID(gomock.Any(), "0c2ab516-d1b9-4ba4-bbf2-a7b77b21e8a0").Return(teenTitans, nil)
 	s := New(repositoryMock, cacheMock, logMock)
 	out, err := s.GetTeamByID(ctx, "0c2ab516-d1b9-4ba4-bbf2-a7b77b21e8a0")
 	assert.Equal(t, teenTitansResponse, out)
@@ -111,8 +111,8 @@ func TestServiceDeleteTeamByIDSuccessTeamDeleted(t *testing.T) {
 		cacheMock      = mock.NewMockCache(ctrl)
 	)
 
-	cacheMock.EXPECT().DeleteTeam(ctx, teenTitans.ID).Return(nil)
-	repositoryMock.EXPECT().DeleteTeamByID(ctx, teenTitans.ID).Return(nil)
+	cacheMock.EXPECT().DeleteTeam(gomock.Any(), teenTitans.ID).Return(nil)
+	repositoryMock.EXPECT().DeleteTeamByID(gomock.Any(), teenTitans.ID).Return(nil)
 	s := &service{
 		repository: repositoryMock,
 		cache:      cacheMock,
@@ -131,8 +131,8 @@ func TestServiceDeleteTeamByIDFailTeamNotDeletedCache(t *testing.T) {
 		logMock   = mock.NewMockLog(ctrl)
 	)
 
-	cacheMock.EXPECT().DeleteTeam(ctx, teenTitans.ID).Return(exception.ErrInternalServer)
-	logMock.EXPECT().SendErrorLog(ctx, gomock.Any())
+	cacheMock.EXPECT().DeleteTeam(gomock.Any(), teenTitans.ID).Return(exception.ErrInternalServer)
+	logMock.EXPECT().SendErrorLog(gomock.Any(), gomock.Any())
 	s := &service{
 		repository: nil,
 		cache:      cacheMock,
@@ -153,9 +153,9 @@ func TestServiceDeleteTeamByIDFailTeamNotDeletedByDatabase(t *testing.T) {
 		logMock        = mock.NewMockLog(ctrl)
 	)
 
-	cacheMock.EXPECT().DeleteTeam(ctx, teenTitans.ID).Return(nil)
-	repositoryMock.EXPECT().DeleteTeamByID(ctx, teenTitans.ID).Return(exception.ErrInternalServer)
-	logMock.EXPECT().SendErrorLog(ctx, gomock.Any())
+	cacheMock.EXPECT().DeleteTeam(gomock.Any(), teenTitans.ID).Return(nil)
+	repositoryMock.EXPECT().DeleteTeamByID(gomock.Any(), teenTitans.ID).Return(exception.ErrInternalServer)
+	logMock.EXPECT().SendErrorLog(gomock.Any(), gomock.Any())
 	s := &service{
 		repository: repositoryMock,
 		cache:      cacheMock,
