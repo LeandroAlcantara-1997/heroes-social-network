@@ -59,7 +59,7 @@ func TestHandlerPostHeroSuccess(t *testing.T) {
 					"universe": "DC"
 				}`),
 	)
-	useCase.EXPECT().CreateHero(ctx, batmanRequest).Return(batmanResponse, nil)
+	useCase.EXPECT().CreateHero(gomock.Any(), batmanRequest).Return(batmanResponse, nil)
 	h := Handler{
 		useCase,
 	}
@@ -114,7 +114,7 @@ func TestHandlerPostHeroFailInternalServerError(t *testing.T) {
 					"universe": "DC"
 				}`),
 	)
-	useCase.EXPECT().CreateHero(ctx, batmanRequest).Return(nil, exception.ErrInternalServer)
+	useCase.EXPECT().CreateHero(gomock.Any(), batmanRequest).Return(nil, exception.ErrInternalServer)
 	h := Handler{
 		useCase,
 	}
@@ -133,7 +133,7 @@ func TestHandlerPutHeroSuccess(t *testing.T) {
 		useCase = mock.NewMockHero(ctrl)
 	)
 	defer ctrl.Finish()
-	useCase.EXPECT().UpdateHero(ctx, batmanResponse.ID, batmanRequest).
+	useCase.EXPECT().UpdateHero(gomock.Any(), batmanResponse.ID, batmanRequest).
 		Return(nil)
 	ctx.Request = httptest.NewRequest(
 		http.MethodPut,
@@ -189,7 +189,7 @@ func TestHandlerPutHeroFailInternalServerError(t *testing.T) {
 		useCase = mock.NewMockHero(ctrl)
 	)
 	defer ctrl.Finish()
-	useCase.EXPECT().UpdateHero(ctx, batmanResponse.ID, batmanRequest).
+	useCase.EXPECT().UpdateHero(gomock.Any(), batmanResponse.ID, batmanRequest).
 		Return(exception.ErrInternalServer)
 	ctx.Request = httptest.NewRequest(
 		http.MethodPut,
@@ -219,7 +219,7 @@ func TestHandlerGetHeroByIDSucess(t *testing.T) {
 		useCase = mock.NewMockHero(ctrl)
 	)
 	defer ctrl.Finish()
-	useCase.EXPECT().GetHeroByID(ctx, batmanResponse.ID).
+	useCase.EXPECT().GetHeroByID(gomock.Any(), batmanResponse.ID).
 		Return(nil, exception.ErrInternalServer)
 	ctx.Request = httptest.NewRequest(
 		http.MethodPut,
@@ -243,7 +243,7 @@ func TestHandlerGetHeroByIDFailHeroNotFound(t *testing.T) {
 		useCase = mock.NewMockHero(ctrl)
 	)
 	defer ctrl.Finish()
-	useCase.EXPECT().GetHeroByID(ctx, batmanResponse.ID).
+	useCase.EXPECT().GetHeroByID(gomock.Any(), batmanResponse.ID).
 		Return(nil, exception.ErrHeroNotFound)
 	ctx.Request = httptest.NewRequest(
 		http.MethodPut,
@@ -267,7 +267,7 @@ func TestHandlerGetHeroByIDFailHInternalServerError(t *testing.T) {
 		useCase = mock.NewMockHero(ctrl)
 	)
 	defer ctrl.Finish()
-	useCase.EXPECT().GetHeroByID(ctx, batmanResponse.ID).
+	useCase.EXPECT().GetHeroByID(gomock.Any(), batmanResponse.ID).
 		Return(nil, exception.ErrInternalServer)
 	ctx.Request = httptest.NewRequest(
 		http.MethodPut,
@@ -292,7 +292,7 @@ func TestHandlerDeleteHeroByIDSuccess(t *testing.T) {
 		useCase = mock.NewMockHero(ctrl)
 	)
 	defer ctrl.Finish()
-	useCase.EXPECT().DeleteHeroByID(ctx, batmanResponse.ID).
+	useCase.EXPECT().DeleteHeroByID(gomock.Any(), batmanResponse.ID).
 		Return(nil)
 	ctx.Request = httptest.NewRequest(
 		http.MethodDelete,
@@ -316,7 +316,7 @@ func TestHandlerDeleteHeroByIDFailHeroNotFound(t *testing.T) {
 		useCase = mock.NewMockHero(ctrl)
 	)
 	defer ctrl.Finish()
-	useCase.EXPECT().DeleteHeroByID(ctx, batmanResponse.ID).
+	useCase.EXPECT().DeleteHeroByID(gomock.Any(), batmanResponse.ID).
 		Return(exception.ErrHeroNotFound)
 	ctx.Request = httptest.NewRequest(
 		http.MethodDelete,
@@ -340,7 +340,7 @@ func TestHandlerDeleteHeroByIDFailInternalServerError(t *testing.T) {
 		useCase = mock.NewMockHero(ctrl)
 	)
 	defer ctrl.Finish()
-	useCase.EXPECT().DeleteHeroByID(ctx, batmanResponse.ID).
+	useCase.EXPECT().DeleteHeroByID(gomock.Any(), batmanResponse.ID).
 		Return(exception.ErrInternalServer)
 	ctx.Request = httptest.NewRequest(
 		http.MethodDelete,

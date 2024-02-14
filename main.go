@@ -30,5 +30,6 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
+
 	rest.New(env.Env.APIPort, env.Env.AllowOrigins, cont).NewServer(ctx)
 }

@@ -19,7 +19,7 @@ func TestServiceCreateConsolesSuccess(t *testing.T) {
 		repositoryMock = mock.NewMockConsoleRepository(ctrl)
 	)
 
-	repositoryMock.EXPECT().CreateConsoles(ctx, []model.Console{
+	repositoryMock.EXPECT().CreateConsoles(gomock.Any(), []model.Console{
 		"Playstation1",
 	}).Return(nil)
 
@@ -46,10 +46,10 @@ func TestServiceCreateConsolesFailRepositoryError(t *testing.T) {
 		expected       *dto.ConsoleResponse
 	)
 
-	repositoryMock.EXPECT().CreateConsoles(ctx, []model.Console{
+	repositoryMock.EXPECT().CreateConsoles(gomock.Any(), []model.Console{
 		"Playstation1",
 	}).Return(exception.ErrInternalServer)
-	loggerMock.EXPECT().SendErrorLog(ctx, gomock.Any())
+	loggerMock.EXPECT().SendErrorLog(gomock.Any(), gomock.Any())
 
 	s := &service{
 		repository: repositoryMock,

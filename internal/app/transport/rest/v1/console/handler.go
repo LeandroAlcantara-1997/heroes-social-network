@@ -8,6 +8,7 @@ import (
 	console "github.com/LeandroAlcantara-1997/heroes-social-network/internal/domain/console/service"
 	"github.com/LeandroAlcantara-1997/heroes-social-network/internal/exception"
 	"github.com/gin-gonic/gin"
+	"go.opentelemetry.io/otel"
 )
 
 type Handler struct {
@@ -25,6 +26,8 @@ type Handler struct {
 // @Failure      500  {object}  error
 // @Router       /consoles [post]
 func (h *Handler) postConsoles(ctx *gin.Context) {
+	c, span := otel.Tracer("console").Start(ctx.Request.Context(), "postConsoles")
+	defer span.End()
 	var req dto.ConsoleRequest
 
 	if err := ctx.BindJSON(&req); err != nil {
@@ -37,7 +40,7 @@ func (h *Handler) postConsoles(ctx *gin.Context) {
 		return
 	}
 
-	resp, err := h.useCase.CreateConsoles(ctx, &req)
+	resp, err := h.useCase.CreateConsoles(c, &req)
 	if err != nil {
 		ctx.AbortWithStatusJSON(response.RestError(err))
 		return
@@ -56,7 +59,9 @@ func (h *Handler) postConsoles(ctx *gin.Context) {
 // @Failure      500  {object}  error
 // @Router       /consoles [get]
 func (h *Handler) getConsoles(ctx *gin.Context) {
-	resp, err := h.useCase.GetConsoles(ctx)
+	c, span := otel.Tracer("console").Start(ctx.Request.Context(), "getConsoles")
+	defer span.End()
+	resp, err := h.useCase.GetConsoles(c)
 	if err != nil {
 		ctx.AbortWithStatusJSON(response.RestError(err))
 		return

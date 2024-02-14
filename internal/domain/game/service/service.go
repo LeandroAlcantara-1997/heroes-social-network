@@ -13,6 +13,7 @@ import (
 	"github.com/LeandroAlcantara-1997/heroes-social-network/internal/exception"
 	"github.com/LeandroAlcantara-1997/heroes-social-network/pkg/util"
 	"github.com/google/uuid"
+	"go.opentelemetry.io/otel"
 )
 
 //go:generate mockgen -destination ../../../mock/game_mock.go -package=mock -source=service.go
@@ -37,6 +38,8 @@ func New(repository repository.GameRepository, cache cache.GameCache, log log.Lo
 	}
 }
 func (s *service) CreateGame(ctx context.Context, req *dto.GameRequest) (*dto.GameResponse, error) {
+	ctx, span := otel.Tracer("game").Start(ctx, "createGame")
+	defer span.End()
 	resp, err := s.createGame(ctx, req)
 	if err != nil {
 		s.log.SendErrorLog(ctx, err)
@@ -62,6 +65,8 @@ func (s *service) createGame(ctx context.Context, req *dto.GameRequest) (*dto.Ga
 }
 
 func (s *service) UpdateGame(ctx context.Context, id string, req *dto.GameRequest) error {
+	ctx, span := otel.Tracer("game").Start(ctx, "updateGame")
+	defer span.End()
 	if err := s.updateGame(ctx, id, req); err != nil {
 		s.log.SendErrorLog(ctx, err)
 		return err
@@ -87,6 +92,8 @@ func (s *service) updateGame(ctx context.Context, id string, req *dto.GameReques
 	return nil
 }
 func (s *service) GetByID(ctx context.Context, id string) (*dto.GameResponse, error) {
+	ctx, span := otel.Tracer("game").Start(ctx, "getGameByID")
+	defer span.End()
 	resp, err := s.getByID(ctx, id)
 	if err != nil {
 		s.log.SendErrorLog(ctx, err)
@@ -117,6 +124,8 @@ func (s *service) getByID(ctx context.Context, id string) (*dto.GameResponse, er
 	), nil
 }
 func (s *service) Delete(ctx context.Context, id string) error {
+	ctx, span := otel.Tracer("game").Start(ctx, "deleteGame")
+	defer span.End()
 	if err := s.delete(ctx, id); err != nil {
 		s.log.SendErrorLog(ctx, err)
 		return err

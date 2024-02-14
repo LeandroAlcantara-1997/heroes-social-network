@@ -9,6 +9,7 @@ import (
 	"github.com/LeandroAlcantara-1997/heroes-social-network/internal/exception"
 	"github.com/LeandroAlcantara-1997/heroes-social-network/pkg/validator"
 	"github.com/gin-gonic/gin"
+	"go.opentelemetry.io/otel"
 )
 
 type Handler struct {
@@ -27,6 +28,9 @@ type Handler struct {
 // @Failure      500  {object}  error
 // @Router       /abilities [post]
 func (h *Handler) postAbility(ctx *gin.Context) {
+	c, span := otel.Tracer("ability").Start(ctx.Request.Context(), "postAbility")
+	defer span.End()
+
 	var req dto.AbilityRequest
 	if err := ctx.BindJSON(&req); err != nil {
 		ctx.AbortWithStatusJSON(response.RestError(err))
@@ -38,7 +42,7 @@ func (h *Handler) postAbility(ctx *gin.Context) {
 		return
 	}
 
-	resp, err := h.useCase.CreateAbility(ctx, &req)
+	resp, err := h.useCase.CreateAbility(c, &req)
 	if err != nil {
 		ctx.AbortWithStatusJSON(response.RestError(err))
 		return
@@ -59,6 +63,8 @@ func (h *Handler) postAbility(ctx *gin.Context) {
 // @Failure      500  {object}  error
 // @Router       /abilities [get]
 func (h *Handler) getAbilityByID(ctx *gin.Context) {
+	c, span := otel.Tracer("ability").Start(ctx.Request.Context(), "getAbilityByID")
+	defer span.End()
 	var id, ok = ctx.GetQuery("id")
 	if ok {
 		if !validator.UUIDValidator(id) {
@@ -67,7 +73,7 @@ func (h *Handler) getAbilityByID(ctx *gin.Context) {
 		}
 	}
 
-	resp, err := h.useCase.GetAbilityByID(ctx, id)
+	resp, err := h.useCase.GetAbilityByID(c, id)
 	if err != nil {
 		ctx.AbortWithStatusJSON(response.RestError(err))
 		return
@@ -88,6 +94,8 @@ func (h *Handler) getAbilityByID(ctx *gin.Context) {
 // @Failure      500  {object}  error
 // @Router       /abilities/heroes [get]
 func (h *Handler) getAbilitiesByHeroID(ctx *gin.Context) {
+	c, span := otel.Tracer("ability").Start(ctx.Request.Context(), "getAbilitiesByHeroID")
+	defer span.End()
 	var id, ok = ctx.GetQuery("heroId")
 	if ok {
 		if !validator.UUIDValidator(id) {
@@ -96,7 +104,7 @@ func (h *Handler) getAbilitiesByHeroID(ctx *gin.Context) {
 		}
 	}
 
-	resp, err := h.useCase.GetAbilitiesByHeroID(ctx, id)
+	resp, err := h.useCase.GetAbilitiesByHeroID(c, id)
 	if err != nil {
 		ctx.AbortWithStatusJSON(response.RestError(err))
 		return
@@ -117,6 +125,8 @@ func (h *Handler) getAbilitiesByHeroID(ctx *gin.Context) {
 // @Failure      500  {object}  error
 // @Router       /abilities [delete]
 func (h *Handler) deleteAbility(ctx *gin.Context) {
+	c, span := otel.Tracer("ability").Start(ctx.Request.Context(), "deleteAbility")
+	defer span.End()
 	var id, ok = ctx.GetQuery("id")
 	if ok {
 		if !validator.UUIDValidator(id) {
@@ -124,7 +134,7 @@ func (h *Handler) deleteAbility(ctx *gin.Context) {
 			return
 		}
 	}
-	if err := h.useCase.DeleteAbility(ctx, id); err != nil {
+	if err := h.useCase.DeleteAbility(c, id); err != nil {
 		ctx.AbortWithStatusJSON(response.RestError(err))
 		return
 	}

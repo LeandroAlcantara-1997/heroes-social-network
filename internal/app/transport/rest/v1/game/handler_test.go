@@ -49,7 +49,7 @@ func TestHandlerPostGameSuccess(t *testing.T) {
 		useCase = mock.NewMockGame(ctrl)
 	)
 	defer ctrl.Finish()
-	useCase.EXPECT().CreateGame(ctx, ironManTwoGameRequest).
+	useCase.EXPECT().CreateGame(gomock.Any(), ironManTwoGameRequest).
 		Return(ironManTwoGameResponse, nil)
 	ctx.Request = httptest.NewRequest(
 		http.MethodPost,
@@ -107,7 +107,7 @@ func TestHandlerGetGameSuccess(t *testing.T) {
 		useCase = mock.NewMockGame(ctrl)
 	)
 	defer ctrl.Finish()
-	useCase.EXPECT().GetByID(ctx, id).
+	useCase.EXPECT().GetByID(gomock.Any(), id).
 		Return(ironManTwoGameResponse, nil)
 	ctx.Request = httptest.NewRequest(
 		http.MethodPost,
@@ -131,7 +131,7 @@ func TestHandlerPutGameSuccess(t *testing.T) {
 		useCase = mock.NewMockGame(ctrl)
 	)
 	defer ctrl.Finish()
-	useCase.EXPECT().UpdateGame(ctx, id, ironManTwoGameRequest).
+	useCase.EXPECT().UpdateGame(gomock.Any(), id, ironManTwoGameRequest).
 		Return(nil)
 	ctx.Request = httptest.NewRequest(
 		http.MethodPut,
@@ -163,7 +163,7 @@ func TestHandlerDeleteGameSuccess(t *testing.T) {
 		useCase = mock.NewMockGame(ctrl)
 	)
 	defer ctrl.Finish()
-	useCase.EXPECT().Delete(ctx, id).
+	useCase.EXPECT().Delete(gomock.Any(), id).
 		Return(nil)
 	ctx.Request = httptest.NewRequest(
 		http.MethodDelete,
