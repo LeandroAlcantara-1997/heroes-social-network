@@ -7,6 +7,7 @@ import (
 
 	"github.com/LeandroAlcantara-1997/heroes-social-network/internal/exception"
 	"github.com/LeandroAlcantara-1997/heroes-social-network/pkg/util"
+	"go.opentelemetry.io/otel"
 
 	"github.com/LeandroAlcantara-1997/heroes-social-network/internal/adapter/cache"
 	"github.com/LeandroAlcantara-1997/heroes-social-network/internal/adapter/log"
@@ -40,6 +41,8 @@ func New(repository repository.Repository, cache cache.Cache,
 	}
 }
 func (s *service) CreateHero(ctx context.Context, req *dto.HeroRequest) (*dto.HeroResponse, error) {
+	ctx, span := otel.Tracer("hero").Start(ctx, "createHero")
+	defer span.End()
 	resp, err := s.createHero(ctx, req)
 	if err != nil {
 		s.log.SendErrorLog(ctx, err)
@@ -63,6 +66,8 @@ func (s *service) createHero(ctx context.Context, request *dto.HeroRequest) (*dt
 }
 
 func (s *service) UpdateHero(ctx context.Context, id string, req *dto.HeroRequest) error {
+	ctx, span := otel.Tracer("hero").Start(ctx, "updateHero")
+	defer span.End()
 	if err := s.updateHero(ctx, id, req); err != nil {
 		s.log.SendErrorLog(ctx, err)
 		return err
@@ -87,6 +92,8 @@ func (s *service) updateHero(ctx context.Context, id string, request *dto.HeroRe
 }
 
 func (s *service) GetHeroByID(ctx context.Context, id string) (*dto.HeroResponse, error) {
+	ctx, span := otel.Tracer("hero").Start(ctx, "getHeroByID")
+	defer span.End()
 	resp, err := s.getHeroByID(ctx, id)
 	if err != nil {
 		s.log.SendErrorLog(ctx, err)
@@ -113,6 +120,8 @@ func (s *service) getHeroByID(ctx context.Context, id string) (*dto.HeroResponse
 }
 
 func (s *service) DeleteHeroByID(ctx context.Context, id string) (err error) {
+	ctx, span := otel.Tracer("hero").Start(ctx, "deleteHeroByID")
+	defer span.End()
 	if err := s.deleteHeroByID(ctx, id); err != nil {
 		s.log.SendErrorLog(ctx, err)
 		return err
@@ -132,6 +141,8 @@ func (s *service) deleteHeroByID(ctx context.Context, id string) (err error) {
 }
 
 func (s *service) AddAbilityToHero(ctx context.Context, abilityID, heroID string) error {
+	ctx, span := otel.Tracer("hero").Start(ctx, "addAbilityToHero")
+	defer span.End()
 	if err := s.addAbilityToHero(ctx, abilityID, heroID); err != nil {
 		s.log.SendErrorLog(ctx, err)
 		return err

@@ -30,7 +30,7 @@ var (
 	}
 )
 
-func TestHandler_PostTeam(t *testing.T) {
+func TestHandlerPostTeam(t *testing.T) {
 	var (
 		response, _ = json.Marshal(&xMenResponse)
 		ctx, _      = gin.CreateTestContext(&httptest.ResponseRecorder{
@@ -49,7 +49,7 @@ func TestHandler_PostTeam(t *testing.T) {
 					"universe": "MARVEL"
 				}`),
 	)
-	useCase.EXPECT().CreateTeam(ctx, xMenRequest).Return(xMenResponse, nil)
+	useCase.EXPECT().CreateTeam(gomock.Any(), xMenRequest).Return(xMenResponse, nil)
 	h := Handler{
 		useCase,
 	}
@@ -97,7 +97,7 @@ func TestHandlerGetTeamByIDSuccess(t *testing.T) {
 		"/v1/teamss?id=e36b3582-f936-47b7-8832-47da045ea4e9",
 		nil,
 	)
-	useCase.EXPECT().GetTeamByID(ctx, "e36b3582-f936-47b7-8832-47da045ea4e9").Return(xMenResponse, nil)
+	useCase.EXPECT().GetTeamByID(gomock.Any(), "e36b3582-f936-47b7-8832-47da045ea4e9").Return(xMenResponse, nil)
 	h := Handler{
 		useCase,
 	}
@@ -120,7 +120,7 @@ func TestHandlerGetTeamByIDFailTeamNotFound(t *testing.T) {
 		"/v1/teamss?id=e36b3582-f936-47b7-8832-47da045ea4e9",
 		nil,
 	)
-	useCase.EXPECT().GetTeamByID(ctx, "e36b3582-f936-47b7-8832-47da045ea4e9").Return(nil, exception.ErrTeamNotFound)
+	useCase.EXPECT().GetTeamByID(gomock.Any(), "e36b3582-f936-47b7-8832-47da045ea4e9").Return(nil, exception.ErrTeamNotFound)
 	h := Handler{
 		useCase,
 	}
@@ -141,7 +141,7 @@ func TestHandlerDeleteTeamByIDSuccess(t *testing.T) {
 		"/v1/teamss?id=e36b3582-f936-47b7-8832-47da045ea4e9",
 		nil,
 	)
-	useCase.EXPECT().DeleteTeamByID(ctx, "e36b3582-f936-47b7-8832-47da045ea4e9").Return(nil)
+	useCase.EXPECT().DeleteTeamByID(gomock.Any(), "e36b3582-f936-47b7-8832-47da045ea4e9").Return(nil)
 	h := Handler{
 		useCase,
 	}
@@ -165,7 +165,7 @@ func TestHandlerDeleteTeamByIDFail(t *testing.T) {
 		"/v1/teamss?id=e36b3582-f936-47b7-8832-47da045ea4e9",
 		nil,
 	)
-	useCase.EXPECT().DeleteTeamByID(ctx, "e36b3582-f936-47b7-8832-47da045ea4e9").Return(nil)
+	useCase.EXPECT().DeleteTeamByID(gomock.Any(), "e36b3582-f936-47b7-8832-47da045ea4e9").Return(nil)
 	h := Handler{
 		useCase,
 	}

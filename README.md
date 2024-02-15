@@ -27,7 +27,12 @@ Heroes social network is a project created to make life easier for superhero fan
 make docker-up
 ~~~
 
-2. After uploading the dependencies, run:
+2. Running migration command:
+~~~
+make migration-up
+~~~
+
+3. After uploading the dependencies, run:
 ~~~
 make run
 ~~~
@@ -38,8 +43,10 @@ make run
 
 * Golang 1.20;
 * PostgreSQL;
-* Cache;
+* Redis as cache;
 * Splunk;
+* Traces with Jaeger;
+* OpenTelemetry;
 * Swagger;
 * Graceful shutdown;
 * Dev Container with Docker;

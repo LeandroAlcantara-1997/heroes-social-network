@@ -9,6 +9,7 @@ import (
 	"github.com/LeandroAlcantara-1997/heroes-social-network/internal/exception"
 	"github.com/LeandroAlcantara-1997/heroes-social-network/pkg/validator"
 	"github.com/gin-gonic/gin"
+	"go.opentelemetry.io/otel"
 )
 
 type Handler struct {
@@ -27,6 +28,8 @@ type Handler struct {
 // @Failure      500  {object}  error
 // @Router       /games [post]
 func (h *Handler) postGame(ctx *gin.Context) {
+	c, span := otel.Tracer("game").Start(ctx.Request.Context(), "postGame")
+	defer span.End()
 	var req dto.GameRequest
 	if err := ctx.BindJSON(&req); err != nil {
 		ctx.AbortWithStatusJSON(response.RestError(err))
@@ -38,7 +41,7 @@ func (h *Handler) postGame(ctx *gin.Context) {
 		return
 	}
 
-	resp, err := h.useCase.CreateGame(ctx, &req)
+	resp, err := h.useCase.CreateGame(c, &req)
 	if err != nil {
 		ctx.AbortWithStatusJSON(response.RestError(err))
 		return
@@ -59,6 +62,8 @@ func (h *Handler) postGame(ctx *gin.Context) {
 // @Failure      500  {object}  error
 // @Router       /games [get]
 func (h *Handler) getGame(ctx *gin.Context) {
+	c, span := otel.Tracer("game").Start(ctx.Request.Context(), "getGame")
+	defer span.End()
 	var id, ok = ctx.GetQuery("id")
 	if ok {
 		if !validator.UUIDValidator(id) {
@@ -66,7 +71,7 @@ func (h *Handler) getGame(ctx *gin.Context) {
 			return
 		}
 	}
-	resp, err := h.useCase.GetByID(ctx, id)
+	resp, err := h.useCase.GetByID(c, id)
 	if err != nil {
 		ctx.AbortWithStatusJSON(response.RestError(err))
 		return
@@ -87,6 +92,8 @@ func (h *Handler) getGame(ctx *gin.Context) {
 // @Failure      500  {object}  error
 // @Router       /games [delete]
 func (h *Handler) deleteGame(ctx *gin.Context) {
+	c, span := otel.Tracer("game").Start(ctx.Request.Context(), "deleteGame")
+	defer span.End()
 	var id, ok = ctx.GetQuery("id")
 	if ok {
 		if !validator.UUIDValidator(id) {
@@ -94,7 +101,7 @@ func (h *Handler) deleteGame(ctx *gin.Context) {
 			return
 		}
 	}
-	if err := h.useCase.Delete(ctx, id); err != nil {
+	if err := h.useCase.Delete(c, id); err != nil {
 		ctx.AbortWithStatusJSON(response.RestError(err))
 		return
 	}
@@ -115,6 +122,8 @@ func (h *Handler) deleteGame(ctx *gin.Context) {
 // @Failure      500  {object}  error
 // @Router       /games [put]
 func (h *Handler) putGame(ctx *gin.Context) {
+	c, span := otel.Tracer("game").Start(ctx.Request.Context(), "putGame")
+	defer span.End()
 	var (
 		id, ok  = ctx.GetQuery("id")
 		request dto.GameRequest
@@ -136,7 +145,7 @@ func (h *Handler) putGame(ctx *gin.Context) {
 		return
 	}
 
-	if err := h.useCase.UpdateGame(ctx, id, &request); err != nil {
+	if err := h.useCase.UpdateGame(c, id, &request); err != nil {
 		ctx.JSON(response.RestError(err))
 		return
 	}
