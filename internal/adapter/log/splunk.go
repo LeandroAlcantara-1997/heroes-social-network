@@ -8,6 +8,8 @@ import (
 	"log"
 	"net/http"
 	"time"
+
+	otelhttp "go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp"
 )
 
 type Splunk struct {
@@ -62,25 +64,28 @@ func (s *Splunk) sendToSplunk(ctx context.Context, payload []byte) {
 	url := fmt.Sprintf("%s/services/collector/event", s.host)
 	request, err := http.NewRequest(http.MethodPost, url, bytes.NewBuffer(payload))
 	if err != nil {
-		log.Default().Printf("error to create request: %v", err)
+		log.Printf("error to create request: %v", err)
 	}
 
 	request.Header.Add("Authorization", fmt.Sprintf("Splunk %s", s.token))
 	request.Header.Add("Content-Type", "application/json")
-	client := &http.Client{Timeout: 10 * time.Second}
+	client := &http.Client{
+		Timeout:   10 * time.Second,
+		Transport: otelhttp.NewTransport(http.DefaultTransport),
+	}
 	response, err := client.Do(request)
 	if err != nil {
-		log.Default().Printf("error to send request: %v", err)
+		log.Printf("error to send request: %v", err)
 		return
 	}
 
 	if response.StatusCode != http.StatusOK {
 		responseMap := make(map[string]any)
 		if err := json.NewDecoder(response.Body).Decode(&responseMap); err != nil {
-			log.Default().Printf("error to decode response body: %v", err)
+			log.Printf("error to decode response body: %v", err)
 			return
 		}
-		log.Default().Printf("error to send request: %v", responseMap)
+		log.Printf("error to send request: %v", responseMap)
 		return
 	}
 }

@@ -13,7 +13,10 @@ import (
 	game "github.com/LeandroAlcantara-1997/heroes-social-network/internal/domain/game/service"
 	hero "github.com/LeandroAlcantara-1997/heroes-social-network/internal/domain/hero/service"
 	team "github.com/LeandroAlcantara-1997/heroes-social-network/internal/domain/team/service"
-	"github.com/jackc/pgx/v5"
+	"github.com/LeandroAlcantara-1997/heroes-social-network/pkg/otel"
+	"github.com/exaring/otelpgx"
+	"github.com/jackc/pgx/v5/pgxpool"
+	redisOtel "github.com/redis/go-redis/extra/redisotel/v9"
 	"github.com/redis/go-redis/v9"
 )
 
@@ -26,7 +29,7 @@ type Container struct {
 }
 
 type components struct {
-	pgxClient    *pgx.Conn
+	pgxClient    *pgxpool.Pool
 	splunkClient *log.Splunk
 	redisClient  *redis.Client
 }
@@ -34,6 +37,8 @@ type components struct {
 func New() (context.Context, *Container, error) {
 	env.LoadEnv()
 	ctx := context.Background()
+	otel.New(env.Env.ServiceName, env.Env.Environment).TraceProvider(ctx)
+
 	cmp, err := setupComponents(ctx)
 	if err != nil {
 		return ctx, nil, err
@@ -77,16 +82,18 @@ func New() (context.Context, *Container, error) {
 }
 
 func setupComponents(ctx context.Context) (*components, error) {
-	pgxClient, err := pgx.Connect(
-		ctx,
-		fmt.Sprintf("postgres://%s:%s@%s:%s/%s?sslmode=disable",
-			env.Env.DBUser,
-			env.Env.DBPassword,
-			env.Env.DBHost,
-			env.Env.DBPort,
-			env.Env.DBName,
-		),
-	)
+	pgxConfig, err := pgxpool.ParseConfig(fmt.Sprintf("postgres://%s:%s@%s:%s/%s?sslmode=disable",
+		env.Env.DBUser,
+		env.Env.DBPassword,
+		env.Env.DBHost,
+		env.Env.DBPort,
+		env.Env.DBName,
+	))
+	if err != nil {
+		return nil, err
+	}
+	pgxConfig.ConnConfig.Tracer = otelpgx.NewTracer()
+	pgxClient, err := pgxpool.NewWithConfig(ctx, pgxConfig)
 	if err != nil {
 		return nil, err
 	}
@@ -100,6 +107,7 @@ func setupComponents(ctx context.Context) (*components, error) {
 			DB:       0,
 		},
 	)
+	redisOtel.InstrumentTracing(redisClient)
 
 	return &components{
 		pgxClient:    pgxClient,

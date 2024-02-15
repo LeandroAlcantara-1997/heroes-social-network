@@ -13,6 +13,7 @@ import (
 	"github.com/LeandroAlcantara-1997/heroes-social-network/internal/exception"
 	"github.com/LeandroAlcantara-1997/heroes-social-network/pkg/util"
 	"github.com/google/uuid"
+	"go.opentelemetry.io/otel"
 )
 
 //go:generate mockgen -destination ../../../mock/team_mock.go -package=mock -source=service.go
@@ -39,6 +40,8 @@ func New(repository repository.Repository, cache cache.Cache,
 	}
 }
 func (s *service) CreateTeam(ctx context.Context, req *dto.TeamRequest) (*dto.TeamResponse, error) {
+	ctx, span := otel.Tracer("team").Start(ctx, "createTeam")
+	defer span.End()
 	resp, err := s.createTeam(ctx, req)
 	if err != nil {
 		s.log.SendErrorLog(ctx, err)
@@ -65,6 +68,8 @@ func (s *service) createTeam(ctx context.Context, request *dto.TeamRequest) (*dt
 }
 
 func (s *service) GetTeamByID(ctx context.Context, id string) (*dto.TeamResponse, error) {
+	ctx, span := otel.Tracer("team").Start(ctx, "getTeamByID")
+	defer span.End()
 	resp, err := s.getTeamByID(ctx, id)
 	if err != nil {
 		s.log.SendErrorLog(ctx, err)
@@ -90,6 +95,8 @@ func (s *service) getTeamByID(ctx context.Context, id string) (*dto.TeamResponse
 		team.UpdatedAt), nil
 }
 func (s *service) DeleteTeamByID(ctx context.Context, id string) (err error) {
+	ctx, span := otel.Tracer("team").Start(ctx, "deleteTeamByID")
+	defer span.End()
 	if err := s.deleteTeamByID(ctx, id); err != nil {
 		s.log.SendErrorLog(ctx, err)
 		return err
@@ -110,6 +117,8 @@ func (s *service) deleteTeamByID(ctx context.Context, id string) (err error) {
 }
 func (s *service) GetTeamByName(ctx context.Context,
 	req *dto.GetTeamByName) (*dto.TeamResponse, error) {
+	ctx, span := otel.Tracer("team").Start(ctx, "getTeamByName")
+	defer span.End()
 	resp, err := s.getTeamByName(ctx, req)
 	if err != nil {
 		s.log.SendErrorLog(ctx, err)
@@ -143,6 +152,8 @@ func (s *service) getTeamByName(ctx context.Context,
 
 func (s *service) UpdateTeam(ctx context.Context, id string,
 	req *dto.TeamRequest) error {
+	ctx, span := otel.Tracer("team").Start(ctx, "updateTeam")
+	defer span.End()
 	if err := s.updateTeam(ctx, id, req); err != nil {
 		s.log.SendErrorLog(ctx, err)
 		return err

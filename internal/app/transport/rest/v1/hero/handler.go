@@ -9,6 +9,7 @@ import (
 	"github.com/LeandroAlcantara-1997/heroes-social-network/internal/exception"
 	"github.com/LeandroAlcantara-1997/heroes-social-network/pkg/validator"
 	"github.com/gin-gonic/gin"
+	"go.opentelemetry.io/otel"
 )
 
 type Handler struct {
@@ -27,6 +28,8 @@ type Handler struct {
 // @Failure      500  {object}  error
 // @Router       /heroes [post]
 func (h *Handler) postHero(ctx *gin.Context) {
+	c, span := otel.Tracer("hero").Start(ctx.Request.Context(), "postHero")
+	defer span.End()
 	var request dto.HeroRequest
 
 	if err := ctx.BindJSON(&request); err != nil {
@@ -39,7 +42,7 @@ func (h *Handler) postHero(ctx *gin.Context) {
 		return
 	}
 
-	resp, err := h.UseCase.CreateHero(ctx, &request)
+	resp, err := h.UseCase.CreateHero(c, &request)
 	if err != nil {
 		ctx.JSON(response.RestError(err))
 		return
@@ -61,6 +64,8 @@ func (h *Handler) postHero(ctx *gin.Context) {
 // @Failure      500  {object}  error
 // @Router       /heroes [put]
 func (h *Handler) putHero(ctx *gin.Context) {
+	c, span := otel.Tracer("hero").Start(ctx.Request.Context(), "putHero")
+	defer span.End()
 	var (
 		id, ok  = ctx.GetQuery("id")
 		request dto.HeroRequest
@@ -82,7 +87,7 @@ func (h *Handler) putHero(ctx *gin.Context) {
 		return
 	}
 
-	if err := h.UseCase.UpdateHero(ctx, id, &request); err != nil {
+	if err := h.UseCase.UpdateHero(c, id, &request); err != nil {
 		ctx.JSON(response.RestError(err))
 		return
 	}
@@ -102,13 +107,15 @@ func (h *Handler) putHero(ctx *gin.Context) {
 // @Failure      500  {object}  error
 // @Router       /heroes [get]
 func (h *Handler) getHeroByID(ctx *gin.Context) {
+	c, span := otel.Tracer("hero").Start(ctx.Request.Context(), "getHeroByID")
+	defer span.End()
 	var id, ok = ctx.GetQuery("id")
 	if ok && !validator.UUIDValidator(id) {
 		ctx.AbortWithStatusJSON(response.RestError(exception.ErrInvalidFields))
 		return
 	}
 
-	resp, err := h.UseCase.GetHeroByID(ctx, id)
+	resp, err := h.UseCase.GetHeroByID(c, id)
 	if err != nil {
 		ctx.JSON(response.RestError(err))
 		return
@@ -129,13 +136,15 @@ func (h *Handler) getHeroByID(ctx *gin.Context) {
 // @Failure      500  {object}  error
 // @Router       /heroes [delete]
 func (h *Handler) deleteHeroByID(ctx *gin.Context) {
+	c, span := otel.Tracer("hero").Start(ctx.Request.Context(), "deleteHeroByID")
+	defer span.End()
 	if id, ok := ctx.GetQuery("id"); ok {
 		if !validator.UUIDValidator(id) {
 			ctx.AbortWithStatusJSON(response.RestError(exception.ErrInvalidFields))
 			return
 		}
 
-		if err := h.UseCase.DeleteHeroByID(ctx, id); err != nil {
+		if err := h.UseCase.DeleteHeroByID(c, id); err != nil {
 			ctx.JSON(response.RestError(err))
 			return
 		}
@@ -157,6 +166,8 @@ func (h *Handler) deleteHeroByID(ctx *gin.Context) {
 // @Failure      500  {object}  error
 // @Router       /heroes/abilities [post]
 func (h *Handler) postAddAbilityToHero(ctx *gin.Context) {
+	c, span := otel.Tracer("hero").Start(ctx.Request.Context(), "postAddAbilityToHero")
+	defer span.End()
 	var request dto.AddAbilityToHeroRequest
 
 	if err := ctx.ShouldBindQuery(&request); err != nil {
@@ -164,7 +175,7 @@ func (h *Handler) postAddAbilityToHero(ctx *gin.Context) {
 		return
 	}
 
-	if err := h.UseCase.AddAbilityToHero(ctx, request.AbilityID, request.HeroID); err != nil {
+	if err := h.UseCase.AddAbilityToHero(c, request.AbilityID, request.HeroID); err != nil {
 		ctx.JSON(response.RestError(err))
 		return
 	}

@@ -20,8 +20,9 @@ func TestServiceCreateAbilitySuccess(t *testing.T) {
 		r    = mock.NewMockAbilityRepository(ctrl)
 		c    = mock.NewMockAbilityCache(ctrl)
 	)
-	r.EXPECT().CreateAbility(ctx, gomock.Any())
-	c.EXPECT().SetAbility(ctx, gomock.Any()).Return(nil)
+
+	r.EXPECT().CreateAbility(gomock.Any(), gomock.Any())
+	c.EXPECT().SetAbility(gomock.Any(), gomock.Any()).Return(nil)
 	s := &service{
 		repository: r,
 		cache:      c,
@@ -41,7 +42,7 @@ func TestServiceGetAbilityByIDSuccess(t *testing.T) {
 		ctrl = gomock.NewController(t)
 		c    = mock.NewMockAbilityCache(ctrl)
 	)
-	c.EXPECT().GetAbility(ctx, id).Return(&model.Ability{
+	c.EXPECT().GetAbility(gomock.Any(), id).Return(&model.Ability{
 		ID:          id,
 		Description: "fly",
 	}, nil)
@@ -62,7 +63,7 @@ func TestServiceGetAbilitiesByHeroID(t *testing.T) {
 		ctrl = gomock.NewController(t)
 		r    = mock.NewMockAbilityRepository(ctrl)
 	)
-	r.EXPECT().GetAbilitiesByHeroID(ctx, id).Return([]model.Ability{
+	r.EXPECT().GetAbilitiesByHeroID(gomock.Any(), id).Return([]model.Ability{
 		{
 			ID:          id,
 			Description: "fly",
@@ -86,8 +87,8 @@ func TestServiceDeleteAbilitySuccess(t *testing.T) {
 		r    = mock.NewMockAbilityRepository(ctrl)
 		c    = mock.NewMockAbilityCache(ctrl)
 	)
-	r.EXPECT().DeleteAbilityByID(ctx, id).Return(nil)
-	c.EXPECT().DeleteAbility(ctx, id).Return(nil)
+	r.EXPECT().DeleteAbilityByID(gomock.Any(), id).Return(nil)
+	c.EXPECT().DeleteAbility(gomock.Any(), id).Return(nil)
 	s := &service{
 		repository: r,
 		cache:      c,

@@ -10,6 +10,7 @@ import (
 	"github.com/LeandroAlcantara-1997/heroes-social-network/internal/domain/ability/dto"
 	"github.com/LeandroAlcantara-1997/heroes-social-network/internal/domain/ability/model"
 	"github.com/LeandroAlcantara-1997/heroes-social-network/internal/exception"
+	"go.opentelemetry.io/otel"
 )
 
 //go:generate mockgen -destination ../../../mock/ability_mock.go -package=mock -source=service.go
@@ -35,6 +36,8 @@ func New(repository repository.AbilityRepository, cache cache.AbilityCache, logg
 }
 
 func (s *service) CreateAbility(ctx context.Context, req *dto.AbilityRequest) (*dto.AbilityResponse, error) {
+	ctx, span := otel.Tracer("ability").Start(ctx, "createAbility")
+	defer span.End()
 	resp, err := s.createAbility(ctx, req)
 	if err != nil {
 		return nil, err
@@ -60,6 +63,8 @@ func (s *service) createAbility(ctx context.Context, req *dto.AbilityRequest) (*
 }
 
 func (s *service) GetAbilityByID(ctx context.Context, id string) (*dto.AbilityResponse, error) {
+	ctx, span := otel.Tracer("ability").Start(ctx, "getAbilityByID")
+	defer span.End()
 	resp, err := s.getAbilityByID(ctx, id)
 	if err != nil {
 		s.logger.SendErrorLog(ctx, err)
@@ -81,6 +86,8 @@ func (s *service) getAbilityByID(ctx context.Context, id string) (*dto.AbilityRe
 }
 
 func (s *service) GetAbilitiesByHeroID(ctx context.Context, id string) ([]dto.AbilityResponse, error) {
+	ctx, span := otel.Tracer("ability").Start(ctx, "getAbilitiesByHeroID")
+	defer span.End()
 	resp, err := s.getAbilitiesByHeroID(ctx, id)
 	if err != nil {
 		s.logger.SendErrorLog(ctx, err)
@@ -108,6 +115,8 @@ func (s *service) getAbilitiesByHeroID(ctx context.Context, id string) ([]dto.Ab
 }
 
 func (s *service) DeleteAbility(ctx context.Context, id string) error {
+	ctx, span := otel.Tracer("ability").Start(ctx, "deleteAbility")
+	defer span.End()
 	if err := s.deleteAbility(ctx, id); err != nil {
 		return err
 	}
