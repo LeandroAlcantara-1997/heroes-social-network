@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/LeandroAlcantara-1997/heroes-social-network/internal/app/transport/rest/response"
+	"github.com/LeandroAlcantara-1997/heroes-social-network/internal/app/transport/http/response"
 	"github.com/LeandroAlcantara-1997/heroes-social-network/internal/domain/team/dto"
 	service "github.com/LeandroAlcantara-1997/heroes-social-network/internal/domain/team/service"
 	"github.com/LeandroAlcantara-1997/heroes-social-network/internal/exception"

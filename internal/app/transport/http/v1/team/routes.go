@@ -1,19 +1,19 @@
-package ability
+package team
 
 import (
 	"net/http"
 
 	"github.com/LeandroAlcantara-1997/heroes-social-network/config/env"
-	"github.com/LeandroAlcantara-1997/heroes-social-network/internal/app/transport/rest/middleware"
-	service "github.com/LeandroAlcantara-1997/heroes-social-network/internal/domain/ability/service"
+	"github.com/LeandroAlcantara-1997/heroes-social-network/internal/app/transport/http/middleware"
+	service "github.com/LeandroAlcantara-1997/heroes-social-network/internal/domain/team/service"
 	"github.com/LeandroAlcantara-1997/heroes-social-network/pkg/util"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
 
-func ConfigureGameRoutes(r *gin.Engine, abilityUseCase service.Ability) {
-	ability := Handler{
-		useCase: abilityUseCase,
+func ConfigureTeamRoutes(r *gin.Engine, teamUseCase service.Team) {
+	team := Handler{
+		UseCase: teamUseCase,
 	}
 	m := &middleware.Middleware{
 		Admin: false,
@@ -27,9 +27,11 @@ func ConfigureGameRoutes(r *gin.Engine, abilityUseCase service.Ability) {
 		},
 	}
 
-	abilityRoute := r.Group("/v1/abilities").Use(m.Init)
-	abilityRoute.POST("", ability.postAbility)
-	abilityRoute.GET("", ability.getAbilityByID)
-	abilityRoute.GET("/heroes", ability.getAbilitiesByHeroID)
-	abilityRoute.DELETE("", ability.deleteAbility)
+	teamsRoute := r.Group("/v1/teams").Use(m.Init)
+	teamsRoute.POST("", team.postTeam)
+	teamsRoute.PUT("", team.updateTeam)
+	teamsRoute.GET("", team.getTeamByID)
+	teamsRoute.GET(":name", team.getTeamByName)
+	teamsRoute.DELETE("", team.deleteTeamByID)
+
 }

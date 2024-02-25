@@ -6,7 +6,7 @@ FROM mcr.microsoft.com/vscode/devcontainers/go:0-${VARIANT} as development
 
 
 COPY Makefile .
-RUN make setup
+# RUN make setup
 
 
 

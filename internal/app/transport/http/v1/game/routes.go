@@ -1,19 +1,19 @@
-package console
+package game
 
 import (
 	"net/http"
 
 	"github.com/LeandroAlcantara-1997/heroes-social-network/config/env"
-	"github.com/LeandroAlcantara-1997/heroes-social-network/internal/app/transport/rest/middleware"
-	service "github.com/LeandroAlcantara-1997/heroes-social-network/internal/domain/console/service"
+	"github.com/LeandroAlcantara-1997/heroes-social-network/internal/app/transport/http/middleware"
+	service "github.com/LeandroAlcantara-1997/heroes-social-network/internal/domain/game/service"
 	"github.com/LeandroAlcantara-1997/heroes-social-network/pkg/util"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
 
-func ConfigureConsoleRoutes(r *gin.Engine, consoleUseCase service.Console) {
-	console := Handler{
-		useCase: consoleUseCase,
+func ConfigureGameRoutes(r *gin.Engine, gameUseCase service.Game) {
+	game := Handler{
+		useCase: gameUseCase,
 	}
 	m := &middleware.Middleware{
 		Admin: false,
@@ -27,7 +27,9 @@ func ConfigureConsoleRoutes(r *gin.Engine, consoleUseCase service.Console) {
 		},
 	}
 
-	consoleRoute := r.Group("/v1/consoles").Use(m.Init)
-	consoleRoute.POST("", console.postConsoles)
-	consoleRoute.GET("", console.getConsoles)
+	gameRoute := r.Group("/v1/games").Use(m.Init)
+	gameRoute.POST("", game.postGame)
+	gameRoute.GET("", game.getGame)
+	gameRoute.DELETE("", game.deleteGame)
+	gameRoute.PUT("", game.putGame)
 }

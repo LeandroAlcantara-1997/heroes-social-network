@@ -27,14 +27,12 @@ type Game interface {
 type service struct {
 	repository repository.GameRepository
 	cache      cache.GameCache
-	log        log.Log
 }
 
-func New(repository repository.GameRepository, cache cache.GameCache, log log.Log) *service {
+func New(repository repository.GameRepository, cache cache.GameCache) *service {
 	return &service{
 		repository: repository,
 		cache:      cache,
-		log:        log,
 	}
 }
 func (s *service) CreateGame(ctx context.Context, req *dto.GameRequest) (*dto.GameResponse, error) {
@@ -42,7 +40,7 @@ func (s *service) CreateGame(ctx context.Context, req *dto.GameRequest) (*dto.Ga
 	defer span.End()
 	resp, err := s.createGame(ctx, req)
 	if err != nil {
-		s.log.SendErrorLog(ctx, err)
+		log.GetLoggerFromContext(ctx).Error(ctx, err, nil)
 		return nil, err
 	}
 
@@ -68,7 +66,7 @@ func (s *service) UpdateGame(ctx context.Context, id string, req *dto.GameReques
 	ctx, span := otel.Tracer("game").Start(ctx, "updateGame")
 	defer span.End()
 	if err := s.updateGame(ctx, id, req); err != nil {
-		s.log.SendErrorLog(ctx, err)
+		log.GetLoggerFromContext(ctx).Error(ctx, err, nil)
 		return err
 	}
 
@@ -83,9 +81,9 @@ func (s *service) updateGame(ctx context.Context, id string, req *dto.GameReques
 	}
 
 	if err := s.cache.SetGame(ctx, game); err != nil {
-		s.log.SendErrorLog(ctx, fmt.Errorf("setGame\n%w", err))
+		log.GetLoggerFromContext(ctx).Error(ctx, fmt.Errorf("setGame\n%w", err), nil)
 		if err := s.cache.DeleteGame(ctx, game.ID); err != nil {
-			s.log.SendErrorLog(ctx, fmt.Errorf("deleteGame\n%w", err))
+			log.GetLoggerFromContext(ctx).Error(ctx, fmt.Errorf("deleteGame\n%w", err), nil)
 		}
 	}
 
@@ -96,7 +94,7 @@ func (s *service) GetByID(ctx context.Context, id string) (*dto.GameResponse, er
 	defer span.End()
 	resp, err := s.getByID(ctx, id)
 	if err != nil {
-		s.log.SendErrorLog(ctx, err)
+		log.GetLoggerFromContext(ctx).Error(ctx, err, nil)
 		return nil, err
 	}
 	return resp, nil
@@ -105,7 +103,7 @@ func (s *service) GetByID(ctx context.Context, id string) (*dto.GameResponse, er
 func (s *service) getByID(ctx context.Context, id string) (*dto.GameResponse, error) {
 	game, err := s.cache.GetGame(ctx, id)
 	if err != nil {
-		s.log.SendErrorLog(ctx, fmt.Errorf("getGame\n%w", err))
+		log.GetLoggerFromContext(ctx).Error(ctx, fmt.Errorf("getGame\n%w", err), nil)
 		game, err = s.repository.GetGameByID(ctx, id)
 		if err != nil {
 			return nil, exception.New(fmt.Sprintf("getGameByID\n%s", err.Error()), err)
@@ -127,7 +125,7 @@ func (s *service) Delete(ctx context.Context, id string) error {
 	ctx, span := otel.Tracer("game").Start(ctx, "deleteGame")
 	defer span.End()
 	if err := s.delete(ctx, id); err != nil {
-		s.log.SendErrorLog(ctx, err)
+		log.GetLoggerFromContext(ctx).Error(ctx, err, nil)
 		return err
 	}
 	return nil

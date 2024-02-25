@@ -4,6 +4,7 @@ import (
 	"context"
 	"testing"
 
+	"github.com/LeandroAlcantara-1997/heroes-social-network/internal/adapter/log"
 	"github.com/LeandroAlcantara-1997/heroes-social-network/internal/domain/game/dto"
 	"github.com/LeandroAlcantara-1997/heroes-social-network/internal/domain/game/model"
 	"github.com/LeandroAlcantara-1997/heroes-social-network/internal/mock"
@@ -23,10 +24,19 @@ var (
 	}
 )
 
+func getMockContext(ctrl *gomock.Controller) context.Context {
+	var (
+		ctx = context.Background()
+		l   = mock.NewMockLogger(ctrl)
+	)
+	l.EXPECT().Error(gomock.Any(), gomock.Any(), gomock.Any()).AnyTimes()
+	return log.AddLoggerInContext(ctx, l)
+}
+
 func TestServiceCreateSuccess(t *testing.T) {
 	var (
-		ctx            = context.Background()
 		ctrl           = gomock.NewController(t)
+		ctx            = getMockContext(ctrl)
 		repositoryMock = mock.NewMockGameRepository(ctrl)
 		cacheMock      = mock.NewMockGameCache(ctrl)
 	)
@@ -36,7 +46,6 @@ func TestServiceCreateSuccess(t *testing.T) {
 	s := &service{
 		repository: repositoryMock,
 		cache:      cacheMock,
-		log:        nil,
 	}
 	out, err := s.CreateGame(ctx, spiderManGame)
 
@@ -59,7 +68,6 @@ func TestServiceCreateFail(t *testing.T) {
 	s := &service{
 		repository: repositoryMock,
 		cache:      cacheMock,
-		log:        nil,
 	}
 	out, err := s.CreateGame(ctx, spiderManGame)
 
@@ -71,8 +79,8 @@ func TestServiceCreateFail(t *testing.T) {
 
 func TestServiceUpdateGameSuccess(t *testing.T) {
 	var (
-		ctx  = context.Background()
 		ctrl = gomock.NewController(t)
+		ctx  = context.Background()
 		rep  = mock.NewMockGameRepository(ctrl)
 		c    = mock.NewMockGameCache(ctrl)
 	)
@@ -94,8 +102,8 @@ func TestServiceUpdateGameSuccess(t *testing.T) {
 
 func TestServiceGetByIDSuccess(t *testing.T) {
 	var (
-		ctx  = context.Background()
 		ctrl = gomock.NewController(t)
+		ctx  = context.Background()
 		rep  = mock.NewMockGameRepository(ctrl)
 		c    = mock.NewMockGameCache(ctrl)
 	)
@@ -111,8 +119,8 @@ func TestServiceGetByIDSuccess(t *testing.T) {
 
 func TestServiceDeleteSuccess(t *testing.T) {
 	var (
-		ctx  = context.Background()
 		ctrl = gomock.NewController(t)
+		ctx  = context.Background()
 		rep  = mock.NewMockGameRepository(ctrl)
 		c    = mock.NewMockGameCache(ctrl)
 	)

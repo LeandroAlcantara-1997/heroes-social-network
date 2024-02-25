@@ -5,7 +5,7 @@ import (
 
 	"github.com/LeandroAlcantara-1997/heroes-social-network/config/env"
 	"github.com/LeandroAlcantara-1997/heroes-social-network/internal/app/container"
-	"github.com/LeandroAlcantara-1997/heroes-social-network/internal/app/transport/rest"
+	"github.com/LeandroAlcantara-1997/heroes-social-network/internal/app/transport/http"
 )
 
 // @title           Heroes Social Network
@@ -31,5 +31,5 @@ func main() {
 		panic(err)
 	}
 
-	rest.New(env.Env.APIPort, env.Env.AllowOrigins, cont).NewServer(ctx)
+	http.New(env.Env.APIPort, env.Env.AllowOrigins, env.Env.Environment, cont).NewServer(ctx)
 }

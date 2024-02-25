@@ -5,66 +5,42 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"log"
 	"net/http"
 	"time"
 
 	otelhttp "go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp"
+	"go.uber.org/zap"
 )
 
-type Splunk struct {
-	host   string
-	token  string
-	assync bool
+type splunk struct {
+	host    string
+	token   string
+	assync  bool
+	strdout *zap.Logger
 }
 
-func New(host string, token string, assync bool) *Splunk {
-	return &Splunk{
-		host:   host,
-		token:  token,
-		assync: assync,
+func New(host, token string, assync bool, zapLogger *zap.Logger) *splunk {
+	return &splunk{
+		host:    host,
+		token:   token,
+		assync:  assync,
+		strdout: zapLogger,
 	}
 }
 
-func (s *Splunk) SendErrorLog(ctx context.Context, err error) {
-	logger := GetLogger(ctx)
-	logger.Data.LogLevel = "error"
-	logger.Data.Message = err.Error()
-
-	payload, err := json.Marshal(&logger)
-	if err != nil {
-		log.Fatalf("Error to do marshal log: %v", err)
-	}
+func (s *splunk) Send(ctx context.Context, payload []byte) {
 	if s.assync {
-		go s.sendToSplunk(ctx, payload)
+		go s.send(ctx, payload)
 	} else {
-		s.sendToSplunk(ctx, payload)
+		s.send(ctx, payload)
 	}
 }
 
-func (s *Splunk) SendEvent(ctx context.Context, eventCode int, message string) {
-	var outputEvent = &GlobalEvent{
-		Data: &EventMetadata{
-			EventCode: eventCode,
-			Message:   message,
-		},
-	}
-	payload, err := json.Marshal(&outputEvent)
-	if err != nil {
-		log.Fatalf("Error to do marshal log: %v", err)
-	}
-	if s.assync {
-		go s.sendToSplunk(ctx, payload)
-	} else {
-		s.sendToSplunk(ctx, payload)
-	}
-}
-
-func (s *Splunk) sendToSplunk(ctx context.Context, payload []byte) {
+func (s *splunk) send(ctx context.Context, payload []byte) {
 	url := fmt.Sprintf("%s/services/collector/event", s.host)
 	request, err := http.NewRequest(http.MethodPost, url, bytes.NewBuffer(payload))
 	if err != nil {
-		log.Printf("error to create request: %v", err)
+		s.strdout.Error(fmt.Sprintf("error to create request: %s", err.Error()))
 	}
 
 	request.Header.Add("Authorization", fmt.Sprintf("Splunk %s", s.token))
@@ -75,17 +51,16 @@ func (s *Splunk) sendToSplunk(ctx context.Context, payload []byte) {
 	}
 	response, err := client.Do(request)
 	if err != nil {
-		log.Printf("error to send request: %v", err)
+		s.strdout.Error(fmt.Sprintf("error to send request: %s", err.Error()))
 		return
 	}
 
 	if response.StatusCode != http.StatusOK {
 		responseMap := make(map[string]any)
 		if err := json.NewDecoder(response.Body).Decode(&responseMap); err != nil {
-			log.Printf("error to decode response body: %v", err)
+			s.strdout.Error(fmt.Sprintf("error to decode response body: %s", err.Error()))
 			return
 		}
-		log.Printf("error to send request: %v", responseMap)
-		return
+		s.strdout.Error(fmt.Sprintf("error to send request: %v", responseMap))
 	}
 }
