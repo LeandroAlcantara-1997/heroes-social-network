@@ -4,7 +4,7 @@ import (
 	"net/http"
 
 	"github.com/LeandroAlcantara-1997/heroes-social-network/config/env"
-	"github.com/LeandroAlcantara-1997/heroes-social-network/internal/app/transport/rest/middleware"
+	"github.com/LeandroAlcantara-1997/heroes-social-network/internal/app/transport/http/middleware"
 	service "github.com/LeandroAlcantara-1997/heroes-social-network/internal/domain/hero/service"
 	"github.com/LeandroAlcantara-1997/heroes-social-network/pkg/util"
 	"github.com/gin-contrib/cors"

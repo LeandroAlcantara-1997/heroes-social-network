@@ -1,4 +1,4 @@
-package rest
+package http
 
 import (
 	"context"
@@ -11,42 +11,43 @@ import (
 	"syscall"
 	"time"
 
+	logger "github.com/LeandroAlcantara-1997/heroes-social-network/internal/adapter/log"
 	"github.com/LeandroAlcantara-1997/heroes-social-network/internal/app/container"
-	"github.com/LeandroAlcantara-1997/heroes-social-network/internal/app/transport/rest/v1/ability"
-	"github.com/LeandroAlcantara-1997/heroes-social-network/internal/app/transport/rest/v1/console"
-	"github.com/LeandroAlcantara-1997/heroes-social-network/internal/app/transport/rest/v1/game"
-	"github.com/LeandroAlcantara-1997/heroes-social-network/internal/app/transport/rest/v1/hero"
-	"github.com/LeandroAlcantara-1997/heroes-social-network/internal/app/transport/rest/v1/team"
+	"github.com/LeandroAlcantara-1997/heroes-social-network/internal/app/transport/http/v1/ability"
+	"github.com/LeandroAlcantara-1997/heroes-social-network/internal/app/transport/http/v1/console"
+	"github.com/LeandroAlcantara-1997/heroes-social-network/internal/app/transport/http/v1/game"
+	"github.com/LeandroAlcantara-1997/heroes-social-network/internal/app/transport/http/v1/hero"
+	"github.com/LeandroAlcantara-1997/heroes-social-network/internal/app/transport/http/v1/team"
 	"github.com/LeandroAlcantara-1997/heroes-social-network/pkg/util"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	swaggerfiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
+	"go.opentelemetry.io/contrib/instrumentation/github.com/gin-gonic/gin/otelgin"
 )
 
 type api struct {
 	allowOrigins string
 	port         string
+	environment  string
 	container    *container.Container
 }
 
-func New(port, allowOrigins string, container *container.Container) *api {
+func New(port, allowOrigins, environment string, container *container.Container) *api {
 	return &api{
 		port:         port,
 		allowOrigins: allowOrigins,
+		environment:  environment,
 		container:    container,
 	}
 }
 
 func (a *api) NewServer(ctx context.Context) {
 	r := gin.Default()
+	r.ContextWithFallback = true
 
-	// otelShutdown, err := otel.SetupOTelSDK(ctx)
-	// defer func() {
-	// 	err = errors.Join(err, otelShutdown(context.Background()))
-	// }()
+	r.Use(otelgin.Middleware("heroes-social-network"))
 
-	// r.Use(otelgin.Middleware("heroes-social-network"))
 	r.GET("/health-check", func(ctx *gin.Context) {
 		ctx.Status(http.StatusOK)
 	})
@@ -57,13 +58,14 @@ func (a *api) NewServer(ctx context.Context) {
 		AllowMethods:  []string{http.MethodGet},
 		AllowHeaders:  []string{"*"},
 		ExposeHeaders: []string{"Content-Length", "content-type"},
-	}))
+	})).Use(logger.NewLogger(a.environment, a.container.GetVendor(),
+		a.container.GetZapLogger()).NewLoggerMiddleware)
 
-	hero.ConfigureHeroRoutes(r, a.container.HeroUseCase)
-	team.ConfigureTeamRoutes(r, a.container.TeamUseCase)
-	game.ConfigureGameRoutes(r, a.container.GameUseCase)
-	console.ConfigureConsoleRoutes(r, a.container.ConsoleUseCase)
-	ability.ConfigureGameRoutes(r, a.container.AbilityUseCase)
+	hero.ConfigureHeroRoutes(r, a.container.Domains.HeroUseCase)
+	team.ConfigureTeamRoutes(r, a.container.Domains.TeamUseCase)
+	game.ConfigureGameRoutes(r, a.container.Domains.GameUseCase)
+	console.ConfigureConsoleRoutes(r, a.container.Domains.ConsoleUseCase)
+	ability.ConfigureGameRoutes(r, a.container.Domains.AbilityUseCase)
 
 	log.Printf("Server listening in :%s", a.port)
 

@@ -3,7 +3,7 @@ package game
 import (
 	"net/http"
 
-	"github.com/LeandroAlcantara-1997/heroes-social-network/internal/app/transport/rest/response"
+	"github.com/LeandroAlcantara-1997/heroes-social-network/internal/app/transport/http/response"
 	"github.com/LeandroAlcantara-1997/heroes-social-network/internal/domain/game/dto"
 	service "github.com/LeandroAlcantara-1997/heroes-social-network/internal/domain/game/service"
 	"github.com/LeandroAlcantara-1997/heroes-social-network/internal/exception"

@@ -11,49 +11,72 @@ import (
 	gomock "github.com/golang/mock/gomock"
 )
 
-// MockLog is a mock of Log interface.
-type MockLog struct {
+// MockLogger is a mock of Logger interface.
+type MockLogger struct {
 	ctrl     *gomock.Controller
-	recorder *MockLogMockRecorder
+	recorder *MockLoggerMockRecorder
 }
 
-// MockLogMockRecorder is the mock recorder for MockLog.
-type MockLogMockRecorder struct {
-	mock *MockLog
+// MockLoggerMockRecorder is the mock recorder for MockLogger.
+type MockLoggerMockRecorder struct {
+	mock *MockLogger
 }
 
-// NewMockLog creates a new mock instance.
-func NewMockLog(ctrl *gomock.Controller) *MockLog {
-	mock := &MockLog{ctrl: ctrl}
-	mock.recorder = &MockLogMockRecorder{mock}
+// NewMockLogger creates a new mock instance.
+func NewMockLogger(ctrl *gomock.Controller) *MockLogger {
+	mock := &MockLogger{ctrl: ctrl}
+	mock.recorder = &MockLoggerMockRecorder{mock}
 	return mock
 }
 
 // EXPECT returns an object that allows the caller to indicate expected use.
-func (m *MockLog) EXPECT() *MockLogMockRecorder {
+func (m *MockLogger) EXPECT() *MockLoggerMockRecorder {
 	return m.recorder
 }
 
-// SendErrorLog mocks base method.
-func (m *MockLog) SendErrorLog(ctx context.Context, err error) {
+// Error mocks base method.
+func (m *MockLogger) Error(ctx context.Context, err error, data any) {
 	m.ctrl.T.Helper()
-	m.ctrl.Call(m, "SendErrorLog", ctx, err)
+	m.ctrl.Call(m, "Error", ctx, err, data)
 }
 
-// SendErrorLog indicates an expected call of SendErrorLog.
-func (mr *MockLogMockRecorder) SendErrorLog(ctx, err interface{}) *gomock.Call {
+// Error indicates an expected call of Error.
+func (mr *MockLoggerMockRecorder) Error(ctx, err, data interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SendErrorLog", reflect.TypeOf((*MockLog)(nil).SendErrorLog), ctx, err)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Error", reflect.TypeOf((*MockLogger)(nil).Error), ctx, err, data)
 }
 
-// SendEvent mocks base method.
-func (m *MockLog) SendEvent(ctx context.Context, eventCode int, message string) {
+// MockVendor is a mock of Vendor interface.
+type MockVendor struct {
+	ctrl     *gomock.Controller
+	recorder *MockVendorMockRecorder
+}
+
+// MockVendorMockRecorder is the mock recorder for MockVendor.
+type MockVendorMockRecorder struct {
+	mock *MockVendor
+}
+
+// NewMockVendor creates a new mock instance.
+func NewMockVendor(ctrl *gomock.Controller) *MockVendor {
+	mock := &MockVendor{ctrl: ctrl}
+	mock.recorder = &MockVendorMockRecorder{mock}
+	return mock
+}
+
+// EXPECT returns an object that allows the caller to indicate expected use.
+func (m *MockVendor) EXPECT() *MockVendorMockRecorder {
+	return m.recorder
+}
+
+// Send mocks base method.
+func (m *MockVendor) Send(ctx context.Context, payload []byte) {
 	m.ctrl.T.Helper()
-	m.ctrl.Call(m, "SendEvent", ctx, eventCode, message)
+	m.ctrl.Call(m, "Send", ctx, payload)
 }
 
-// SendEvent indicates an expected call of SendEvent.
-func (mr *MockLogMockRecorder) SendEvent(ctx, eventCode, message interface{}) *gomock.Call {
+// Send indicates an expected call of Send.
+func (mr *MockVendorMockRecorder) Send(ctx, payload interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SendEvent", reflect.TypeOf((*MockLog)(nil).SendEvent), ctx, eventCode, message)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Send", reflect.TypeOf((*MockVendor)(nil).Send), ctx, payload)
 }

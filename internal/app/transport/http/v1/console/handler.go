@@ -3,7 +3,7 @@ package console
 import (
 	"net/http"
 
-	"github.com/LeandroAlcantara-1997/heroes-social-network/internal/app/transport/rest/response"
+	"github.com/LeandroAlcantara-1997/heroes-social-network/internal/app/transport/http/response"
 	"github.com/LeandroAlcantara-1997/heroes-social-network/internal/domain/console/dto"
 	console "github.com/LeandroAlcantara-1997/heroes-social-network/internal/domain/console/service"
 	"github.com/LeandroAlcantara-1997/heroes-social-network/internal/exception"

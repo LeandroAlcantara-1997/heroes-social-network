@@ -26,7 +26,7 @@ func (e *ErrorWithTrace) GetError() error {
 }
 
 func (e *ErrorWithTrace) Error() string {
-	return e.err.Error()
+	return e.trace
 }
 func New(trace string, err error) *ErrorWithTrace {
 	var errTrace *ErrorWithTrace
