@@ -28,15 +28,12 @@ type Team interface {
 type service struct {
 	repository repository.TeamRepository
 	cache      cache.TeamCache
-	log        log.Log
 }
 
-func New(repository repository.Repository, cache cache.Cache,
-	log log.Log) *service {
+func New(repository repository.Repository, cache cache.Cache) *service {
 	return &service{
 		repository: repository,
 		cache:      cache,
-		log:        log,
 	}
 }
 func (s *service) CreateTeam(ctx context.Context, req *dto.TeamRequest) (*dto.TeamResponse, error) {
@@ -44,7 +41,7 @@ func (s *service) CreateTeam(ctx context.Context, req *dto.TeamRequest) (*dto.Te
 	defer span.End()
 	resp, err := s.createTeam(ctx, req)
 	if err != nil {
-		s.log.SendErrorLog(ctx, err)
+		log.GetLoggerFromContext(ctx).Error(ctx, err, nil)
 		return nil, err
 	}
 	return resp, nil
@@ -60,7 +57,7 @@ func (s *service) createTeam(ctx context.Context, request *dto.TeamRequest) (*dt
 	}
 
 	if err := s.cache.SetTeam(ctx, team, team.ID); err != nil {
-		s.log.SendErrorLog(ctx, fmt.Errorf("setTeam\n%w", err))
+		log.GetLoggerFromContext(ctx).Error(ctx, fmt.Errorf("setTeam\n%w", err), nil)
 	}
 
 	return dto.NewTeamResponse(team.ID, team.Name, team.Universe,
@@ -72,7 +69,7 @@ func (s *service) GetTeamByID(ctx context.Context, id string) (*dto.TeamResponse
 	defer span.End()
 	resp, err := s.getTeamByID(ctx, id)
 	if err != nil {
-		s.log.SendErrorLog(ctx, err)
+		log.GetLoggerFromContext(ctx).Error(ctx, err, nil)
 		return nil, err
 	}
 	return resp, nil
@@ -81,7 +78,7 @@ func (s *service) GetTeamByID(ctx context.Context, id string) (*dto.TeamResponse
 func (s *service) getTeamByID(ctx context.Context, id string) (*dto.TeamResponse, error) {
 	team, err := s.cache.GetTeam(ctx, id)
 	if err != nil {
-		s.log.SendErrorLog(ctx, fmt.Errorf("getTeam\n%w", err))
+		log.GetLoggerFromContext(ctx).Error(ctx, fmt.Errorf("getTeam\n%w", err), nil)
 		if team, err = s.repository.GetTeamByID(ctx, id); err != nil {
 			return nil, exception.New(fmt.Sprintf("getTeamByID\n%s", err.Error()), exception.ErrTeamNotFound)
 		}
@@ -98,7 +95,7 @@ func (s *service) DeleteTeamByID(ctx context.Context, id string) (err error) {
 	ctx, span := otel.Tracer("team").Start(ctx, "deleteTeamByID")
 	defer span.End()
 	if err := s.deleteTeamByID(ctx, id); err != nil {
-		s.log.SendErrorLog(ctx, err)
+		log.GetLoggerFromContext(ctx).Error(ctx, err, nil)
 		return err
 	}
 	return nil
@@ -121,7 +118,7 @@ func (s *service) GetTeamByName(ctx context.Context,
 	defer span.End()
 	resp, err := s.getTeamByName(ctx, req)
 	if err != nil {
-		s.log.SendErrorLog(ctx, err)
+		log.GetLoggerFromContext(ctx).Error(ctx, err, nil)
 		return nil, err
 	}
 	return resp, nil
@@ -131,7 +128,7 @@ func (s *service) getTeamByName(ctx context.Context,
 	req *dto.GetTeamByName) (*dto.TeamResponse, error) {
 	team, err := s.cache.GetTeam(ctx, req.Name)
 	if err != nil {
-		s.log.SendErrorLog(ctx, fmt.Errorf("getTeam\n%w", err))
+		log.GetLoggerFromContext(ctx).Error(ctx, fmt.Errorf("getTeam\n%w", err), nil)
 		team, err = s.repository.GetTeamByName(ctx, req.Name)
 		if err != nil {
 			return nil, exception.New(fmt.Sprintf("getTeamByName\n%s", err.Error()), exception.ErrTeamNotFound)
@@ -139,7 +136,7 @@ func (s *service) getTeamByName(ctx context.Context,
 
 	}
 	if err := s.cache.SetTeam(ctx, team, req.Name); err != nil {
-		s.log.SendErrorLog(ctx, fmt.Errorf("setTeam\n%w", err))
+		log.GetLoggerFromContext(ctx).Error(ctx, fmt.Errorf("setTeam\n%w", err), nil)
 	}
 	return dto.NewTeamResponse(
 		team.ID,
@@ -155,7 +152,7 @@ func (s *service) UpdateTeam(ctx context.Context, id string,
 	ctx, span := otel.Tracer("team").Start(ctx, "updateTeam")
 	defer span.End()
 	if err := s.updateTeam(ctx, id, req); err != nil {
-		s.log.SendErrorLog(ctx, err)
+		log.GetLoggerFromContext(ctx).Error(ctx, err, nil)
 		return err
 	}
 	return nil
@@ -168,7 +165,7 @@ func (s *service) updateTeam(ctx context.Context, id string,
 	}
 	team.UpdatedAt = util.GerPointer(time.Now().UTC())
 	if err := s.repository.UpdateTeam(ctx, team); err != nil {
-		s.log.SendErrorLog(ctx, fmt.Errorf("updateTeam\n%w", err))
+		log.GetLoggerFromContext(ctx).Error(ctx, fmt.Errorf("updateTeam\n%w", err), nil)
 		if err := s.cache.DeleteTeam(ctx, team.ID); err != nil {
 			return exception.New(fmt.Sprintf("deleteTeam\n%s", err.Error()), err)
 		}
@@ -176,16 +173,16 @@ func (s *service) updateTeam(ctx context.Context, id string,
 	}
 
 	if err := s.cache.SetTeam(ctx, team, team.ID); err != nil {
-		s.log.SendErrorLog(ctx, fmt.Errorf("setTeam\n%w", err))
+		log.GetLoggerFromContext(ctx).Error(ctx, fmt.Errorf("setTeam\n%w", err), nil)
 		if err := s.cache.DeleteTeam(ctx, team.ID); err != nil {
-			s.log.SendErrorLog(ctx, fmt.Errorf("deleteTeam\n%w", err))
+			log.GetLoggerFromContext(ctx).Error(ctx, fmt.Errorf("deleteTeam\n%w", err), nil)
 		}
 	}
 
 	if err := s.cache.SetTeam(ctx, team, team.Name); err != nil {
-		s.log.SendErrorLog(ctx, fmt.Errorf("setTeam\n%w", err))
+		log.GetLoggerFromContext(ctx).Error(ctx, fmt.Errorf("setTeam\n%w", err), nil)
 		if err := s.cache.DeleteTeam(ctx, team.Name); err != nil {
-			s.log.SendErrorLog(ctx, fmt.Errorf("deleteTeam\n%w", err))
+			log.GetLoggerFromContext(ctx).Error(ctx, fmt.Errorf("deleteTeam\n%w", err), nil)
 		}
 	}
 

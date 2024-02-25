@@ -1,9 +1,11 @@
 package ability
 
 import (
+	"errors"
 	"net/http"
 
-	"github.com/LeandroAlcantara-1997/heroes-social-network/internal/app/transport/rest/response"
+	"github.com/LeandroAlcantara-1997/heroes-social-network/internal/adapter/log"
+	"github.com/LeandroAlcantara-1997/heroes-social-network/internal/app/transport/http/response"
 	"github.com/LeandroAlcantara-1997/heroes-social-network/internal/domain/ability/dto"
 	service "github.com/LeandroAlcantara-1997/heroes-social-network/internal/domain/ability/service"
 	"github.com/LeandroAlcantara-1997/heroes-social-network/internal/exception"
@@ -33,11 +35,13 @@ func (h *Handler) postAbility(ctx *gin.Context) {
 
 	var req dto.AbilityRequest
 	if err := ctx.BindJSON(&req); err != nil {
+		log.GetLoggerFromContext(ctx).Error(ctx, err, nil)
 		ctx.AbortWithStatusJSON(response.RestError(err))
 		return
 	}
 
 	if err := req.Validator(); err != nil {
+		log.GetLoggerFromContext(ctx).Error(ctx, err, nil)
 		ctx.AbortWithStatusJSON(response.RestError(exception.ErrInvalidRequest))
 		return
 	}
@@ -68,6 +72,7 @@ func (h *Handler) getAbilityByID(ctx *gin.Context) {
 	var id, ok = ctx.GetQuery("id")
 	if ok {
 		if !validator.UUIDValidator(id) {
+			log.GetLoggerFromContext(ctx).Error(ctx, errors.New("invalid uuid"), id)
 			ctx.AbortWithStatusJSON(response.RestError(exception.ErrInvalidFields))
 			return
 		}

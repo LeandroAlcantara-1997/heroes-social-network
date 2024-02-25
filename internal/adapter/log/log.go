@@ -2,39 +2,45 @@ package log
 
 import (
 	"context"
+	"encoding/json"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
+	"go.uber.org/zap"
 )
 
 //go:generate mockgen -destination ../../mock/log_mock.go -package=mock -source=log.go
-type Log interface {
-	SendErrorLog(ctx context.Context, err error)
-	SendEvent(ctx context.Context, eventCode int, message string)
+type Logger interface {
+	Error(ctx context.Context, err error, data any)
 }
 
-type GlobalEvent struct {
-	Data *EventMetadata `json:"event"`
+type Vendor interface {
+	Send(ctx context.Context, payload []byte)
 }
 
-type GlobalLog struct {
-	Data *LogMetadata `json:"event"`
-}
-type EventMetadata struct {
-	RequestID string `json:"requestId,omitempty"`
-	Type      string `json:"type,omitempty"`
-	DataType  string `json:"dataType,omitempty"`
-	LogLevel  string `json:"logLevel,omitempty"`
-	UserAgent string `json:"userAgent,omitempty"`
-	EventCode int    `json:"eventCode,omitempty"`
-	Message   string `json:"message,omitempty"`
+type logger struct {
+	Data   *Metadata `json:"event"`
+	stdout *zap.Logger
+	vendor Vendor
 }
 
-type LogMetadata struct {
-	LogLevel string  `json:"logLevel,omitempty"`
-	Message  string  `json:"message,omitempty"`
-	Request  Request `json:"request"`
+func NewLogger(environment string, vendor Vendor, zapLogger *zap.Logger) *logger {
+	return &logger{
+		stdout: zapLogger,
+		vendor: vendor,
+	}
+}
+
+type logLevel string
+
+const logLevelError logLevel = "error"
+
+type Metadata struct {
+	LogLevel logLevel `json:"logLevel,omitempty"`
+	Data     any      `json:"data,omitempty"`
+	Message  string   `json:"message,omitempty"`
+	Request  Request  `json:"request"`
 }
 
 type Request struct {
@@ -46,28 +52,46 @@ type Request struct {
 	Endpoint  string      `json:"endpoint"`
 	Headers   http.Header `json:"headers"`
 }
+type contextKey string
 
-const loggerKey string = "logger"
+const loggerKey contextKey = "logger"
 
-func AddLoggerInContext(ctx *gin.Context) {
-	SetLogger(ctx)
+func GetLoggerFromContext(ctx context.Context) Logger {
+	return ctx.Value(loggerKey).(Logger)
 }
 
-func GetLogger(ctx context.Context) *GlobalLog {
-	return ctx.Value(loggerKey).(*GlobalLog)
+func (l *logger) Error(ctx context.Context, err error, data any) {
+	l.Data = &Metadata{
+		LogLevel: logLevelError,
+		Message:  err.Error(),
+		Data:     data,
+		Request:  l.Data.Request,
+	}
+
+	l.stdout.Error(err.Error(), zap.String("message", l.Data.Message),
+		zap.Any("data", l.Data.Data))
+	payload, err := json.Marshal(&l)
+	if err != nil {
+		l.stdout.Error(err.Error(), zap.Any("data", l.Data))
+	}
+	l.vendor.Send(ctx, payload)
 }
-func SetLogger(ctx *gin.Context) {
-	ctx.Set(loggerKey, &GlobalLog{
-		Data: &LogMetadata{
-			Request: Request{
-				RequestID: uuid.NewString(),
-				Host:      ctx.Request.Host,
-				UserAgent: ctx.Request.Header.Get("User-Agent"),
-				IP:        ctx.RemoteIP(),
-				Method:    ctx.Request.Method,
-				Endpoint:  ctx.Request.URL.Path,
-				Headers:   ctx.Request.Header,
-			},
+
+func (l *logger) NewLoggerMiddleware(ctx *gin.Context) {
+	l.Data = &Metadata{
+		Request: Request{
+			RequestID: uuid.NewString(),
+			Host:      ctx.Request.Host,
+			UserAgent: ctx.Request.Header.Get("User-Agent"),
+			IP:        ctx.RemoteIP(),
+			Method:    ctx.Request.Method,
+			Endpoint:  ctx.Request.URL.Path,
+			Headers:   ctx.Request.Header,
 		},
-	})
+	}
+	ctx.Request = ctx.Request.WithContext(context.WithValue(ctx.Request.Context(), loggerKey, l))
+}
+
+func AddLoggerInContext(ctx context.Context, l Logger) context.Context {
+	return context.WithValue(ctx, loggerKey, l)
 }

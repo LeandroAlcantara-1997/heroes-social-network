@@ -1,19 +1,19 @@
-package team
+package console
 
 import (
 	"net/http"
 
 	"github.com/LeandroAlcantara-1997/heroes-social-network/config/env"
-	"github.com/LeandroAlcantara-1997/heroes-social-network/internal/app/transport/rest/middleware"
-	service "github.com/LeandroAlcantara-1997/heroes-social-network/internal/domain/team/service"
+	"github.com/LeandroAlcantara-1997/heroes-social-network/internal/app/transport/http/middleware"
+	service "github.com/LeandroAlcantara-1997/heroes-social-network/internal/domain/console/service"
 	"github.com/LeandroAlcantara-1997/heroes-social-network/pkg/util"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
 
-func ConfigureTeamRoutes(r *gin.Engine, teamUseCase service.Team) {
-	team := Handler{
-		UseCase: teamUseCase,
+func ConfigureConsoleRoutes(r *gin.Engine, consoleUseCase service.Console) {
+	console := Handler{
+		useCase: consoleUseCase,
 	}
 	m := &middleware.Middleware{
 		Admin: false,
@@ -27,11 +27,7 @@ func ConfigureTeamRoutes(r *gin.Engine, teamUseCase service.Team) {
 		},
 	}
 
-	teamsRoute := r.Group("/v1/teams").Use(m.Init)
-	teamsRoute.POST("", team.postTeam)
-	teamsRoute.PUT("", team.updateTeam)
-	teamsRoute.GET("", team.getTeamByID)
-	teamsRoute.GET(":name", team.getTeamByName)
-	teamsRoute.DELETE("", team.deleteTeamByID)
-
+	consoleRoute := r.Group("/v1/consoles").Use(m.Init)
+	consoleRoute.POST("", console.postConsoles)
+	consoleRoute.GET("", console.getConsoles)
 }

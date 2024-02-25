@@ -24,14 +24,12 @@ type Ability interface {
 type service struct {
 	repository repository.AbilityRepository
 	cache      cache.AbilityCache
-	logger     log.Log
 }
 
-func New(repository repository.AbilityRepository, cache cache.AbilityCache, logger log.Log) *service {
+func New(repository repository.AbilityRepository, cache cache.AbilityCache) *service {
 	return &service{
 		repository: repository,
 		cache:      cache,
-		logger:     logger,
 	}
 }
 
@@ -40,6 +38,7 @@ func (s *service) CreateAbility(ctx context.Context, req *dto.AbilityRequest) (*
 	defer span.End()
 	resp, err := s.createAbility(ctx, req)
 	if err != nil {
+		log.GetLoggerFromContext(ctx).Error(ctx, err, nil)
 		return nil, err
 	}
 	return resp, nil
@@ -48,11 +47,11 @@ func (s *service) CreateAbility(ctx context.Context, req *dto.AbilityRequest) (*
 func (s *service) createAbility(ctx context.Context, req *dto.AbilityRequest) (*dto.AbilityResponse, error) {
 	ability := model.NewAbility(req)
 	if err := s.repository.CreateAbility(ctx, ability); err != nil {
-		return nil, err
+		return nil, exception.New(fmt.Sprintf("createAbility\n%s", err.Error()), err)
 	}
 
 	if err := s.cache.SetAbility(ctx, ability); err != nil {
-		s.logger.SendErrorLog(ctx, err)
+		log.GetLoggerFromContext(ctx).Error(ctx, err, nil)
 	}
 	return dto.NewAbilityResponse(
 		ability.ID,
@@ -67,7 +66,7 @@ func (s *service) GetAbilityByID(ctx context.Context, id string) (*dto.AbilityRe
 	defer span.End()
 	resp, err := s.getAbilityByID(ctx, id)
 	if err != nil {
-		s.logger.SendErrorLog(ctx, err)
+		log.GetLoggerFromContext(ctx).Error(ctx, err, nil)
 		return nil, err
 	}
 	return resp, nil
@@ -76,10 +75,10 @@ func (s *service) GetAbilityByID(ctx context.Context, id string) (*dto.AbilityRe
 func (s *service) getAbilityByID(ctx context.Context, id string) (*dto.AbilityResponse, error) {
 	ability, err := s.cache.GetAbility(ctx, id)
 	if err != nil {
-		s.logger.SendErrorLog(ctx, exception.New(fmt.Sprintf("getAbility\n%s", err.Error()), err))
+		log.GetLoggerFromContext(ctx).Error(ctx, exception.New(fmt.Sprintf("getAbility\n%s", err.Error()), err), nil)
 		ability, err = s.repository.GetAbilityByID(ctx, id)
 		if err != nil {
-			return nil, exception.New(fmt.Sprintf("GetAbilityByID\n%s", err.Error()), err)
+			return nil, exception.New(fmt.Sprintf("getAbilityByID\n%s", err.Error()), err)
 		}
 	}
 	return dto.NewAbilityResponse(ability.ID, ability.Description, ability.CreatedAt, ability.UpdatedAt), nil
@@ -90,7 +89,7 @@ func (s *service) GetAbilitiesByHeroID(ctx context.Context, id string) ([]dto.Ab
 	defer span.End()
 	resp, err := s.getAbilitiesByHeroID(ctx, id)
 	if err != nil {
-		s.logger.SendErrorLog(ctx, err)
+		log.GetLoggerFromContext(ctx).Error(ctx, err, nil)
 		return nil, err
 	}
 	return resp, nil
@@ -118,6 +117,7 @@ func (s *service) DeleteAbility(ctx context.Context, id string) error {
 	ctx, span := otel.Tracer("ability").Start(ctx, "deleteAbility")
 	defer span.End()
 	if err := s.deleteAbility(ctx, id); err != nil {
+		log.GetLoggerFromContext(ctx).Error(ctx, err, nil)
 		return err
 	}
 

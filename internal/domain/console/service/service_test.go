@@ -4,6 +4,7 @@ import (
 	"context"
 	"testing"
 
+	"github.com/LeandroAlcantara-1997/heroes-social-network/internal/adapter/log"
 	"github.com/LeandroAlcantara-1997/heroes-social-network/internal/domain/console/dto"
 	"github.com/LeandroAlcantara-1997/heroes-social-network/internal/domain/console/model"
 	"github.com/LeandroAlcantara-1997/heroes-social-network/internal/exception"
@@ -12,10 +13,19 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+func getMockContext(ctrl *gomock.Controller) context.Context {
+	var (
+		ctx = context.Background()
+		l   = mock.NewMockLogger(ctrl)
+	)
+	l.EXPECT().Error(gomock.Any(), gomock.Any(), gomock.Any()).AnyTimes()
+	return log.AddLoggerInContext(ctx, l)
+}
+
 func TestServiceCreateConsolesSuccess(t *testing.T) {
 	var (
-		ctx            = context.Background()
 		ctrl           = gomock.NewController(t)
+		ctx            = getMockContext(ctrl)
 		repositoryMock = mock.NewMockConsoleRepository(ctrl)
 	)
 
@@ -25,7 +35,6 @@ func TestServiceCreateConsolesSuccess(t *testing.T) {
 
 	s := &service{
 		repository: repositoryMock,
-		logger:     nil,
 	}
 	out, err := s.CreateConsoles(ctx, &dto.ConsoleRequest{
 		Names: []model.Console{
@@ -39,21 +48,18 @@ func TestServiceCreateConsolesSuccess(t *testing.T) {
 
 func TestServiceCreateConsolesFailRepositoryError(t *testing.T) {
 	var (
-		ctx            = context.Background()
 		ctrl           = gomock.NewController(t)
+		ctx            = getMockContext(ctrl)
 		repositoryMock = mock.NewMockConsoleRepository(ctrl)
-		loggerMock     = mock.NewMockLog(ctrl)
 		expected       *dto.ConsoleResponse
 	)
 
 	repositoryMock.EXPECT().CreateConsoles(gomock.Any(), []model.Console{
 		"Playstation1",
 	}).Return(exception.ErrInternalServer)
-	loggerMock.EXPECT().SendErrorLog(gomock.Any(), gomock.Any())
 
 	s := &service{
 		repository: repositoryMock,
-		logger:     loggerMock,
 	}
 	out, err := s.CreateConsoles(ctx, &dto.ConsoleRequest{
 		Names: []model.Console{

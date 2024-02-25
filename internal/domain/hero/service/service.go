@@ -29,15 +29,12 @@ type Hero interface {
 type service struct {
 	repository repository.HeroRepository
 	cache      cache.HeroCache
-	log        log.Log
 }
 
-func New(repository repository.Repository, cache cache.Cache,
-	log log.Log) *service {
+func New(repository repository.Repository, cache cache.Cache) *service {
 	return &service{
 		repository: repository,
 		cache:      cache,
-		log:        log,
 	}
 }
 func (s *service) CreateHero(ctx context.Context, req *dto.HeroRequest) (*dto.HeroResponse, error) {
@@ -45,7 +42,7 @@ func (s *service) CreateHero(ctx context.Context, req *dto.HeroRequest) (*dto.He
 	defer span.End()
 	resp, err := s.createHero(ctx, req)
 	if err != nil {
-		s.log.SendErrorLog(ctx, err)
+		log.GetLoggerFromContext(ctx).Error(ctx, err, nil)
 		return nil, err
 	}
 	return resp, nil
@@ -69,7 +66,7 @@ func (s *service) UpdateHero(ctx context.Context, id string, req *dto.HeroReques
 	ctx, span := otel.Tracer("hero").Start(ctx, "updateHero")
 	defer span.End()
 	if err := s.updateHero(ctx, id, req); err != nil {
-		s.log.SendErrorLog(ctx, err)
+		log.GetLoggerFromContext(ctx).Error(ctx, err, nil)
 		return err
 	}
 	return nil
@@ -82,9 +79,9 @@ func (s *service) updateHero(ctx context.Context, id string, request *dto.HeroRe
 	}
 
 	if err := s.cache.SetHero(ctx, hero); err != nil {
-		s.log.SendErrorLog(ctx, fmt.Errorf("setHero\n%w", err))
+		log.GetLoggerFromContext(ctx).Error(ctx, fmt.Errorf("setHero\n%w", err), nil)
 		if err = s.cache.DeleteHero(ctx, hero.ID); err != nil {
-			s.log.SendErrorLog(ctx, fmt.Errorf("deleteHero\n%w", err))
+			log.GetLoggerFromContext(ctx).Error(ctx, fmt.Errorf("deleteHero\n%w", err), nil)
 		}
 	}
 
@@ -96,7 +93,7 @@ func (s *service) GetHeroByID(ctx context.Context, id string) (*dto.HeroResponse
 	defer span.End()
 	resp, err := s.getHeroByID(ctx, id)
 	if err != nil {
-		s.log.SendErrorLog(ctx, err)
+		log.GetLoggerFromContext(ctx).Error(ctx, err, nil)
 		return nil, err
 	}
 
@@ -106,7 +103,7 @@ func (s *service) GetHeroByID(ctx context.Context, id string) (*dto.HeroResponse
 func (s *service) getHeroByID(ctx context.Context, id string) (*dto.HeroResponse, error) {
 	hero, err := s.cache.GetHero(ctx, id)
 	if err != nil {
-		s.log.SendErrorLog(ctx, fmt.Errorf("getHero\n%w", err))
+		log.GetLoggerFromContext(ctx).Error(ctx, fmt.Errorf("getHero\n%w", err), nil)
 		hero, err = s.repository.GetHeroByID(ctx, id)
 		if err != nil {
 			return nil, exception.New(fmt.Sprintf("getHeroByID\n%s", err.Error()), err)
@@ -123,7 +120,7 @@ func (s *service) DeleteHeroByID(ctx context.Context, id string) (err error) {
 	ctx, span := otel.Tracer("hero").Start(ctx, "deleteHeroByID")
 	defer span.End()
 	if err := s.deleteHeroByID(ctx, id); err != nil {
-		s.log.SendErrorLog(ctx, err)
+		log.GetLoggerFromContext(ctx).Error(ctx, err, nil)
 		return err
 	}
 	return nil
@@ -144,7 +141,7 @@ func (s *service) AddAbilityToHero(ctx context.Context, abilityID, heroID string
 	ctx, span := otel.Tracer("hero").Start(ctx, "addAbilityToHero")
 	defer span.End()
 	if err := s.addAbilityToHero(ctx, abilityID, heroID); err != nil {
-		s.log.SendErrorLog(ctx, err)
+		log.GetLoggerFromContext(ctx).Error(ctx, err, nil)
 		return err
 	}
 

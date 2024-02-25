@@ -3,6 +3,7 @@ package container
 import (
 	"context"
 	"fmt"
+	"time"
 
 	"github.com/LeandroAlcantara-1997/heroes-social-network/config/env"
 	"github.com/LeandroAlcantara-1997/heroes-social-network/internal/adapter/cache"
@@ -18,9 +19,15 @@ import (
 	"github.com/jackc/pgx/v5/pgxpool"
 	redisOtel "github.com/redis/go-redis/extra/redisotel/v9"
 	"github.com/redis/go-redis/v9"
+	"go.uber.org/zap"
 )
 
 type Container struct {
+	Domains    Domains
+	components *components
+}
+
+type Domains struct {
 	HeroUseCase    hero.Hero
 	TeamUseCase    team.Team
 	GameUseCase    game.Game
@@ -29,9 +36,10 @@ type Container struct {
 }
 
 type components struct {
-	pgxClient    *pgxpool.Pool
-	splunkClient *log.Splunk
-	redisClient  *redis.Client
+	pgxClient   *pgxpool.Pool
+	logVendor   log.Vendor
+	redisClient *redis.Client
+	zapLogger   *zap.Logger
 }
 
 func New() (context.Context, *Container, error) {
@@ -46,38 +54,36 @@ func New() (context.Context, *Container, error) {
 	heroService := hero.New(
 		repository.New(cmp.pgxClient),
 		cache.New(cmp.redisClient),
-		cmp.splunkClient,
 	)
 
 	teamService := team.New(
 		repository.New(cmp.pgxClient),
 		cache.New(cmp.redisClient),
-		cmp.splunkClient,
 	)
 
 	gameService := game.New(
 		repository.New(cmp.pgxClient),
 		cache.New(cmp.redisClient),
-		cmp.splunkClient,
 	)
 
 	consoleService := console.New(
 		repository.New(cmp.pgxClient),
-		cmp.splunkClient,
 	)
 
 	abilityService := ability.New(
 		repository.New(cmp.pgxClient),
 		cache.New(cmp.redisClient),
-		cmp.splunkClient,
 	)
 
 	return ctx, &Container{
-		HeroUseCase:    heroService,
-		TeamUseCase:    teamService,
-		GameUseCase:    gameService,
-		ConsoleUseCase: consoleService,
-		AbilityUseCase: abilityService,
+		Domains: Domains{
+			HeroUseCase:    heroService,
+			TeamUseCase:    teamService,
+			GameUseCase:    gameService,
+			ConsoleUseCase: consoleService,
+			AbilityUseCase: abilityService,
+		},
+		components: cmp,
 	}, nil
 }
 
@@ -98,20 +104,38 @@ func setupComponents(ctx context.Context) (*components, error) {
 		return nil, err
 	}
 
-	splunkClient := log.New(env.Env.SplunkHost, env.Env.SplunkToken, false)
+	splunkClient := log.New(env.Env.SplunkHost, env.Env.SplunkToken, env.Env.SplunkAssync, newZapLogger(env.Env.Environment))
 
 	redisClient := redis.NewClient(
 		&redis.Options{
-			Addr:     fmt.Sprintf("%s:%s", env.Env.CacheHost, env.Env.CachePort),
-			Password: env.Env.CachePassword,
-			DB:       0,
+			Addr:         fmt.Sprintf("%s:%s", env.Env.CacheHost, env.Env.CachePort),
+			Password:     env.Env.CachePassword,
+			DB:           0,
+			ReadTimeout:  time.Duration(env.Env.CacheReadTimeout) * time.Second,
+			WriteTimeout: time.Duration(env.Env.CacheWriteTimeout) * time.Second,
 		},
 	)
 	redisOtel.InstrumentTracing(redisClient)
 
 	return &components{
-		pgxClient:    pgxClient,
-		splunkClient: splunkClient,
-		redisClient:  redisClient,
+		pgxClient:   pgxClient,
+		logVendor:   splunkClient,
+		redisClient: redisClient,
 	}, nil
+}
+
+func (c *Container) GetVendor() log.Vendor {
+	return c.components.logVendor
+}
+
+func newZapLogger(environment string) *zap.Logger {
+	var l, _ = zap.NewDevelopment()
+	if environment != "prd" {
+		l, _ = zap.NewProduction()
+	}
+	return l
+}
+
+func (c *Container) GetZapLogger() *zap.Logger {
+	return c.components.zapLogger
 }

@@ -19,13 +19,11 @@ type Console interface {
 
 type service struct {
 	repository repository.ConsoleRepository
-	logger     log.Log
 }
 
-func New(repository repository.ConsoleRepository, log log.Log) *service {
+func New(repository repository.ConsoleRepository) *service {
 	return &service{
 		repository: repository,
-		logger:     log,
 	}
 }
 
@@ -34,7 +32,7 @@ func (s *service) CreateConsoles(ctx context.Context, req *dto.ConsoleRequest) (
 	defer span.End()
 	resp, err := s.createConsoles(ctx, req)
 	if err != nil {
-		s.logger.SendErrorLog(ctx, err)
+		log.GetLoggerFromContext(ctx).Error(ctx, err, nil)
 		return nil, err
 	}
 	return resp, nil
@@ -55,6 +53,7 @@ func (s *service) GetConsoles(ctx context.Context) (*dto.ConsoleResponse, error)
 	defer span.End()
 	resp, err := s.getConsoles(ctx)
 	if err != nil {
+		log.GetLoggerFromContext(ctx).Error(ctx, err, nil)
 		return nil, exception.New(fmt.Sprintf("getConsoles\n%s", err.Error()), err)
 	}
 	return resp, nil
@@ -63,7 +62,7 @@ func (s *service) GetConsoles(ctx context.Context) (*dto.ConsoleResponse, error)
 func (s *service) getConsoles(ctx context.Context) (*dto.ConsoleResponse, error) {
 	consoles, err := s.repository.GetConsoles(ctx)
 	if err != nil {
-		return nil, err
+		return nil, exception.New(fmt.Sprintf("getConsoles\n%s", err.Error()), err)
 	}
 
 	return &dto.ConsoleResponse{
