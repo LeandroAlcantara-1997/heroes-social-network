@@ -1,6 +1,8 @@
 package main
 
 import (
+	"log"
+
 	_ "github.com/LeandroAlcantara-1997/heroes-social-network/docs"
 
 	"github.com/LeandroAlcantara-1997/heroes-social-network/config/env"
@@ -8,8 +10,6 @@ import (
 	"github.com/LeandroAlcantara-1997/heroes-social-network/internal/app/transport/http"
 )
 
-// @title           Heroes Social Network
-// @version         1.0
 // @description     Heroes social network is a project created to make life easier for superhero fans.
 // @termsOfService  http://swagger.io/terms/
 
@@ -24,12 +24,15 @@ import (
 // @securityDefinitions.basic  BasicAuth
 
 // @externalDocs.description  OpenAPI
-// @externalDocs.url          https://swagger.io/resources/open-api/
+// @externalDocs.url          https://github.com/LeandroAlcantara-1997/heroes-social-network/wiki
 func main() {
 	ctx, cont, err := container.New()
 	if err != nil {
+		log.Fatal(err)
 		panic(err)
 	}
 
-	http.New(env.Env.APIPort, env.Env.AllowOrigins, env.Env.Environment, cont).NewServer(ctx)
+	http.New(env.Env.APIPort, env.Env.APIName,
+		env.Env.APIVersion, env.Env.AllowOrigins,
+		env.Env.Environment, cont).NewServer(ctx)
 }

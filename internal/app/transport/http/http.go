@@ -11,6 +11,7 @@ import (
 	"syscall"
 	"time"
 
+	docs "github.com/LeandroAlcantara-1997/heroes-social-network/docs"
 	logger "github.com/LeandroAlcantara-1997/heroes-social-network/internal/adapter/log"
 	"github.com/LeandroAlcantara-1997/heroes-social-network/internal/app/container"
 	"github.com/LeandroAlcantara-1997/heroes-social-network/internal/app/transport/http/v1/ability"
@@ -29,13 +30,17 @@ import (
 type api struct {
 	allowOrigins string
 	port         string
+	version      string
+	apiName      string
 	environment  string
 	container    *container.Container
 }
 
-func New(port, allowOrigins, environment string, container *container.Container) *api {
+func New(port, apiName, version, allowOrigins, environment string, container *container.Container) *api {
 	return &api{
 		port:         port,
+		apiName:      apiName,
+		version:      version,
 		allowOrigins: allowOrigins,
 		environment:  environment,
 		container:    container,
@@ -91,4 +96,9 @@ func (a *api) shutdown(server *http.Server) {
 		log.Fatalf("HTTP shutdown error: %v", err)
 	}
 	log.Println("Graceful shutdown complete.")
+}
+
+func (a *api) initDoc() {
+	docs.SwaggerInfo.Title = a.apiName
+	docs.SwaggerInfo.Version = a.version
 }
