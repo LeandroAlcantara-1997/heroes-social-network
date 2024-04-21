@@ -4,9 +4,10 @@
 	"name": "heroes-social-network-name",
 	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
 	"dockerComposeFile": [
-		"../build/docker-compose.yaml"
+		"../build/docker-compose.yaml",
+		"../build/dev/docker-compose.yaml"
 	],
-	"service": "heroes-social-network",
+	"service": "heroes-social-network-dev",
 	"workspaceFolder": "/workspace",
 	// Features to add to the dev container. More info: https://containers.dev/features.
 	// "features": {},

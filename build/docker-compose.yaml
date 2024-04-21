@@ -1,27 +1,6 @@
 version: '3.9'
 
-services:
-  heroes-social-network:
-    container_name: heroes-social-network-container
-    env_file:
-      - .env
-    build:
-      context: ./../
-      dockerfile: build/Dockerfile
-    volumes:
-      - ..:/workspace
-    ports:
-      - "8080:8080"
-    command: /bin/sh -c "while sleep 1000; do :; done"
-    depends_on:
-      - postgres-database
-      - redis-cache
-      - splunk
-      - jaeger
-    networks:
-      - heroes-network
-
-  
+services:  
   postgres-database:
     image: postgres
     container_name: postgres-heroes-social-network
@@ -34,7 +13,7 @@ services:
     ports:
       - "5432:5432"
     networks:
-     - heroes-network
+      - heroes-network
     
   redis-cache:
     image: redis
@@ -43,7 +22,7 @@ services:
     ports:
       - "6379:6379"
     networks:
-     - heroes-network
+      - heroes-network
 
   splunk:
     image: splunk/splunk:latest
@@ -82,4 +61,6 @@ services:
     
 networks:
   heroes-network:
-    driver: bridge
+    name: heroes
+    external: true 
+      
