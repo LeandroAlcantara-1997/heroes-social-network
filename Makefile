@@ -1,5 +1,5 @@
-include .env
-export $(shell sed 's/=.*//' .env)
+# include .env
+# export $(shell sed 's/=.*//' .env)
 
 
 DB_URL = postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_NAME}?sslmode=disable
@@ -65,6 +65,7 @@ setup:
 	@go install github.com/golang/mock/mockgen@v1.6.0
 	@echo __Installing__
 	@go install github.com/swaggo/swag/cmd/swag@latest
+	@go install golang.org/x/tools/go/analysis/passes/fieldalignment/cmd/fieldalignment@latest
 
 
 # files swagger
@@ -93,11 +94,6 @@ migration-drop:
 migration-create:
 	@migrate create -ext sql -dir config/migration/ -seq create_base_tables
 
-.PHONY: echo
-echo:
-	@ls
-
-.PHONY: exec
-exec:
-	@ls
-	@./main
+.PHONY: align
+ align:
+	@fieldalignment -fix .

@@ -57,6 +57,7 @@ func (a *api) NewServer(ctx context.Context) {
 		ctx.Status(http.StatusOK)
 	})
 
+	a.initDoc()
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 	r.Use(cors.New(cors.Config{
 		AllowOrigins:  util.ChunkTextByComma(a.allowOrigins),
