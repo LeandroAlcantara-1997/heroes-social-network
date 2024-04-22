@@ -22,19 +22,9 @@ Heroes social network é um projeto criado com a finalidade de facilitar a vida 
 
 ## Como executar
 
-1. Suba as dependências com o comando:
+1. Configure as variáveis de ambiente e execute:
 ~~~ make 
 make docker-up
-~~~
-
-2. Configure as tabelas no banco de dados com o seguinte comando:
-~~~
-make migration-up
-~~~
-
-3. Após subir as dependências, inicialize a aplicação com o comando:
-~~~
-make run
 ~~~
 
 ## Para configurar Splunk

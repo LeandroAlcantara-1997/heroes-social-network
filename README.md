@@ -22,19 +22,9 @@ Heroes social network is a project created to make life easier for superhero fan
 
 ## How to execute
 
-1. Climb the dependencies
+1. Run:
 ~~~ make 
 make docker-up
-~~~
-
-2. Running migration command:
-~~~
-make migration-up
-~~~
-
-3. After uploading the dependencies, run:
-~~~
-make run
 ~~~
 
 ## To configure splunk

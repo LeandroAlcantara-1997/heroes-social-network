@@ -9,6 +9,7 @@ type repository struct {
 }
 
 func New(client *pgxpool.Pool) *repository {
+
 	return &repository{
 		client: client,
 	}

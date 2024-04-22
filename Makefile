@@ -1,18 +1,26 @@
-DB_URL = postgres://${DB_USER}:${DB_PASSWORD}@postgres-database:5432/${DB_NAME}?sslmode=disable
-MODULE_NAME=$(shell grep ^module go.mod | cut -d " " -f2)
-GIT_COMMIT_HASH=$(shell git rev-parse HEAD)
-.INCLUDE: ./build/.env
-$(eval export $(shell sed -ne 's/ *#.*$$//; /./ s/=.*$$// p' ./build/.env))
+# include .env
+# export $(shell sed 's/=.*//' .env)
+
+
+DB_URL = postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_NAME}?sslmode=disable
+
+# all:
+#     @script.sh
 
 # docker
 .PHONY: docker-up
 docker-up:
-	@docker compose -f ./build/docker-compose.yaml up
+	@docker compose -f ./build/docker-compose.yaml up -d
+	@docker compose -f ./build/run/docker-compose.yaml up
 
 .PHONY: docker-build
 docker-build:
-	@docker compose -f ./build/docker-compose.yaml build
+	@docker compose -f ./build/run/docker-compose.yaml build
 
+.PHONY: docker-stop
+docker-stop:
+	@docker compose -f ./build/docker-compose.yaml stop
+	@docker compose -f ./build/dev/docker-compose.yaml stop
 
 # lint
 .PHONY: lint
@@ -42,22 +50,22 @@ mock:
 # setup
 .PHONY: setup
 setup:
+	@sudo apt-get update
 	@echo __Installing migrate__
 	@curl -s https://packagecloud.io/install/repositories/golang-migrate/migrate/script.deb.sh | sudo bash
-	@sudo apt-get update
 	@sudo apt-get install migrate
 	@echo __Installing staticcheck__
 	@go install honnef.co/go/tools/cmd/staticcheck@latest
 	@staticcheck --version
 	@go install github.com/swaggo/swag/cmd/swag@latest
-	# @echo __Installing hot reload__
-	# @curl -sSfL https://raw.githubusercontent.com/cosmtrek/air/master/install.sh | sh -s -- -b $(go env GOPATH)/bin
-	# @air -v
-	@git config --global --add safe.directory '*'
+	@echo __Installing hot reload__
+	@curl -sSfL https://raw.githubusercontent.com/cosmtrek/air/master/install.sh | sh -s -- -b $(go env GOPATH)/bin
+	@air -v
 	@echo __Installing MockGen__
 	@go install github.com/golang/mock/mockgen@v1.6.0
 	@echo __Installing__
 	@go install github.com/swaggo/swag/cmd/swag@latest
+	@go install golang.org/x/tools/go/analysis/passes/fieldalignment/cmd/fieldalignment@latest
 
 
 # files swagger
@@ -85,3 +93,7 @@ migration-drop:
 .PHONY: migration-create
 migration-create:
 	@migrate create -ext sql -dir config/migration/ -seq create_base_tables
+
+.PHONY: align
+ align:
+	@fieldalignment -fix .
